@@ -23,7 +23,7 @@ Clase Nodo:
 - nivel:	int
 - valor:	int
 - padre:	Nodo
-- quien_soy:	???
+- quien_soy:	string
 
 
 Zonas:
@@ -81,5 +81,13 @@ Valor fichas en las zonas:
 
 Convenciones:
 ^^^^^^^^^^^^^
-
+Posiciones fichas:
+0=peon1
+1=peon2
+2=peon3
+3=peon4
+4=caballo
+5=alfil
+6=reina
+7=rey
 
