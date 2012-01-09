@@ -8,6 +8,10 @@ DEPENDPATH += .
 INCLUDEPATH += .
 
 # Input
-HEADERS += Ventana.h
+HEADERS += Ventana.h \
+    Tablero.h \
+    Ficha.h
 FORMS += Ventana.ui
-SOURCES += Main.cpp Ventana.cpp
+SOURCES += Main.cpp Ventana.cpp \
+    Tablero.cpp \
+    Ficha.cpp
