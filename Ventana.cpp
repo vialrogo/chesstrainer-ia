@@ -9,8 +9,8 @@ Ventana::Ventana(QWidget *parent) :
     this->setWindowTitle("Project ChessTrainer-IA");
 
     //Dimenciones de la escena --> FALTA AJUSTAR!!!
-    W=480; //80 de ancho por celda
-    H=480; //80 de largo por celda
+    W=540; //80x6 de ancho por celda + 30x2 de los bordes
+    H=540; //80x6 de largo por celda + 30x2 de los bordes
 
     //Se agrega el Tablero a la GUI
     tablerito = new Tablero();
@@ -38,25 +38,49 @@ void Ventana::pintarCuadricula()
 {
     borrarMapa();
 
-    int filas=6;
-    int columnas=6;
+    int deltaX=30+1; //Empirico, tiene que ver con que no aparezcan los scroll
+    int deltaY=30+1; //Empirico, tiene que ver con que no aparezcan los scroll
+    int ancho = 80;
+    int alto = 80;
 
-    int ancho = W/filas;
-    int alto = H/columnas;
-
-    for (int i = 0; i <=filas; ++i)
+    //Cuadros
+    for (int i = 0; i < 6; ++i)
     {
-        QGraphicsLineItem *line = new QGraphicsLineItem(i*ancho,0,i*ancho,columnas*alto);
-        line->setPen(QColor(180,180,180,255));//Coloca el color de la cuadricula: R,G,B,alfa
-        tablerito->addItem(line);
+        for (int j = 0; j < 6; ++j)
+        {
+            QGraphicsRectItem *cuadrado = new QGraphicsRectItem(i*alto+deltaY,j*ancho+deltaX,ancho,alto,0,tablerito);
+            cuadrado->setPen(QColor(180,180,180,255));//Color de linea
+
+            if((i+j)%2==0)
+                cuadrado->setBrush(QColor(255,255,255,255));//Cuadros Blancos
+            else
+                cuadrado->setBrush(QColor(0,0,0,255));//Cuadros Negros
+        }
     }
 
-    for (int i = 0; i <= columnas; ++i)
+    //Texto
+    QString letras[6] = {"a","b","c","d","e","f"};
+    QString numeros[6] = {"1","2","3","4","5","6"};
+    QFont fuente("Times", 12, QFont::Monospace);
+    int dxnumeros=5;
+    int dyletras=4;
+
+    for (int i = 0; i < 6; ++i)
     {
-        QGraphicsLineItem *line = new QGraphicsLineItem(0,i*alto,filas*ancho,i*alto);
-        line->setPen(QColor(180,180,180,255));//Coloca el color de la cuadricula: R,G,B,alfa
-        tablerito->addItem(line);
+        QGraphicsTextItem* letraSuperior = new QGraphicsTextItem(letras[i],0,tablerito);
+        letraSuperior->setFont(fuente);
+        letraSuperior->setPos(deltaX+40+(i*80),dyletras);
+        QGraphicsTextItem* letraInferior = new QGraphicsTextItem(letras[i],0,tablerito);
+        letraInferior->setFont(fuente);
+        letraInferior->setPos(deltaX+40+(i*80),deltaY+480+dyletras);
+        QGraphicsTextItem* numeroSuperior = new QGraphicsTextItem(numeros[i],0,tablerito);
+        numeroSuperior->setFont(fuente);
+        numeroSuperior->setPos(dxnumeros,deltaY+40+(i*80));
+        QGraphicsTextItem* numeroInferior = new QGraphicsTextItem(numeros[i],0,tablerito);
+        numeroInferior->setFont(fuente);
+        numeroInferior->setPos(deltaX+480+dxnumeros,deltaY+40+(i*80));
     }
+
 }
 
 void Ventana::acercaDe()
