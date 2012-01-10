@@ -7,7 +7,7 @@ Tablero::Tablero()
     connect(timer, SIGNAL(timeout()), this, SLOT(animar()));
 }
 
-void Tablero::crearCuadros()
+void Tablero::crearCuadros(int *posBlancasX, int *posBlancasY, int *posNegrasX, int *posNegrasY)
 {
 //    int anchoCelda = (W/M);
 //    int altoCelda = (H/N);

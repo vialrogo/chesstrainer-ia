@@ -16,12 +16,14 @@ Ventana::Ventana(QWidget *parent) :
     tablerito = new Tablero();
     tablerito->setSceneRect(0,0,W,H);
     ui->graphicsView->setScene(tablerito);
-
-    //Inicialización
-    pintarCuadricula();
+    ui->graphicsView->setHidden(true);
 
     connect(ui->actionQuit, SIGNAL(triggered()),this,SLOT(close()));
     connect(ui->actionAbout,SIGNAL(triggered()),this,SLOT(acercaDe()));
+    connect(ui->actionNew_Game,SIGNAL(triggered()),this,SLOT(newGame()));
+    connect(ui->pushButtonEasy,SIGNAL(clicked()),this,SLOT(gameEasy()));
+    connect(ui->pushButtonMedium,SIGNAL(clicked()),this,SLOT(gameMedium()));
+    connect(ui->pushButtonHard,SIGNAL(clicked()),this,SLOT(gameHard()));
 }
 
 Ventana::~Ventana()
@@ -94,3 +96,46 @@ void Ventana::acercaDe()
     msgBox.exec();
     return;
 }
+
+void Ventana::crearMapa()
+{
+    borrarMapa();
+    pintarCuadricula();
+
+    ui->graphicsView->setHidden(false);
+    ui->pushButtonEasy->setHidden(true);
+    ui->pushButtonMedium->setHidden(true);
+    ui->pushButtonHard->setHidden(true);
+
+//    tablerito->crearCuadros();
+
+}
+
+void Ventana::newGame()
+{
+    //Se vuelve a la pantalla con botones
+    borrarMapa();
+    ui->graphicsView->setHidden(true);
+    ui->pushButtonEasy->setHidden(false);
+    ui->pushButtonMedium->setHidden(false);
+    ui->pushButtonHard->setHidden(false);
+}
+
+void Ventana::gameEasy()
+{
+    crearMapa();
+    cout<<"Empieza un juego fácil"<<endl;
+}
+
+void Ventana::gameMedium()
+{
+    crearMapa();
+    cout<<"Empieza un juego intermedio"<<endl;
+}
+
+void Ventana::gameHard()
+{
+    crearMapa();
+    cout<<"Empieza un juego difícil"<<endl;
+}
+
