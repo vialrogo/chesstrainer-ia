@@ -9,54 +9,52 @@ Tablero::Tablero()
 
 void Tablero::crearCuadros(int *posBlancasX, int *posBlancasY, int *posNegrasX, int *posNegrasY)
 {
-//    int anchoCelda = (W/M);
-//    int altoCelda = (H/N);
+    int deltax=30+1; //Quemados en el código!! se definen en Ventana::pintarCuadricula()
+    int deltay=30+1; //Quemados en el código!! se definen en Ventana::pintarCuadricula()
+    int anchoCelda = 80; //Quemados en el código!! se definen en Ventana::pintarCuadricula()
+    int altoCelda = 80; //Quemados en el código!! se definen en Ventana::pintarCuadricula()
 
-//    imagenesFicha = new  Ficha*[CantidadCarros];
-//    bool* pintado = new bool[CantidadCarros];
+    imagenesFichasBlancas = new  Ficha*[8];
+    imagenesFichasNegras = new  Ficha*[8];
 
-//    for (int i = 0; i < CantidadCarros; ++i)
-//    {
-//        //carros[i] = new imagencarro();
-//        pintado[i]=false;
-//    }
+    for (int i = 0; i < 8; ++i)
+    {
+        if(i<4) //Peones
+        {
+            imagenesFichasBlancas[i]=new Ficha(QSizeF(540,540),QPixmap("Imagenes/P.png"),this);
+            imagenesFichasNegras[i]=new Ficha(QSizeF(540,540),QPixmap("Imagenes/p.png"),this);
+        }
 
-//    int tmp=0;
-//    char letra=' ';
-//    char orientacion=' ';
+        if(i==4) //Caballo
+        {
+            imagenesFichasBlancas[i]=new Ficha(QSizeF(540,540),QPixmap("Imagenes/C.png"),this);
+            imagenesFichasNegras[i]=new Ficha(QSizeF(540,540),QPixmap("Imagenes/c.png"),this);
+        }
 
-//    for (int i = 0; i < N; ++i)
-//    {
-//        for (int j = 0; j < M; ++j)
-//        {
-//            letra = (matriz[i][j]);
-//            tmp =  letra - 65;
+        if(i==5) //Alfil
+        {
+            imagenesFichasBlancas[i]=new Ficha(QSizeF(540,540),QPixmap("Imagenes/B.png"),this);
+            imagenesFichasNegras[i]=new Ficha(QSizeF(540,540),QPixmap("Imagenes/b.png"),this);
+        }
 
-//            if(letra != '0' && letra!='1' && !pintado[tmp])
-//            {
-//                pintado[tmp]=true;
+        if(i==6) //Reina
+        {
+            imagenesFichasBlancas[i]=new Ficha(QSizeF(540,540),QPixmap("Imagenes/Q.png"),this);
+            imagenesFichasNegras[i]=new Ficha(QSizeF(540,540),QPixmap("Imagenes/q.png"),this);
+        }
 
-//                if(direcciones[tmp])
-//                    orientacion='2';
-//                else
-//                    orientacion='1';
+        if(i==7) //Rey
+        {
+            imagenesFichasBlancas[i]=new Ficha(QSizeF(540,540),QPixmap("Imagenes/K.png"),this);
+            imagenesFichasNegras[i]=new Ficha(QSizeF(540,540),QPixmap("Imagenes/k.png"),this);
+        }
 
-//                QString ruta = QString("Imagenes/%1%2.png").arg(letra).arg(orientacion);
-//                carros[tmp]= new imagencarro(QSizeF(65*7,65*7),QPixmap (ruta),this);
-//                carros[tmp]->setOffset (j*anchoCelda,i*altoCelda);
-//                posicionesCarro[tmp]= QPoint(0,0);
-//                this->addItem(carros[tmp]);
-//            }
+        imagenesFichasBlancas[i]->setOffset(posBlancasX[i]*anchoCelda+deltax,posBlancasY[i]*altoCelda+deltay);
+        this->addItem(imagenesFichasBlancas[i]);
 
-//            if(letra == '1')
-//            {
-//                QGraphicsRectItem* qri =  new QGraphicsRectItem(j*anchoCelda,i*altoCelda,anchoCelda,altoCelda);
-//                qri->setBrush(QPixmap ("Imagenes/muro.jpg"));
-//                qri->setPen(QColor(180,180,180,0));
-//                this->addItem(qri);
-//            }
-//        }
-//    }
+        imagenesFichasNegras[i]->setOffset(posNegrasX[i]*anchoCelda+deltax,posNegrasY[i]*altoCelda+deltay);
+        this->addItem(imagenesFichasNegras[i]);
+    }
 }
 
 void Tablero::animar()

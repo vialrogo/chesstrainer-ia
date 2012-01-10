@@ -12,6 +12,12 @@ Ventana::Ventana(QWidget *parent) :
     W=540; //80x6 de ancho por celda + 30x2 de los bordes
     H=540; //80x6 de largo por celda + 30x2 de los bordes
 
+    //Arreglos con las posiciones de las fichas
+    posBlancasX = new int[8];
+    posBlancasY = new int[8];
+    posNegrasX = new int[8];
+    posNegrasY = new int[8];
+
     //Se agrega el Tablero a la GUI
     tablerito = new Tablero();
     tablerito->setSceneRect(0,0,W,H);
@@ -107,8 +113,42 @@ void Ventana::crearMapa()
     ui->pushButtonMedium->setHidden(true);
     ui->pushButtonHard->setHidden(true);
 
-//    tablerito->crearCuadros();
+    //Para colocar las fichas en posición aleatoria. Se puede mejorar
+    //Supuestamente funciona, pero revisar si salen bien
+    QVector<QPoint> vect;
+    for (int i = 0; i < 6; ++i) {
+        for (int j = 0; j < 6; ++j) {
+            vect.append(QPoint(i,j));
+        }
+    }
 
+    QTime time = QTime::currentTime();
+    qsrand((uint)time.msec());
+    int tmp;
+    QPoint ptmp;
+
+    for (int i = 0; i < 8; ++i) {
+        tmp=qrand()%(36-(i*2));
+        ptmp=vect.at(tmp);
+        posBlancasX[i]=ptmp.rx();
+        posBlancasY[i]=ptmp.ry();
+        vect.remove(tmp);
+
+        tmp=qrand()%(35-(i*2));
+        ptmp=vect.at(tmp);
+        posNegrasX[i]= ptmp.rx();
+        posNegrasY[i]= ptmp.ry();
+        vect.remove(tmp);
+    }
+    vect.clear();
+
+    tablerito->crearCuadros(posBlancasX,posBlancasY,posNegrasX,posNegrasY);
+
+//    for (int i = 0; i < 8; ++i)
+//        cout<<i<<" = ["<<posBlancasX[i]<<","<<posBlancasY[i]<<"]"<<endl;
+
+//    for (int i = 0; i < 8; ++i)
+//        cout<<i<<" = ["<<posNegrasX[i]<<","<<posNegrasY[i]<<"]"<<endl;
 }
 
 void Ventana::newGame()

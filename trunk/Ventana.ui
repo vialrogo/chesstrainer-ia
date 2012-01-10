@@ -43,7 +43,7 @@
      <string>Easy</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButtonMedium">
+   <widget class="QPushButton" name="pushButtonHard">
     <property name="geometry">
      <rect>
       <x>181</x>
@@ -62,7 +62,7 @@
      <string>Hard</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButtonHard">
+   <widget class="QPushButton" name="pushButtonMedium">
     <property name="geometry">
      <rect>
       <x>181</x>

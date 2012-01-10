@@ -19,6 +19,10 @@ class Ventana : public QMainWindow
 private:
     int W;
     int H;
+    int *posBlancasX;
+    int *posBlancasY;
+    int *posNegrasX;
+    int *posNegrasY;
     Tablero* tablerito;
 
 public:
