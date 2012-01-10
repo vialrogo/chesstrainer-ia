@@ -23,6 +23,7 @@ private:
     int *posBlancasY;
     int *posNegrasX;
     int *posNegrasY;
+    char** estado;
     Tablero* tablerito;
 
 public:
@@ -32,6 +33,8 @@ public:
     void borrarMapa();
     void pintarCuadricula();
     void crearMapa();
+    void crearEstadoDeArreglos();
+    void imprimirEstado();
 
 public slots:
     void acercaDe();

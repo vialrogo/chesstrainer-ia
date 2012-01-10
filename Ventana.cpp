@@ -18,6 +18,11 @@ Ventana::Ventana(QWidget *parent) :
     posNegrasX = new int[8];
     posNegrasY = new int[8];
 
+    //Estado del tablero
+    estado = new char*[6];
+    for (int i = 0; i < 6; ++i)
+        estado[i] = new char[6];
+
     //Se agrega el Tablero a la GUI
     tablerito = new Tablero();
     tablerito->setSceneRect(0,0,W,H);
@@ -105,14 +110,6 @@ void Ventana::acercaDe()
 
 void Ventana::crearMapa()
 {
-    borrarMapa();
-    pintarCuadricula();
-
-    ui->graphicsView->setHidden(false);
-    ui->pushButtonEasy->setHidden(true);
-    ui->pushButtonMedium->setHidden(true);
-    ui->pushButtonHard->setHidden(true);
-
     //Para colocar las fichas en posición aleatoria. Se puede mejorar
     //Supuestamente funciona, pero revisar si salen bien
     QVector<QPoint> vect;
@@ -140,15 +137,69 @@ void Ventana::crearMapa()
         posNegrasY[i]= ptmp.ry();
         vect.remove(tmp);
     }
-    vect.clear();
+
+    crearEstadoDeArreglos();
+    imprimirEstado();
+
+    //Verifica y arregla jaque
+    /** Pendiente!!!*/
+
+    //Crea el mapa (parte gráfica)
+    borrarMapa();
+    pintarCuadricula();
+
+    ui->graphicsView->setHidden(false);
+    ui->pushButtonEasy->setHidden(true);
+    ui->pushButtonMedium->setHidden(true);
+    ui->pushButtonHard->setHidden(true);
 
     tablerito->crearCuadros(posBlancasX,posBlancasY,posNegrasX,posNegrasY);
+}
 
-//    for (int i = 0; i < 8; ++i)
-//        cout<<i<<" = ["<<posBlancasX[i]<<","<<posBlancasY[i]<<"]"<<endl;
+void Ventana::crearEstadoDeArreglos()
+{
+    //Vacio la matriz
+    for (int i = 0; i < 6; ++i) {
+        for (int j = 0; j < 6; ++j) {
+            estado[i][j]=' ';
+        }
+    }
 
-//    for (int i = 0; i < 8; ++i)
-//        cout<<i<<" = ["<<posNegrasX[i]<<","<<posNegrasY[i]<<"]"<<endl;
+    for (int i = 0; i < 8; ++i)
+    {
+        if(i<4){
+            estado[posBlancasY[i]][posBlancasX[i]]='P';
+            estado[posNegrasY[i]][posNegrasX[i]]='p';
+        }
+        if(i==4){
+            estado[posBlancasY[i]][posBlancasX[i]]='C';
+            estado[posNegrasY[i]][posNegrasX[i]]='c';
+        }
+        if(i==5){
+            estado[posBlancasY[i]][posBlancasX[i]]='B';
+            estado[posNegrasY[i]][posNegrasX[i]]='b';
+        }
+        if(i==6){
+            estado[posBlancasY[i]][posBlancasX[i]]='Q';
+            estado[posNegrasY[i]][posNegrasX[i]]='q';
+        }
+        if(i==7){
+            estado[posBlancasY[i]][posBlancasX[i]]='K';
+            estado[posNegrasY[i]][posNegrasX[i]]='k';
+        }
+    }
+}
+
+void Ventana::imprimirEstado()
+{
+    for (int i = 0; i < 6; ++i) {
+        cout<<"+---+---+---+---+---+---+"<<endl;
+        for (int j = 0; j < 6; ++j) {
+            cout<<"| "<<estado[i][j]<<" ";
+        }
+        cout<<"|"<<endl;
+    }
+    cout<<"+---+---+---+---+---+---+"<<endl<<endl;
 }
 
 void Ventana::newGame()
