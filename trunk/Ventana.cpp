@@ -9,8 +9,8 @@ Ventana::Ventana(QWidget *parent) :
     this->setWindowTitle("Project ChessTrainer-IA");
 
     //Dimenciones de la escena --> FALTA AJUSTAR!!!
-    W=420; //70
-    H=420; //70
+    W=480; //80 de ancho por celda
+    H=480; //80 de largo por celda
 
     //Se agrega el Tablero a la GUI
     tablerito = new Tablero();
