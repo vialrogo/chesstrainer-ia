@@ -17,7 +17,7 @@ class Tablero: public QGraphicsScene
 
 public:
     Tablero();
-    void crearCuadros();
+    void crearCuadros(int* posBlancasX, int* posBlancasY, int* posNegrasX, int* posNegrasY);
     void moverFicha(/*char carro, int direccion*/);
 //    void iniciarAnimacion(string solucion,bool *direcciones);
     void pararAnimacion();
