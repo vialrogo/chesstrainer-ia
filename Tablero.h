@@ -23,7 +23,8 @@ public:
     void pararAnimacion();
 
 private:
-    Ficha** imagenesFicha;
+    Ficha** imagenesFichasBlancas;
+    Ficha** imagenesFichasNegras;
     QTimer *timer;
 
 private slots:
