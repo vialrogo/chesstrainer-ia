@@ -111,7 +111,6 @@ void Ventana::acercaDe()
 void Ventana::crearMapa()
 {
     //Para colocar las fichas en posición aleatoria. Se puede mejorar
-    //Supuestamente funciona, pero revisar si salen bien
     QVector<QPoint> vect;
     for (int i = 0; i < 6; ++i) {
         for (int j = 0; j < 6; ++j) {
