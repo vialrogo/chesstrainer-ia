@@ -110,7 +110,15 @@ void Ventana::acercaDe()
 
 void Ventana::crearMapa()
 {
-    //Para colocar las fichas en posición aleatoria. Se puede mejorar
+    //Inicializo los arreglos (-1 significa que la ficha no ha sido colocada o no existe)
+    for (int i = 0; i < 8; ++i) {
+        posBlancasX[i]=-1;
+        posBlancasY[i]=-1;
+        posNegrasX[i]=-1;
+        posNegrasY[i]=-1;
+    }
+
+    //Creo el vector con todos los puntos existentes en el tablero
     QVector<QPoint> vect;
     for (int i = 0; i < 6; ++i) {
         for (int j = 0; j < 6; ++j) {
@@ -118,42 +126,84 @@ void Ventana::crearMapa()
         }
     }
 
+    //Inicializo semilla aleatoria
     QTime time = QTime::currentTime();
     qsrand((uint)time.msec());
     int tmp;
     QPoint ptmp;
 
-    for (int i = 0; i < 8; ++i) {
-        tmp=qrand()%(36-(i*2));
-        ptmp=vect.at(tmp);
-        posBlancasX[i]=ptmp.rx();
-        posBlancasY[i]=ptmp.ry();
-        vect.remove(tmp);
+    //Coloco Rey Blanco
+    tmp=qrand()%36;
+    ptmp=vect.at(tmp);
+    posBlancasX[7]=ptmp.rx();
+    posBlancasY[7]=ptmp.ry();
+    vect.remove(tmp);
+    crearEstadoDeArreglos();
 
-        tmp=qrand()%(35-(i*2));
+    //Coloco Rey Negro
+    while(true)
+    {
+        tmp=qrand()%35;
+        ptmp=vect.at(tmp);
+        posNegrasX[7]= ptmp.rx();
+        posNegrasY[7]= ptmp.ry();
+        vect.remove(tmp);
+        crearEstadoDeArreglos();
+
+        if(verificarJaque(true))
+            vect.append(ptmp);
+        else
+            break;
+    }
+
+    //Coloco resto fichas blancas
+    int i=0;
+    while(true)
+    {
+        if(i==7) break;
+
+        tmp=qrand()%(34-i);
+        ptmp=vect.at(tmp);
+        posBlancasX[i]= ptmp.rx();
+        posBlancasY[i]= ptmp.ry();
+        vect.remove(tmp);
+        crearEstadoDeArreglos();
+
+        if(verificarJaque(false))
+            vect.append(ptmp);
+        else
+            i++;
+    }
+
+    //Coloco resto fichas negras
+    i=0;
+    while(true)
+    {
+        if(i==7) break;
+
+        tmp=qrand()%(27-i);
         ptmp=vect.at(tmp);
         posNegrasX[i]= ptmp.rx();
         posNegrasY[i]= ptmp.ry();
         vect.remove(tmp);
+        crearEstadoDeArreglos();
+
+        if(verificarJaque(true))
+            vect.append(ptmp);
+        else
+            i++;
     }
 
-    crearEstadoDeArreglos();
-    imprimirEstado();
-    cout<<"Rey blanco en jaque: "<<verificarJaque(true)<<endl;
-    cout<<"Rey negro en jaque: "<<verificarJaque(false)<<endl;
-
-    //Verifica y arregla jaque
-    /** Pendiente!!!*/
+//    imprimirEstado();
 
     //Crea el mapa (parte gráfica)
-    borrarMapa();
-    pintarCuadricula();
-
     ui->graphicsView->setHidden(false);
     ui->pushButtonEasy->setHidden(true);
     ui->pushButtonMedium->setHidden(true);
     ui->pushButtonHard->setHidden(true);
 
+    borrarMapa();
+    pintarCuadricula();
     tablerito->crearCuadros(posBlancasX,posBlancasY,posNegrasX,posNegrasY);
 }
 
@@ -314,25 +364,21 @@ void Ventana::crearEstadoDeArreglos()
 
     for (int i = 0; i < 8; ++i)
     {
-        if(i<4){
-            estado[posBlancasY[i]][posBlancasX[i]]='P';
-            estado[posNegrasY[i]][posNegrasX[i]]='p';
+        if(posBlancasY[i]!=-1 && posBlancasX[i]!=-1)
+        {
+            if(i<4) estado[posBlancasY[i]][posBlancasX[i]]='P';
+            if(i==4) estado[posBlancasY[i]][posBlancasX[i]]='C';
+            if(i==5) estado[posBlancasY[i]][posBlancasX[i]]='B';
+            if(i==6) estado[posBlancasY[i]][posBlancasX[i]]='Q';
+            if(i==7) estado[posBlancasY[i]][posBlancasX[i]]='K';
         }
-        if(i==4){
-            estado[posBlancasY[i]][posBlancasX[i]]='C';
-            estado[posNegrasY[i]][posNegrasX[i]]='c';
-        }
-        if(i==5){
-            estado[posBlancasY[i]][posBlancasX[i]]='B';
-            estado[posNegrasY[i]][posNegrasX[i]]='b';
-        }
-        if(i==6){
-            estado[posBlancasY[i]][posBlancasX[i]]='Q';
-            estado[posNegrasY[i]][posNegrasX[i]]='q';
-        }
-        if(i==7){
-            estado[posBlancasY[i]][posBlancasX[i]]='K';
-            estado[posNegrasY[i]][posNegrasX[i]]='k';
+        if(posNegrasY[i]!=-1 && posNegrasX[i]!=-1)
+        {
+            if(i<4) estado[posNegrasY[i]][posNegrasX[i]]='p';
+            if(i==4) estado[posNegrasY[i]][posNegrasX[i]]='c';
+            if(i==5) estado[posNegrasY[i]][posNegrasX[i]]='b';
+            if(i==6) estado[posNegrasY[i]][posNegrasX[i]]='q';
+            if(i==7) estado[posNegrasY[i]][posNegrasX[i]]='k';
         }
     }
 }
