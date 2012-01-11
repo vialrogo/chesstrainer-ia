@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QMessageBox>
 #include <iostream>
+#include <exception>
 #include "Tablero.h"
 
 using namespace std;
@@ -35,6 +36,7 @@ public:
     void crearMapa();
     void crearEstadoDeArreglos();
     void imprimirEstado();
+    bool verificarJaque(bool color); //Es posible que este método no vaya en esta clase
 
 public slots:
     void acercaDe();
