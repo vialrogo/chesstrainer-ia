@@ -91,3 +91,17 @@ Posiciones fichas:
 6=reina
 7=rey
 
+
+Orientación:
+
+       pos*X ⇒
+ p  +---+---+---+
+ o  |           |
+ s  +           +
+ *  |   Estado  |
+ Y  +           +
+ ⇓  |           |
+    +---+---+---+
+
+
+
