@@ -31,9 +31,9 @@ public:
     explicit Ventana(QWidget *parent = 0);
     ~Ventana();
     Ui::Ventana *ui;
-    void borrarMapa();
-    void pintarCuadricula();
-    void crearMapa();
+    void borrarTablero();
+
+    void crearTablero();
     void crearEstadoDeArreglos();
     void imprimirEstado();
     bool verificarJaque(bool color); //Es posible que este método no vaya en esta clase
