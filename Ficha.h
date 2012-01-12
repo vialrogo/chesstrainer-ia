@@ -4,6 +4,9 @@
 #include <QObject>
 #include <QGraphicsPixmapItem>
 #include <QtGui>
+#include <iostream>
+
+using namespace std;
 
 class Ficha : public QObject, public QGraphicsPixmapItem
 {
