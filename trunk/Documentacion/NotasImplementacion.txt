@@ -25,6 +25,8 @@ Clase Nodo:
 - padre:	Nodo
 - quien_soy:	string
 
+quien_soy=ficha_a_posición, es decir que ficha se movió a que posición. ejemplo: h34 = caballo en la posición x=3, y=4.
+
 
 Zonas:
 ^^^^^^
@@ -102,6 +104,4 @@ Orientación:
  Y  +           +
  ⇓  |           |
     +---+---+---+
-
-
 
