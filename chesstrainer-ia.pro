@@ -11,12 +11,20 @@ INCLUDEPATH += .
 HEADERS += Ventana.h \
     Tablero.h \
     Ficha.h \
-    Mapa.h
+    Mapa.h \
+    Nodo.h
 FORMS += Ventana.ui
 SOURCES += Main.cpp Ventana.cpp \
     Tablero.cpp \
     Ficha.cpp \
-    Mapa.cpp
+    Mapa.cpp \
+    Nodo.cpp
+
+
+
+
+
+
 
 
 
