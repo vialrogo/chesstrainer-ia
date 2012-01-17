@@ -93,7 +93,6 @@ Posiciones fichas:
 6=reina
 7=rey
 
-
 Orientación:
 
        pos*X ⇒
@@ -105,3 +104,7 @@ Orientación:
  ⇓  |           |
     +---+---+---+
 
+Nivel:
+0=principiante
+1=amateur
+2=experto

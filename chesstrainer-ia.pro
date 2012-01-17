@@ -12,13 +12,17 @@ HEADERS += Ventana.h \
     Tablero.h \
     Ficha.h \
     Mapa.h \
-    Nodo.h
+    Nodo.h \
+    Minimax.h
 FORMS += Ventana.ui
 SOURCES += Main.cpp Ventana.cpp \
     Tablero.cpp \
     Ficha.cpp \
     Mapa.cpp \
-    Nodo.cpp
+    Nodo.cpp \
+    Minimax.cpp
+
+
 
 
 
