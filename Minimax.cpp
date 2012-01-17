@@ -18,32 +18,80 @@ void MiniMax::definirVariables(char **estadoIn, int *posBlancasXIn, int *posBlan
     posNegrasY=posNegrasYIn;
 }
 
-bool MiniMax::verificarJaque(bool color) //color=false => negras / color=true => blancas
+/*color=false => negras
+  color=true => blancas
+
+  Fichas= 0-3:peones 4:caballo 5:alfil 6:reina 7:rey
+
+  Salida=   -2: No se puede mover (o se sale del tablero, o la casilla ocupada)
+            -1: Casilla libre
+             #: Ficha que se come
+*/
+int MiniMax::sePuedeMover(int xDestino, int yDestino, int ficha, bool color)
 {
-    /*
-        B = 66    b = 98
-        C = 67    c = 99
-        K = 75    k = 107
-        P = 80    p = 112
-        Q = 81    q = 113
-     */
+    if(xDestino<0 || xDestino>5 || yDestino<0 || yDestino>5) return -2;
+
+    //Verificar Peones
+    if(ficha<4 && color) //Peones Blancos
+    {
+        if(xDestino==posBlancasX[ficha] && yDestino==(posBlancasY[ficha]-1))
+        {
+            if(estado[xDestino][yDestino]==' ') return -1;
+            else return -2;
+        }
+        else
+        {
+            if(estado[xDestino][yDestino]==' ' ||  estado[xDestino][yDestino]<82) return -2;
+            else return estado[xDestino][yDestino];
+        }
+    }
+    else if(ficha<4 && !color) //Peones Negros
+    {
+        if(xDestino==posNegrasX[ficha] && yDestino==(posNegrasY[ficha]+1))
+        {
+            if(estado[xDestino][yDestino]==' ') return -1;
+            else return -2;
+        }
+        else
+        {
+            if(estado[xDestino][yDestino]==' ' ||  estado[xDestino][yDestino]>97) return -2;
+            else return estado[xDestino][yDestino];
+        }
+    }
+    else //Verificar Resto
+    {
+        if (color)
+        {
+            if(estado[xDestino][yDestino]==' ') return -1;
+            else if( estado[xDestino][yDestino]<82) return -2;
+            else return estado[xDestino][yDestino];
+        }
+        else
+        {
+            if(estado[xDestino][yDestino]==' ') return -1;
+            else if( estado[xDestino][yDestino]>97) return -2;
+            else return estado[xDestino][yDestino];
+        }
+    }
+}
+
+/*
+    B = 66    b = 98
+    C = 67    c = 99
+    K = 75    k = 107
+    P = 80    p = 112
+    Q = 81    q = 113
+
+    color=false => negras / color=true => blancas
+
+ */
+bool MiniMax::verificarJaque(bool color)
+{
 
     int delta = color? 32 : 0;
 
     int reyX = color? posBlancasX[7] : posNegrasX[7];
     int reyY = color? posBlancasY[7] : posNegrasY[7];
-
-    int dxDiago[] = {-1, 1,-1, 1};
-    int dyDiago[] = {-1,-1, 1, 1};
-
-    int dxRectas[] = { 0, 1, 0,-1};
-    int dyRectas[] = {-1, 0, 1, 0};
-
-    int dxCaballo[] = {-2,-2,-1,-1, 1, 1, 2, 2};
-    int dyCaballo[] = {-1, 1,-2, 2,-2, 2,-1, 1};
-
-    int dxRey[] = {-1,-1,-1, 0, 0, 1, 1, 1};
-    int dyRey[] = {-1, 0, 1,-1, 1,-1, 0, 1};
 
     int idx=0;
     int count=1;
@@ -58,8 +106,8 @@ bool MiniMax::verificarJaque(bool color) //color=false => negras / color=true =>
     {
         if(idx > 3) break;
 
-        xx = reyX+(count*dxDiago[idx]);
-        yy = reyY+(count*dyDiago[idx]);
+        xx = reyX+(count*mapa.getDxDiago(idx));
+        yy = reyY+(count*mapa.getDyDiago(idx));
 
         if(xx<0 || xx>5 || yy<0 || yy>5)
         {
@@ -89,8 +137,8 @@ bool MiniMax::verificarJaque(bool color) //color=false => negras / color=true =>
     {
         if(idx > 3) break;
 
-        xx = reyX+(count*dxRectas[idx]);
-        yy = reyY+(count*dyRectas[idx]);
+        xx = reyX+(count*mapa.getDxRectas(idx));
+        yy = reyY+(count*mapa.getDyRectas(idx));
 
         if(xx<0 || xx>5 || yy<0 || yy>5)
         {
@@ -116,8 +164,8 @@ bool MiniMax::verificarJaque(bool color) //color=false => negras / color=true =>
     //Caballos
     for (int i = 0; i < 8; ++i)
     {
-        xx = reyX + dxCaballo[i];
-        yy = reyY + dyCaballo[i];
+        xx = reyX + mapa.getDxCaballo(i);
+        yy = reyY + mapa.getDyCaballo(i);
 
         if(xx<0 || xx>5 || yy<0 || yy>5)
             continue;
@@ -151,8 +199,8 @@ bool MiniMax::verificarJaque(bool color) //color=false => negras / color=true =>
     //Otro rey
     for (int i = 0; i < 8; ++i)
     {
-        xx = reyX + dxRey[i];
-        yy = reyY + dyRey[i];
+        xx = reyX + mapa.getDxRey(i);
+        yy = reyY + mapa.getDyRey(i);
 
         if(xx<0 || xx>5 || yy<0 || yy>5)
             continue;

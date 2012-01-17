@@ -30,6 +30,18 @@ int Mapa::rey[6][6]={{1002,1000,1000,1000,1000,1002},
                      {1000,998,998,998,998,1000},
                      {1002,1000,1000,1000,1000,1002}};
 
+int Mapa::dxDiago[4] = {-1, 1,-1, 1};
+int Mapa::dyDiago[4] = {-1,-1, 1, 1};
+
+int Mapa::dxRectas[4] = { 0, 1, 0,-1};
+int Mapa::dyRectas[4] = {-1, 0, 1, 0};
+
+int Mapa::dxCaballo[8] = {-2,-2,-1,-1, 1, 1, 2, 2};
+int Mapa::dyCaballo[8] = {-1, 1,-2, 2,-2, 2,-1, 1};
+
+int Mapa::dxRey[8] = {-1,-1,-1, 0, 0, 1, 1, 1};
+int Mapa::dyRey[8] = {-1, 0, 1,-1, 1,-1, 0, 1};
+
 //int Mapa::dxRectaArriba=0;
 //int Mapa::dyRectaArriba=-1;
 //int Mapa::dxRectaAbajo=0;
@@ -61,6 +73,45 @@ int Mapa::pesoRey(int x, int y)
     return rey[x][y];
 }
 
+int Mapa::getDxDiago(int i)
+{
+    return dxDiago[i];
+}
+
+int Mapa::getDyDiago(int i)
+{
+    return dyDiago[i];
+}
+
+int Mapa::getDxRectas(int i)
+{
+    return dxRectas[i];
+}
+
+int Mapa::getDyRectas(int i)
+{
+    return dyRectas[i];
+}
+
+int Mapa::getDxCaballo(int i)
+{
+    return dxCaballo[i];
+}
+
+int Mapa::getDyCaballo(int i)
+{
+    return dyCaballo[i];
+}
+
+int Mapa::getDxRey(int i)
+{
+    return dxRey[i];
+}
+
+int Mapa::getDyRey(int i)
+{
+    return dyRey[i];
+}
 
 //int main()
 //{
