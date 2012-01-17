@@ -29,7 +29,6 @@ Ventana::Ventana(QWidget *parent) :
     ui->graphicsView->setScene(tablerito);
     ui->graphicsView->setHidden(true);
 
-
     connect(ui->actionQuit, SIGNAL(triggered()),this,SLOT(close()));
     connect(ui->actionAbout,SIGNAL(triggered()),this,SLOT(acercaDe()));
     connect(ui->actionNew_Game,SIGNAL(triggered()),this,SLOT(newGame()));
