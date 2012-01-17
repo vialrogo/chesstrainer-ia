@@ -25,6 +25,7 @@ public:
     string tomarDesicion();
     void definirVariables(char **estadoIn, int *posBlancasXIn, int *posBlancasYIn, int *posNegrasXIn, int *posNegrasYIn);
     bool verificarJaque(bool color);
+    bool sePuedeMover();
 
 };
 
