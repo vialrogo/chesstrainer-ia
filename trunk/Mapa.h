@@ -9,6 +9,12 @@ private:
     static int reina[6][6];
     static int rey[6][6];
 
+    //Desplazamiento de las fichas
+//    static int dxRectaArriba;
+//    static int dyRectaArriba;
+//    static int dxRectaAbajo;
+//    static int dyRectaAbajo;
+
 public:
     Mapa();
     static int pesoPeon(int x, int y);
@@ -45,5 +51,10 @@ int Mapa::rey[6][6]={{1002,1000,1000,1000,1000,1002},
                      {1000,998,998,998,998,1000},
                      {1000,998,998,998,998,1000},
                      {1002,1000,1000,1000,1000,1002}};
+
+//int Mapa::dxRectaArriba=0;
+//int Mapa::dyRectaArriba=-1;
+//int Mapa::dxRectaAbajo=0;
+//int Mapa::dyRectaAbajo=1;
 
 #endif // MAPA_H

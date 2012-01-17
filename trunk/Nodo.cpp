@@ -10,23 +10,11 @@ Nodo::Nodo(Nodo* padreIn, int nivelIn, int *posBlancasXIn, int *posBlancasYIn, i
     posNegrasY=posNegrasYIn;
     estado=estadoIn;
 
-//    for (int var = 0; var < 8; var++) {
-//        posBlancasXIn[var]=posBlancasX[var];
-//        posBlancasYIn[var]=posBlancasY[var];
-//        posNegrasXIn[var]=posNegrasX[var];
-//        posNegrasYIn[var]=posNegrasYIn[var];
-//    }
-
-//    for (int var = 0; var < 6; var++) {
-//        for (int var2 = 0; var2 < 6; var2++) {
-//            estadoIn[var][var2]=estado[var][var2];
-//        }
-//    }
-
     quienSoy="";
     valor=0;
 }
 
+//para quien soy: Mayúscula=blancas Minúscula=negras; B=alfil, H=Caballo, K=rey, P=peón, Q=reina
 void Nodo::actualizarDesicion(int valorIn, string quiensoyIn)
 {
     if(nivel%2==0){
