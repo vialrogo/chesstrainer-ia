@@ -6,6 +6,7 @@
 #include <iostream>
 #include <exception>
 #include "Tablero.h"
+#include "Minimax.h"
 
 using namespace std;
 
@@ -26,24 +27,25 @@ private:
     int *posNegrasY;
     char** estado;
     Tablero* tablerito;
+    MiniMax* minimax;
+    void game(int nivel);
 
 public:
     explicit Ventana(QWidget *parent = 0);
     ~Ventana();
     Ui::Ventana *ui;
     void borrarTablero();
-
     void crearTablero();
     void crearEstadoDeArreglos();
     void imprimirEstado();
-    bool verificarJaque(bool color); //Es posible que este método no vaya en esta clase
 
 public slots:
     void acercaDe();
     void newGame();
-    void gameEasy();
-    void gameMedium();
-    void gameHard();
+    void gameEasy(){game(0);};
+    void gameMedium(){game(1);};
+    void gameHard(){game(2);};
+
 };
 
 #endif // VENTANA_H

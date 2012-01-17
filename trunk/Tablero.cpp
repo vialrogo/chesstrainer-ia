@@ -36,8 +36,8 @@ void Tablero::crearFichas(int *posBlancasX, int *posBlancasY, int *posNegrasX, i
 
         if(i==4) //Caballo
         {
-            imagenesFichasBlancas[i]=new Ficha(QSizeF(540,540),QPixmap("Imagenes/C.png"),this);
-            imagenesFichasNegras[i]=new Ficha(QSizeF(540,540),QPixmap("Imagenes/c.png"),this);
+            imagenesFichasBlancas[i]=new Ficha(QSizeF(540,540),QPixmap("Imagenes/H.png"),this);
+            imagenesFichasNegras[i]=new Ficha(QSizeF(540,540),QPixmap("Imagenes/h.png"),this);
         }
 
         if(i==5) //Alfil
@@ -73,6 +73,8 @@ void Tablero::mousePressEvent(QGraphicsSceneMouseEvent* mouseevent)
     double xpos = posicion.rx();
     double ypos = posicion.ry();
 
+    QColor colorFichaSeleccionada(0,180,180,255);
+
     //Con esto se sale si se ha dado clic fuera del tablero
     if(xpos<=deltaX || ypos<=deltaY || xpos>=480+deltaX || ypos>=480+deltaY) return;
 
@@ -84,7 +86,7 @@ void Tablero::mousePressEvent(QGraphicsSceneMouseEvent* mouseevent)
     {
         if(xSelected==-1 && ySelected==-1) //No hay ninguna ficha seleccionada
         {
-            matrizCuadrados[yCelda][xCelda]->setBrush(QColor(0,0,180,255));
+            matrizCuadrados[yCelda][xCelda]->setBrush(colorFichaSeleccionada);
             xSelected=xCelda;
             ySelected=yCelda;
         }
@@ -102,7 +104,7 @@ void Tablero::mousePressEvent(QGraphicsSceneMouseEvent* mouseevent)
             }
             else //Se cliqueo en una ficha, cuando ya había OTRA seleccionada
             {
-                matrizCuadrados[yCelda][xCelda]->setBrush(QColor(0,0,180,255));
+                matrizCuadrados[yCelda][xCelda]->setBrush(colorFichaSeleccionada);
 
                 if((xSelected+ySelected)%2==0)
                     matrizCuadrados[ySelected][xSelected]->setBrush(QColor(255,255,255,255));

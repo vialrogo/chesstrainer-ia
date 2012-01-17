@@ -9,7 +9,7 @@ using namespace std;
 class MiniMax
 {
 private:
-    char **estadoInicial;
+    char **estado;
     int *posBlancasX;
     int *posBlancasY;
     int *posNegrasX;
@@ -22,7 +22,9 @@ private:
 
 public:
     MiniMax(int nivelIn);
-    string tomarDesicion(char **estadoInicialIn, int *posBlancasXIn, int *posBlancasYIn, int *posNegrasXIn, int *posNegrasYIn);
+    string tomarDesicion();
+    void definirVariables(char **estadoIn, int *posBlancasXIn, int *posBlancasYIn, int *posNegrasXIn, int *posNegrasYIn);
+    bool verificarJaque(bool color);
 
 };
 
