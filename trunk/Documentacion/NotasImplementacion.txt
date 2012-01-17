@@ -4,13 +4,13 @@ PROYECTO 2 - IA: CHESS-TRAINER
 Diagrama de Clases :P
 ^^^^^^^^^^^^^^^^^^^^^
 
-+-------+	+-------+		+----+
-|Tablero|<------|Ventana|		|Mapa|
-+-------+	+-------+		+----+
-    |		    |			  |
- +-----+            |	+-------+	+----+
- |Ficha|            +-->|MiniMax|------>|Nodo|
- +-----+		+-------+	+----+
++-------+	+-------+     +----+
+|Tablero|<------|Ventana|     |Mapa|
++-------+	+-------+     +----+
+    |		    |	        |
+ +-----+            |	    +-------+       +----+
+ |Ficha|            +------>|MiniMax|------>|Nodo|
+ +-----+		    +-------+	    +----+
 
 
 Clase Nodo:
@@ -108,3 +108,15 @@ Nivel:
 0=principiante
 1=amateur
 2=experto
+
+
+Caracteres ASCII:
+
+B = 66    b = 98
+C = 67    c = 99
+K = 75    k = 107
+P = 80    p = 112
+Q = 81    q = 113
+
+
+
