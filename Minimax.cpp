@@ -52,13 +52,12 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
     int mover=0, idx=0, count=0, val=0;
 
     for (int i = 0; i < 8; i++) {//Intentar mover todas las fichas
-        //los datos del padre
+        //los datos del padre ->depronto no es necesario colocarlo aquí. revisar al finalizar el método.
         estadoTmp=elNodo->getEstado();
         posBlancasXTmp=elNodo->getPosBlancasX();
         posBlancasYTmp=elNodo->getPosBlancasY();
         posNegrasXTmp=elNodo->getPosNegrasX();
         posNegrasYTmp=elNodo->getPosNegrasY();
-        quienSoyTmp=i;
 
         if(elNodo->getNivel()%2==0) //blancas
         {
@@ -76,7 +75,7 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
                     posBlancasYTmp=elNodo->getPosBlancasY();
                     posNegrasXTmp=elNodo->getPosNegrasX();
                     posNegrasYTmp=elNodo->getPosNegrasY();
-                    quienSoyTmp=i;
+                    quienSoyTmp=mapa.getBlanca(i);
 
                     val=sePuedeMover(posBlancasXTmp[i]+mapa.getDxCaballo(j),posBlancasYTmp[i]+mapa.getDyCaballo(j),i,true);
                     if(val!=-2)
@@ -98,10 +97,69 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
                     }
                 }
             }
+            else if(i==5) //Alfil
+            {
+
+            }
+            else if(i==6) //Reina
+            {
+
+            }
+            else if(i==7) //Rey
+            {
+
+            }
         }
         else //negras
         {
+            if(i<4) //peones
+            {
+                //De ultimos... cuando se arregle sePuedeMover
+            }
+            else if(i==4) //Caballo
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    //Recuperar los datos del padre
+                    estadoTmp=elNodo->getEstado();
+                    posBlancasXTmp=elNodo->getPosBlancasX();
+                    posBlancasYTmp=elNodo->getPosBlancasY();
+                    posNegrasXTmp=elNodo->getPosNegrasX();
+                    posNegrasYTmp=elNodo->getPosNegrasY();
+                    quienSoyTmp=mapa.getNegra(i);
 
+                    val=sePuedeMover(posNegrasXTmp[i]+mapa.getDxCaballo(j),posNegrasYTmp[i]+mapa.getDyCaballo(j),i,false);
+                    if(val!=-2)
+                    {
+                        estadoTmp[posNegrasXTmp[i]][posNegrasYTmp[i]]=' ';
+                        estadoTmp[posNegrasXTmp[i]+mapa.getDxCaballo(j)][posNegrasYTmp[i]+mapa.getDyCaballo(j)]=mapa.getNegra(i);
+                        posNegrasXTmp[i]+=mapa.getDxCaballo(j);
+                        posNegrasYTmp[i]+=mapa.getDyCaballo(j);
+
+                        if(val!=-1)
+                        {
+                            posBlancasXTmp[val]=-1;
+                            posBlancasYTmp[val]=-1;
+                        }
+
+                        quienSoyTmp+=posNegrasXTmp[i];
+                        quienSoyTmp+=posNegrasYTmp[i];
+                        respuesta.push_back(new Nodo(elNodo,elNodo->getNivel()+1,posBlancasXTmp,posBlancasYTmp,posNegrasXTmp,posNegrasYTmp,estadoTmp,quienSoyTmp));
+                    }
+                }
+            }
+            else if(i==5) //Alfil
+            {
+
+            }
+            else if(i==6) //Reina
+            {
+
+            }
+            else if(i==7) //Rey
+            {
+
+            }
         }
     }
 
