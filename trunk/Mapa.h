@@ -18,6 +18,9 @@ private:
     static int dxRey[8];
     static int dyRey[8];
 
+    static char blancas[8];
+    static char negras[8];
+
     //Desplazamiento de las fichas
 //    static int dxRectaArriba;
 //    static int dyRectaArriba;
@@ -30,6 +33,7 @@ public:
     static int pesoCaballoAlfil(int x, int y);
     static int pesoReina(int x, int y);
     static int pesoRey(int x, int y);
+
     static int getDxDiago(int i);
     static int getDyDiago(int i);
     static int getDxRectas(int i);
@@ -38,6 +42,9 @@ public:
     static int getDyCaballo(int i);
     static int getDxRey(int i);
     static int getDyRey(int i);
+
+    static char getBlanca(int i);
+    static char getNegra(int i);
 
 };
 

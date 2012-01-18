@@ -28,6 +28,8 @@ public:
     int* getPosBlancasY();
     int* getPosNegrasX();
     int* getPosNegrasY();
+    string getDecision();
+    int getNivel();
 };
 
 #endif // NODO_H

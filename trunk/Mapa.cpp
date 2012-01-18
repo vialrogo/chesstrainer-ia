@@ -42,6 +42,9 @@ int Mapa::dyCaballo[8] = {-1, 1,-2, 2,-2, 2,-1, 1};
 int Mapa::dxRey[8] = {-1,-1,-1, 0, 0, 1, 1, 1};
 int Mapa::dyRey[8] = {-1, 0, 1,-1, 1,-1, 0, 1};
 
+char Mapa::blancas[8] = {'p','p','p','p','h','b','q','k'};
+char Mapa::negras[8] = {'P','P','P','P','H','B','Q','K'};
+
 //int Mapa::dxRectaArriba=0;
 //int Mapa::dyRectaArriba=-1;
 //int Mapa::dxRectaAbajo=0;
@@ -115,6 +118,16 @@ int Mapa::getDxRey(int i)
 int Mapa::getDyRey(int i)
 {
     return dyRey[i];
+}
+
+char Mapa::getBlanca(int i)
+{
+    return blancas[i];
+}
+
+char Mapa::getNegra(int i)
+{
+    return negras[i];
 }
 
 //int main()
