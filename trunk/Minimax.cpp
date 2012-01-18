@@ -7,6 +7,12 @@ MiniMax::MiniMax(int nivelIn)
 
 string MiniMax::tomarDesicion()
 {
+    Nodo *inicial=new Nodo(0,0,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,"original");
+    /*
+      Expandir Nodo = crear arbol
+
+      Retornar inicial->decision
+    */
 }
 
 void MiniMax::definirVariables(char **estadoIn, int *posBlancasXIn, int *posBlancasYIn, int *posNegrasXIn, int *posNegrasYIn)
@@ -16,6 +22,38 @@ void MiniMax::definirVariables(char **estadoIn, int *posBlancasXIn, int *posBlan
     posBlancasY=posBlancasYIn;
     posNegrasX=posNegrasXIn;
     posNegrasY=posNegrasYIn;
+}
+
+int MiniMax::calcularHeuristica(Nodo *elNodo)
+{
+    int resultado=0;
+    int *xBlancas=elNodo->getPosBlancasX();
+    int *yBlancas=elNodo->getPosBlancasY();
+    int *xNegras=elNodo->getPosNegrasX();
+    int *yNegras=elNodo->getPosNegrasY();
+
+    for (int var = 0; var < 4; var++) {
+        resultado+=mapa.pesoPeon(xBlancas[var],yBlancas[var]);
+    }
+    resultado+=mapa.pesoCaballoAlfil(xBlancas[4],yBlancas[4]);
+    resultado+=mapa.pesoCaballoAlfil(xBlancas[5],yBlancas[5]);
+    resultado+=mapa.pesoReina(xBlancas[6],yBlancas[6]);
+    resultado+=mapa.pesoRey(xBlancas[7],yBlancas[7]);
+
+    for (int var = 0; var < 4; var++) {
+        resultado-=mapa.pesoPeon(xNegras[var],yNegras[var]);
+    }
+    resultado-=mapa.pesoCaballoAlfil(xNegras[4],yNegras[4]);
+    resultado-=mapa.pesoCaballoAlfil(xNegras[5],yNegras[5]);
+    resultado-=mapa.pesoReina(xNegras[6],yNegras[6]);
+    resultado-=mapa.pesoRey(xNegras[7],yNegras[7]);
+
+    delete xBlancas;
+    delete yBlancas;
+    delete xNegras;
+    delete yNegras;
+
+    return resultado;
 }
 
 /*color=false => negras

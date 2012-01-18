@@ -1,6 +1,6 @@
 #include "Nodo.h"
 
-Nodo::Nodo(Nodo* padreIn, int nivelIn, int *posBlancasXIn, int *posBlancasYIn, int *posNegrasXIn, int *posNegrasYIn, char **estadoIn)
+Nodo::Nodo(Nodo* padreIn, int nivelIn, int *posBlancasXIn, int *posBlancasYIn, int *posNegrasXIn, int *posNegrasYIn, char **estadoIn, string quienSoyIn)
 {
     padre=padreIn;
     nivel=nivelIn;
@@ -10,25 +10,26 @@ Nodo::Nodo(Nodo* padreIn, int nivelIn, int *posBlancasXIn, int *posBlancasYIn, i
     posNegrasY=posNegrasYIn;
     estado=estadoIn;
 
-    quienSoy="";
+    quienSoy=quienSoyIn;
+    decision="";
     valor=0;
 }
 
 //para quien soy: Mayúscula=blancas Minúscula=negras; B=alfil, H=Caballo, K=rey, P=peón, Q=reina
-void Nodo::actualizarDesicion(int valorIn, string quiensoyIn)
+void Nodo::actualizarDesicion(int valorIn, string cualHijo)
 {
     if(nivel%2==0){
         if(valor<=valorIn)
         {
             valor=valorIn;
-            quienSoy=quiensoyIn;
+            decision=cualHijo;
         }
     }
     else{
         if(valor>=valorIn)
         {
             valor=valorIn;
-            quienSoy=quiensoyIn;
+            decision=cualHijo;
         }
     }
 }

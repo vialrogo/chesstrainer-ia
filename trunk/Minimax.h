@@ -3,6 +3,7 @@
 
 #include <string>
 #include "Mapa.h"
+#include "Nodo.h"
 
 using namespace std;
 
@@ -17,6 +18,7 @@ private:
     int nivel;
 
     Mapa mapa;
+    int calcularHeuristica(Nodo *elNodo);
 
 public:
     MiniMax(int nivelIn);
