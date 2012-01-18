@@ -59,3 +59,12 @@ int* Nodo::getPosNegrasY()
     return posNegrasY;
 }
 
+string Nodo::getDecision()
+{
+    return decision;
+}
+
+int Nodo::getNivel()
+{
+    return nivel;
+}

@@ -5,25 +5,7 @@ MiniMax::MiniMax(int nivelIn)
     nivel=nivelIn;//0=principiante, 1=amateur, 2=experto
 }
 
-string MiniMax::tomarDesicion()
-{
-    Nodo *inicial=new Nodo(0,0,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,"original");
-    /*
-      Expandir Nodo = crear arbol
-
-      Retornar inicial->decision
-    */
-}
-
-void MiniMax::definirVariables(char **estadoIn, int *posBlancasXIn, int *posBlancasYIn, int *posNegrasXIn, int *posNegrasYIn)
-{
-    estado=estadoIn;
-    posBlancasX=posBlancasXIn;
-    posBlancasY=posBlancasYIn;
-    posNegrasX=posNegrasXIn;
-    posNegrasY=posNegrasYIn;
-}
-
+//Calcula el valor para un nodo
 int MiniMax::calcularHeuristica(Nodo *elNodo)
 {
     int resultado=0;
@@ -56,6 +38,100 @@ int MiniMax::calcularHeuristica(Nodo *elNodo)
     return resultado;
 }
 
+QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
+{
+    QList<Nodo*> respuesta;
+    char** estadoTmp;
+    int *posBlancasXTmp;
+    int *posBlancasYTmp;
+    int *posNegrasXTmp;
+    int *posNegrasYTmp;
+    string quienSoyTmp;
+    bool color;
+
+    int mover=0, idx=0, count=0, val=0;
+
+    for (int i = 0; i < 8; i++) {//Intentar mover todas las fichas
+        //los datos del padre
+        estadoTmp=elNodo->getEstado();
+        posBlancasXTmp=elNodo->getPosBlancasX();
+        posBlancasYTmp=elNodo->getPosBlancasY();
+        posNegrasXTmp=elNodo->getPosNegrasX();
+        posNegrasYTmp=elNodo->getPosNegrasY();
+        quienSoyTmp=i;
+
+        if(elNodo->getNivel()%2==0) //blancas
+        {
+            if(i<4) //peones
+            {
+                //De ultimos... cuando se arregle sePuedeMover
+            }
+            else if(i==4) //Caballo
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    //Recuperar los datos del padre
+                    estadoTmp=elNodo->getEstado();
+                    posBlancasXTmp=elNodo->getPosBlancasX();
+                    posBlancasYTmp=elNodo->getPosBlancasY();
+                    posNegrasXTmp=elNodo->getPosNegrasX();
+                    posNegrasYTmp=elNodo->getPosNegrasY();
+                    quienSoyTmp=i;
+
+                    val=sePuedeMover(posBlancasXTmp[i]+mapa.getDxCaballo(j),posBlancasYTmp[i]+mapa.getDyCaballo(j),i,true);
+                    if(val!=-2)
+                    {
+                        estadoTmp[posBlancasXTmp[i]][posBlancasYTmp[i]]=' ';
+                        estadoTmp[posBlancasXTmp[i]+mapa.getDxCaballo(j)][posBlancasYTmp[i]+mapa.getDyCaballo(j)]=mapa.getBlanca(i);
+                        posBlancasXTmp[i]+=mapa.getDxCaballo(j);
+                        posBlancasYTmp[i]+=mapa.getDyCaballo(j);
+
+                        if(val!=-1)
+                        {
+                            posNegrasXTmp[val]=-1;
+                            posNegrasYTmp[val]=-1;
+                        }
+
+                        quienSoyTmp+=posBlancasXTmp[i];
+                        quienSoyTmp+=posBlancasYTmp[i];
+                        respuesta.push_back(new Nodo(elNodo,elNodo->getNivel()+1,posBlancasXTmp,posBlancasYTmp,posNegrasXTmp,posNegrasYTmp,estadoTmp,quienSoyTmp));
+                    }
+                }
+            }
+        }
+        else //negras
+        {
+
+        }
+    }
+
+    return respuesta;
+}
+
+string MiniMax::tomarDesicion()
+{
+    Nodo *inicial=new Nodo(0,0,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,"original");
+
+    //Inicia expandiendo el nodo
+    QStack<Nodo*> plia;//Para expandirlos.
+    QVector<Nodo*> vector;//para después eliminarlos
+
+    QList<Nodo*> hijos;//donde se colocan los hijos generados
+
+
+
+    return inicial->getDecision();
+}
+
+void MiniMax::definirVariables(char **estadoIn, int *posBlancasXIn, int *posBlancasYIn, int *posNegrasXIn, int *posNegrasYIn)
+{
+    estado=estadoIn;
+    posBlancasX=posBlancasXIn;
+    posBlancasY=posBlancasYIn;
+    posNegrasX=posNegrasXIn;
+    posNegrasY=posNegrasYIn;
+}
+
 /*color=false => negras
   color=true => blancas
 
@@ -69,6 +145,7 @@ int MiniMax::sePuedeMover(int xDestino, int yDestino, int ficha, bool color)
 {
     if(xDestino<0 || xDestino>5 || yDestino<0 || yDestino>5) return -2;
 
+    /*No sirve
     //Verificar Peones
     if(ficha<4 && color) //Peones Blancos
     {
@@ -97,7 +174,7 @@ int MiniMax::sePuedeMover(int xDestino, int yDestino, int ficha, bool color)
         }
     }
     else //Verificar Resto
-    {
+    {*/
         if (color)
         {
             if(estado[xDestino][yDestino]==' ') return -1;
@@ -110,7 +187,7 @@ int MiniMax::sePuedeMover(int xDestino, int yDestino, int ficha, bool color)
             else if( estado[xDestino][yDestino]>97) return -2;
             else return estado[xDestino][yDestino];
         }
-    }
+//    }
 }
 
 /*

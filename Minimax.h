@@ -4,6 +4,9 @@
 #include <string>
 #include "Mapa.h"
 #include "Nodo.h"
+#include <QStack>
+#include <QVector>
+#include <QList>
 
 using namespace std;
 
@@ -19,6 +22,7 @@ private:
 
     Mapa mapa;
     int calcularHeuristica(Nodo *elNodo);
+    QList<Nodo*> expandir (Nodo *elNodo);
 
 public:
     MiniMax(int nivelIn);
