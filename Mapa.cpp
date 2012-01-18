@@ -55,21 +55,25 @@ Mapa::Mapa()
 
 int Mapa::pesoPeon(int x, int y)
 {
+    if(x==-1 && y==-1) return 0;
     return Mapa::peon[x][y];
 }
 
 int Mapa::pesoCaballoAlfil(int x, int y)
 {
+    if(x==-1 && y==-1) return 0;
     return caballoAlfil[x][y];
 }
 
 int Mapa::pesoReina(int x, int y)
 {
+    if(x==-1 && y==-1) return 0;
     return reina[x][y];
 }
 
 int Mapa::pesoRey(int x, int y)
 {
+    if(x==-1 && y==-1) return 0;
     return rey[x][y];
 }
 

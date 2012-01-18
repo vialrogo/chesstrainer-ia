@@ -16,11 +16,12 @@ private:
     int nivel;
     double valor;
     string quienSoy;
+    string decision;
     Nodo* padre;
 
 public:
-    Nodo(Nodo* padreIn, int nivelIn, int *posBlancasXIn, int *posBlancasYIn, int *posNegrasXIn, int *posNegrasYIn, char **estadoIn);
-    void actualizarDesicion(int valorIn, string quiensoyIn);
+    Nodo(Nodo* padreIn, int nivelIn, int *posBlancasXIn, int *posBlancasYIn, int *posNegrasXIn, int *posNegrasYIn, char **estadoIn, string quienSoyIn);
+    void actualizarDesicion(int valorIn, string cualHijo);
 
     char** getEstado();
     int* getPosBlancasX();
