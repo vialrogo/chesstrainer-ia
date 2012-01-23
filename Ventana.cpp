@@ -26,6 +26,8 @@ Ventana::Ventana(QWidget *parent) :
     //Celda seleccionada
     xSelected=-1;
     ySelected=-1;
+    ficha=-1;
+    color=NULL;
 
     //Se agrega el Tablero a la GUI
     tablerito = new Tablero();
@@ -235,10 +237,37 @@ void Ventana::game(int nivel) // Facil=0, Medio=1, Dificil=2
         cout<<"Empieza un juego difícil"<<endl;
 }
 
+/*
+    Devuelve el color de la ficha que se encuentra en la posición [y,x]
+  */
+bool Ventana::colorDeficha(int xCelda, int yCelda)
+{
+    if(estado[yCelda][xCelda]<82) return true;
+    else return false;
+}
+
+/*
+    Devuelve el numero de la ficha (en el arreglo de posiciones, por lo que diferencia cada peon por ejemplo
+    de la ficha que se encuentra en la posición [y,x]
+  */
+int Ventana::numeroDeFicha(int xCelda, int yCelda)
+{
+    for (int i = 0; i < 8; ++i) {
+        if ((posBlancasX[i]==xCelda && posBlancasY[i]==yCelda) || (posNegrasX[i]==xCelda && posNegrasY[i]==yCelda))
+            return i;
+    }
+}
+
 void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
 {
+    //Debuggin
+    cout<<"Ficha seleccionada = "<<ficha<<" Color = "<<color<<endl;
+
     if(estado[yCelda][xCelda]!=' ') //Se cliqueo en una ficha
     {
+        ficha = numeroDeFicha(xCelda,yCelda);
+        color = colorDeficha(xCelda,yCelda);
+
         if(xSelected==-1 && ySelected==-1) //No hay ninguna ficha seleccionada
         {
             tablerito->seleccionarFicha(xCelda,yCelda);
@@ -268,6 +297,7 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
         if(xSelected!=-1 && ySelected!=-1)
         {
             // verificar si el movimiento es válido
+            tablerito->moverFicha(ficha,color,xSelected, ySelected, xCelda,yCelda);
         }
     }
 }

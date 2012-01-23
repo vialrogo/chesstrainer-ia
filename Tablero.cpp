@@ -158,6 +158,11 @@ void Tablero::pintarCuadricula()
 
 }
 
+void Tablero::setEstado(char ** estado_in)
+{
+    estado=estado_in;
+}
+
 void Tablero::animar()
 {
 //    if(0 == solucion.size() && 0 == tiempo )
@@ -189,50 +194,19 @@ void Tablero::animar()
 //    }
 }
 
-void Tablero::moverFicha(/*char carro, int direccion*/)
+/*
+    color:  false=negro, true=blanco
+    ficha:  en el orden del arreglo
+*/
+void Tablero::moverFicha(int ficha, bool color, int xIni, int yIni, int xFin, int yFin)
 {
-//    int anchoCelda = (W/M);
-//    int altoCelda = (H/N);
-//    int NumeroCarro = (carro - 65);
-//    int posX = posicionesCarro[NumeroCarro].rx();
-//    int posY = posicionesCarro[NumeroCarro].ry();
-
-////    cout<<"posX: "<<posX<<" posY: "<<posY<<endl;
-
-//    if(direcciones[NumeroCarro]) //Movimiento vertical
-//    {
-//        if(direccion==1) //Moverse hacia arriba
-//        {
-//           carros[NumeroCarro]->animatePosition(QPointF( posX, (-1*altoCelda) + posY) );
-//           posicionesCarro[NumeroCarro].setY( (-1*altoCelda) + posY );
-//        }
-//        else //Moverse hacia abajo
-//        {
-//           carros[NumeroCarro]->animatePosition(QPointF( posX, altoCelda+posY) );
-//           posicionesCarro[NumeroCarro].setY( altoCelda + posY );
-//        }
-//    }
-//    else //Movimiento horizontal
-//    {
-//        if(direccion==1) //Moverse hacia la derecha
-//        {
-//            carros[NumeroCarro]->animatePosition(QPointF( posX + anchoCelda, posY));
-//            posicionesCarro[NumeroCarro].setX( anchoCelda + posX);
-//        }
-//        else //Moverse hacia la izquierda
-//        {
-//            carros[NumeroCarro]->animatePosition(QPointF( posX + (-1*anchoCelda), posY ) );
-//            posicionesCarro[NumeroCarro].setX( (-1*anchoCelda) + posX );
-//        }
-//    }
+    if(color)
+        imagenesFichasBlancas[ficha]->animatePosition(QPointF((xFin-xIni)*anchoCelda,(yFin-yIni)*altoCelda));
+    else
+        imagenesFichasNegras[ficha]->animatePosition(QPointF((xFin-xIni)*anchoCelda,(yFin-yIni)*altoCelda));
 }
 
 void Tablero::pararAnimacion()
 {
     timer->stop();
-}
-
-void Tablero::setEstado(char ** estado_in)
-{
-    estado=estado_in;
 }

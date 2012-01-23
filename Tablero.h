@@ -22,7 +22,7 @@ public:
     Tablero();
     void crearFichas(int* posBlancasX, int* posBlancasY, int* posNegrasX, int* posNegrasY);
     void pintarCuadricula();
-    void moverFicha(/*char carro, int direccion*/);
+    void moverFicha(int ficha, bool color, int xIni, int yIni, int xFin, int yFin);
 //    void iniciarAnimacion(string solucion,bool *direcciones);
     void pararAnimacion();
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
