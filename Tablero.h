@@ -9,6 +9,7 @@
 #include <iostream>
 #include <QDebug>
 #include <QTimer>
+#include <QPoint>
 #include <QPropertyAnimation>
 
 using namespace std;
@@ -26,6 +27,8 @@ public:
     void pararAnimacion();
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
     void setEstado(char** estado_in);
+    void seleccionarFicha(int xFicha, int yFicha);
+    void seleccionarFicha(int xFicha, int yFicha, int xAnterior, int yAnterior);
 
 private:
     int deltaX;
@@ -33,8 +36,7 @@ private:
     int anchoCelda;
     int altoCelda;
     char** estado;
-    int xSelected;
-    int ySelected;
+    QColor colorFichaSeleccionada;
     QGraphicsRectItem *** matrizCuadrados;
     Ficha** imagenesFichasBlancas;
     Ficha** imagenesFichasNegras;
@@ -45,6 +47,7 @@ private slots:
 
 signals:
     void terminoAnimacion();
+    void celdaCliqueada(int X, int Y);
 };
 
 #endif // TABLERO_H

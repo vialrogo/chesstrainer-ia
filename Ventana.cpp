@@ -23,6 +23,10 @@ Ventana::Ventana(QWidget *parent) :
     for (int i = 0; i < 6; ++i)
         estado[i] = new char[6];
 
+    //Celda seleccionada
+    xSelected=-1;
+    ySelected=-1;
+
     //Se agrega el Tablero a la GUI
     tablerito = new Tablero();
     tablerito->setSceneRect(0,0,W,H);
@@ -35,6 +39,7 @@ Ventana::Ventana(QWidget *parent) :
     connect(ui->pushButtonEasy,SIGNAL(clicked()),this,SLOT(gameEasy()));
     connect(ui->pushButtonMedium,SIGNAL(clicked()),this,SLOT(gameMedium()));
     connect(ui->pushButtonHard,SIGNAL(clicked()),this,SLOT(gameHard()));
+    connect(tablerito,SIGNAL(celdaCliqueada(int,int)),this,SLOT(cliquearonEnCelda(int,int)));
 }
 
 Ventana::~Ventana()
@@ -230,4 +235,39 @@ void Ventana::game(int nivel) // Facil=0, Medio=1, Dificil=2
         cout<<"Empieza un juego difícil"<<endl;
 }
 
+void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
+{
+    if(estado[yCelda][xCelda]!=' ') //Se cliqueo en una ficha
+    {
+        if(xSelected==-1 && ySelected==-1) //No hay ninguna ficha seleccionada
+        {
+            tablerito->seleccionarFicha(xCelda,yCelda);
+            xSelected=xCelda;
+            ySelected=yCelda;
+        }
+        else
+        {
+            if(xSelected==xCelda && ySelected==yCelda) //Se volvió a cliclear en la ficha seleccionada
+            {
+                tablerito->seleccionarFicha(xCelda,yCelda);
+                xSelected=-1;
+                ySelected=-1;
+            }
+            else //Se cliqueo en una ficha, cuando ya había OTRA seleccionada
+            {
+                tablerito->seleccionarFicha(xCelda,yCelda,xSelected,ySelected);
+                xSelected=xCelda;
+                ySelected=yCelda;
+            }
+
+        }
+    }
+    else //Se cliqueo en un espacio en blanco
+    {
+        if(xSelected!=-1 && ySelected!=-1)
+        {
+            // verificar si el movimiento es válido
+        }
+    }
+}
 
