@@ -18,6 +18,7 @@ Tablero::Tablero()
     //Timer para las animaciones
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(animar()));
+    tiempo=0;
 }
 
 void Tablero::crearFichas(int *posBlancasX, int *posBlancasY, int *posNegrasX, int *posNegrasY)
@@ -163,47 +164,106 @@ void Tablero::setEstado(char ** estado_in)
     estado=estado_in;
 }
 
+void Tablero::iniciarAnimacion(int ficha_in, bool color_in, int xIni, int yIni, int xFin, int yFin)
+{
+    cout<<"Entró a Iniciar animacion"<<endl;
+
+    int dx = xFin-xIni;
+    int dy = yFin-yIni;
+    ficha=ficha_in;
+    color=color_in;
+
+    if (ficha!=4) //Todas menos el caballo
+    {
+        if(dx==0 && dy!=0) //Movimiento vertical
+        {
+            signo = dy>0? 1:-1;
+            tiempo=abs(dy);
+            tipoMovimiento=0;
+        }
+
+        if(dx!=0 && dy==0) //Movimiento horizontal
+        {
+            signo = dx>0? 1:-1;
+            tiempo=abs(dx);
+            tipoMovimiento=1;
+        }
+
+        if(dx!=0 && dy!=0 && dx==dy) //Movimiento en diagonal
+        {
+            signo = dy>0? 1:-1;
+            tiempo=abs(dx);
+            tipoMovimiento=2;
+        }
+        if(dx!=0 && dy!=0 && dx!=dy) //Movimiento en diagonal
+        {
+            signo = dy>0? 1:-1;
+            tiempo=abs(dx);
+            tipoMovimiento=3;
+        }
+    }
+    else //Caballo
+    {
+
+    }
+
+    timer->start(100);
+}
+
+/*
+    timpoMovimiento:    0 = vertical
+                        1 = horizontal
+                        2 = DiagonalPrincipal
+                        3 = DiagonalSecundaria
+
+    signo: es positivo hacia la derecha y abajo. Para las diagonales, crece hacia abajo
+*/
 void Tablero::animar()
 {
-//    if(0 == solucion.size() && 0 == tiempo )
-//    {
-//        timer->stop();
-//        emit terminoAnimacion();
-//    }
-//    else
-//    {
-//        if(0 == tiempo)
-//        {
-//            QString l = solucion.left(3);
-//            QString tmp;
-//            solucion = solucion.right(solucion.size()-3);
-//            tmp = l.left(1);
-//            l = l.right(2);
-//            carroActual = tmp.toLocal8Bit().data()[0];
-//            tmp = l.left(1);
-//            l = l.right(1);
-//            dirreccionActual = tmp.toInt();
-//            tiempo = l.toInt()-1;
-//            moverCarro(carroActual,dirreccionActual);
-//        }
-//        else
-//        {
-//            tiempo--;
-//            moverCarro(carroActual,dirreccionActual);
-//        }
-//    }
+    cout<<"Entró a animar"<<endl;
+
+    if(tiempo==0)
+    {
+        timer->stop();
+        emit terminoAnimacion();
+    }
+    else
+    {
+        tiempo--;
+        if(tipoMovimiento==0) moverFicha(ficha, color, 0, signo);
+        if(tipoMovimiento==1) moverFicha(ficha, color, signo, 0);
+        if(tipoMovimiento==2) moverFicha(ficha, color, signo, signo);
+        if(tipoMovimiento==3) moverFicha(ficha, color, (-1*signo), signo);
+    }
 }
 
 /*
     color:  false=negro, true=blanco
     ficha:  en el orden del arreglo
 */
-void Tablero::moverFicha(int ficha, bool color, int xIni, int yIni, int xFin, int yFin)
+void Tablero::moverFicha(int ficha, bool color, int dx, int dy)
 {
+    cout<<"Entró a mover ficha.  ficha: "<<ficha<<" color: "<<color<<" dx: "<<dx<<" dy: "<<dy<<endl;
+
+    int offsetX;
+    int offsetY;
+
     if(color)
-        imagenesFichasBlancas[ficha]->animatePosition(QPointF((xFin-xIni)*anchoCelda,(yFin-yIni)*altoCelda));
+    {
+//        offsetX = imagenesFichasBlancas[ficha]->offset().rx();
+//        offsetY = imagenesFichasBlancas[ficha]->offset().ry();
+        imagenesFichasBlancas[ficha]->animatePosition(QPointF(dx*anchoCelda,dy*altoCelda));
+//        imagenesFichasBlancas[ficha]->setOffset(offsetX+dx*anchoCelda,offsetY+dy*altoCelda);
+    }
     else
-        imagenesFichasNegras[ficha]->animatePosition(QPointF((xFin-xIni)*anchoCelda,(yFin-yIni)*altoCelda));
+    {
+        cout<<"offset "<<imagenesFichasNegras[ficha]->offset().rx()<<" "<<imagenesFichasNegras[ficha]->offset().ry()<<endl;
+        offsetX = imagenesFichasNegras[ficha]->offset().rx();
+        offsetY = imagenesFichasNegras[ficha]->offset().ry();
+        imagenesFichasNegras[ficha]->animatePosition(QPointF(dx*anchoCelda,dy*altoCelda));
+        imagenesFichasNegras[ficha]->setOffset(offsetX+dx*anchoCelda,offsetY+dy*altoCelda);
+        cout<<"offset "<<imagenesFichasNegras[ficha]->offset().rx()<<" "<<imagenesFichasNegras[ficha]->offset().ry()<<endl;
+    }
 }
 
 void Tablero::pararAnimacion()
