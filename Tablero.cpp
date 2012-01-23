@@ -97,6 +97,8 @@ void Tablero::seleccionarFicha(int xFicha, int yFicha)
     {
         matrizCuadrados[yFicha][xFicha]->setBrush(colorFichaSeleccionada);
     }
+
+    update(0,0,540,540);
 }
 
 void Tablero::seleccionarFicha(int xFicha, int yFicha, int xAnterior, int yAnterior)
@@ -108,6 +110,52 @@ void Tablero::seleccionarFicha(int xFicha, int yFicha, int xAnterior, int yAnter
         matrizCuadrados[yAnterior][xAnterior]->setBrush(QColor(255,255,255,255));
     else
         matrizCuadrados[yAnterior][xAnterior]->setBrush(QColor(0,0,0,255));
+
+    update(0,0,540,540);
+}
+
+void Tablero::pintarCuadricula()
+{
+    clear();
+
+    //Cuadros
+    for (int i = 0; i < 6; ++i)
+    {
+        for (int j = 0; j < 6; ++j)
+        {
+            matrizCuadrados[j][i] = new QGraphicsRectItem(i*altoCelda+deltaY,j*anchoCelda+deltaX,anchoCelda,altoCelda,0,this);
+            matrizCuadrados[j][i]->setPen(QColor(180,180,180,255));//Color de linea
+
+            if((i+j)%2==0)
+                matrizCuadrados[j][i]->setBrush(QColor(255,255,255,255));//Cuadros Blancos
+            else
+                matrizCuadrados[j][i]->setBrush(QColor(0,0,0,255));//Cuadros Negros
+        }
+    }
+
+    //Texto
+    QString letras[6] = {"a","b","c","d","e","f"};
+    QString numeros[6] = {"1","2","3","4","5","6"};
+    QFont fuente("Times", 12, QFont::Monospace);
+    int dxnumeros=5;
+    int dyletras=4;
+
+    for (int i = 0; i < 6; ++i)
+    {
+        QGraphicsTextItem* letraSuperior = new QGraphicsTextItem(letras[i],0,this);
+        letraSuperior->setFont(fuente);
+        letraSuperior->setPos(deltaX+40+(i*80),dyletras);
+        QGraphicsTextItem* letraInferior = new QGraphicsTextItem(letras[i],0,this);
+        letraInferior->setFont(fuente);
+        letraInferior->setPos(deltaX+40+(i*80),deltaY+480+dyletras);
+        QGraphicsTextItem* numeroSuperior = new QGraphicsTextItem(numeros[i],0,this);
+        numeroSuperior->setFont(fuente);
+        numeroSuperior->setPos(dxnumeros,deltaY+40+(i*80));
+        QGraphicsTextItem* numeroInferior = new QGraphicsTextItem(numeros[i],0,this);
+        numeroInferior->setFont(fuente);
+        numeroInferior->setPos(deltaX+480+dxnumeros,deltaY+40+(i*80));
+    }
+
 }
 
 void Tablero::animar()
@@ -177,50 +225,6 @@ void Tablero::moverFicha(/*char carro, int direccion*/)
 //            posicionesCarro[NumeroCarro].setX( (-1*anchoCelda) + posX );
 //        }
 //    }
-}
-
-void Tablero::pintarCuadricula()
-{
-    clear();
-
-    //Cuadros
-    for (int i = 0; i < 6; ++i)
-    {
-        for (int j = 0; j < 6; ++j)
-        {
-            matrizCuadrados[j][i] = new QGraphicsRectItem(i*altoCelda+deltaY,j*anchoCelda+deltaX,anchoCelda,altoCelda,0,this);
-            matrizCuadrados[j][i]->setPen(QColor(180,180,180,255));//Color de linea
-
-            if((i+j)%2==0)
-                matrizCuadrados[j][i]->setBrush(QColor(255,255,255,255));//Cuadros Blancos
-            else
-                matrizCuadrados[j][i]->setBrush(QColor(0,0,0,255));//Cuadros Negros
-        }
-    }
-
-    //Texto
-    QString letras[6] = {"a","b","c","d","e","f"};
-    QString numeros[6] = {"1","2","3","4","5","6"};
-    QFont fuente("Times", 12, QFont::Monospace);
-    int dxnumeros=5;
-    int dyletras=4;
-
-    for (int i = 0; i < 6; ++i)
-    {
-        QGraphicsTextItem* letraSuperior = new QGraphicsTextItem(letras[i],0,this);
-        letraSuperior->setFont(fuente);
-        letraSuperior->setPos(deltaX+40+(i*80),dyletras);
-        QGraphicsTextItem* letraInferior = new QGraphicsTextItem(letras[i],0,this);
-        letraInferior->setFont(fuente);
-        letraInferior->setPos(deltaX+40+(i*80),deltaY+480+dyletras);
-        QGraphicsTextItem* numeroSuperior = new QGraphicsTextItem(numeros[i],0,this);
-        numeroSuperior->setFont(fuente);
-        numeroSuperior->setPos(dxnumeros,deltaY+40+(i*80));
-        QGraphicsTextItem* numeroInferior = new QGraphicsTextItem(numeros[i],0,this);
-        numeroInferior->setFont(fuente);
-        numeroInferior->setPos(deltaX+480+dxnumeros,deltaY+40+(i*80));
-    }
-
 }
 
 void Tablero::pararAnimacion()
