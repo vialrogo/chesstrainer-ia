@@ -23,6 +23,8 @@ private:
     int H;
     int xSelected;
     int ySelected;
+    int ficha;
+    bool color;
     int *posBlancasX;
     int *posBlancasY;
     int *posNegrasX;
@@ -39,6 +41,8 @@ public:
     void borrarTablero();
     void crearTablero();
     void crearEstadoDeArreglos();
+    bool colorDeficha(int xCelda, int yCelda);
+    int numeroDeFicha(int xCelda, int yCelda);
     void imprimirEstado();
 
 public slots:
