@@ -8,8 +8,7 @@ Tablero::Tablero()
     anchoCelda = 80; //Quemados en el código!! se definen en Ventana::pintarCuadricula()
     altoCelda = 80; //Quemados en el código!! se definen en Ventana::pintarCuadricula()
 
-    xSelected=-1;
-    ySelected=-1;
+    colorFichaSeleccionada=QColor(0,180,180,255);
 
     //Inicializo la matriz de cuadros
     matrizCuadrados = new QGraphicsRectItem**[6];
@@ -73,8 +72,6 @@ void Tablero::mousePressEvent(QGraphicsSceneMouseEvent* mouseevent)
     double xpos = posicion.rx();
     double ypos = posicion.ry();
 
-    QColor colorFichaSeleccionada(0,180,180,255);
-
     //Con esto se sale si se ha dado clic fuera del tablero
     if(xpos<=deltaX || ypos<=deltaY || xpos>=480+deltaX || ypos>=480+deltaY) return;
 
@@ -82,41 +79,35 @@ void Tablero::mousePressEvent(QGraphicsSceneMouseEvent* mouseevent)
     int xCelda = (xpos-deltaX)/anchoCelda;
     int yCelda = (ypos-deltaY)/altoCelda;
 
-    if(estado[yCelda][xCelda]!=' ')
+    emit celdaCliqueada(xCelda, yCelda);
+}
+
+void Tablero::seleccionarFicha(int xFicha, int yFicha)
+{
+    QColor colorFicha = matrizCuadrados[yFicha][xFicha]->brush().color();
+
+    if(colorFicha==colorFichaSeleccionada)
     {
-        if(xSelected==-1 && ySelected==-1) //No hay ninguna ficha seleccionada
-        {
-            matrizCuadrados[yCelda][xCelda]->setBrush(colorFichaSeleccionada);
-            xSelected=xCelda;
-            ySelected=yCelda;
-        }
+        if((xFicha+yFicha)%2==0)
+            matrizCuadrados[yFicha][xFicha]->setBrush(QColor(255,255,255,255));
         else
-        {
-            if(xSelected==xCelda && ySelected==yCelda) //Se volvió a cliclear en la ficha seleccionada
-            {
-                if((xCelda+yCelda)%2==0)
-                    matrizCuadrados[yCelda][xCelda]->setBrush(QColor(255,255,255,255));
-                else
-                    matrizCuadrados[yCelda][xCelda]->setBrush(QColor(0,0,0,255));
-
-                xSelected=-1;
-                ySelected=-1;
-            }
-            else //Se cliqueo en una ficha, cuando ya había OTRA seleccionada
-            {
-                matrizCuadrados[yCelda][xCelda]->setBrush(colorFichaSeleccionada);
-
-                if((xSelected+ySelected)%2==0)
-                    matrizCuadrados[ySelected][xSelected]->setBrush(QColor(255,255,255,255));
-                else
-                    matrizCuadrados[ySelected][xSelected]->setBrush(QColor(0,0,0,255));
-
-                xSelected=xCelda;
-                ySelected=yCelda;
-            }
-
-        }
+            matrizCuadrados[yFicha][xFicha]->setBrush(QColor(0,0,0,255));
     }
+    else
+    {
+        matrizCuadrados[yFicha][xFicha]->setBrush(colorFichaSeleccionada);
+    }
+}
+
+void Tablero::seleccionarFicha(int xFicha, int yFicha, int xAnterior, int yAnterior)
+{
+
+    matrizCuadrados[yFicha][xFicha]->setBrush(colorFichaSeleccionada);
+
+    if((xAnterior+yAnterior)%2==0)
+        matrizCuadrados[yAnterior][xAnterior]->setBrush(QColor(255,255,255,255));
+    else
+        matrizCuadrados[yAnterior][xAnterior]->setBrush(QColor(0,0,0,255));
 }
 
 void Tablero::animar()
@@ -187,7 +178,6 @@ void Tablero::moverFicha(/*char carro, int direccion*/)
 //        }
 //    }
 }
-
 
 void Tablero::pintarCuadricula()
 {
