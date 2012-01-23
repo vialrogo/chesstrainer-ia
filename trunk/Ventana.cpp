@@ -297,7 +297,7 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
         if(xSelected!=-1 && ySelected!=-1)
         {
             // verificar si el movimiento es válido
-            tablerito->moverFicha(ficha,color,xSelected, ySelected, xCelda,yCelda);
+            tablerito->iniciarAnimacion(ficha,color,xSelected, ySelected, xCelda,yCelda);
         }
     }
 }
