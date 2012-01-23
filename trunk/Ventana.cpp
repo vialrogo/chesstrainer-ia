@@ -254,6 +254,7 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
                 ySelected=-1;
             }
             else //Se cliqueo en una ficha, cuando ya había OTRA seleccionada
+                /** OJO!!! aquí falta colocar que pasa cuando se come una ficha*/
             {
                 tablerito->seleccionarFicha(xCelda,yCelda,xSelected,ySelected);
                 xSelected=xCelda;
