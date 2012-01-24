@@ -281,35 +281,128 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
                 ySelected=-1;
             }
             else //Se cliqueo en una ficha, cuando ya había OTRA seleccionada
-                /** OJO!!! aquí falta colocar que pasa cuando se come una ficha*/
             {
-                tablerito->seleccionarFicha(xCelda,yCelda,xSelected,ySelected);
-                xSelected=xCelda;
-                ySelected=yCelda;
+                if(false) /** <- Aquí va si la ficha es de color contrario*/  //Se cliqueó en una ficha del color contrario (o la come, o es inválido)
+                {
+                }
+                else // Se cliqueó en una ficha del mismo color (cambio de ficha seleccionada)
+                {
+                    tablerito->seleccionarFicha(xCelda,yCelda,xSelected,ySelected);
+                    xSelected=xCelda;
+                    ySelected=yCelda;
+                }
             }
 
         }
     }
     else //Se cliqueo en un espacio en blanco
     {
-        if(xSelected!=-1 && ySelected!=-1)
+        if(xSelected!=-1 && ySelected!=-1) //Ya había una ficha seleccionada
         {
-            // verificar si el movimiento es válido
+            /** falta verificar si el movimiento es válido */
 
-            tablerito->iniciarAnimacion(ficha, color, xSelected, ySelected, xCelda, yCelda);
-            tablerito->seleccionarFicha(xSelected,ySelected);
-            xSelected=-1;
-            ySelected=-1;
+            if(movimientoValido(ficha,color,xCelda,yCelda)) /** <- falta verificar si el movimiento es válido */ //El movimiento es válido
+            {
+                tablerito->iniciarAnimacion(ficha, color, xSelected, ySelected, xCelda, yCelda);
+                tablerito->seleccionarFicha(xSelected,ySelected);
+                xSelected=-1;
+                ySelected=-1;
 
-            if(color) {
-                posBlancasX[ficha]=xCelda;
-                posBlancasY[ficha]=yCelda;
-            }else {
-                posNegrasX[ficha]=xCelda;
-                posNegrasY[ficha]=yCelda;
+                if(color) {
+                    posBlancasX[ficha]=xCelda;
+                    posBlancasY[ficha]=yCelda;
+                }else {
+                    posNegrasX[ficha]=xCelda;
+                    posNegrasY[ficha]=yCelda;
+                }
+
+                crearEstadoDeArreglos();
             }
+            else //El movimiento no es inválido
+            {
 
-            crearEstadoDeArreglos();
+            }
         }
     }
+}
+
+bool Ventana::sePuedeMoverFicha(int ficha, bool color, int xCelda, int yCelda)
+{
+    int xOrigen;
+    int yOrigen;
+    int xx;
+    int yy;
+    int cont;
+    char ctmp;
+
+    if (color) {
+        xOrigen = posBlancasX[ficha];
+        yOrigen = posBlancasY[ficha];
+    } else {
+        xOrigen = posNegrasX[ficha];
+        yOrigen = posNegrasY[ficha];
+    }
+
+    int dx = xCelda - xOrigen;
+    int dy = yCelda - yOrigen;
+
+    if(ficha<4)
+    {
+        if(color && dy==-1 && (abs(dx)<2)) return true; //Peon blanco
+        if(!color && dy==1 && (abs(dx)<2)) return true;//Peon negro
+    }
+    if(ficha==4)
+    {
+
+    }
+    if(ficha==5)
+    {
+        if(abs(dx)==abs(dy))
+        {
+            cont=1;
+            xx = dx>0? 1 : -1;
+            yy = dy>0? 1 : -1;
+
+            while (true)
+            {
+                ctmp=estado[yOrigen + yy*cont][xOrigen + xx*cont];
+
+                if ((xOrigen + xx*cont == xCelda) && (yOrigen + yy*cont == yCelda))
+                {
+                    if(ctmp!=' ')
+                    {
+                        if(color && ctmp>97) return true;
+                        else return false;
+
+                        if(!color && ctmp<82) return true;
+                        else return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    if(ctmp!=' ') return false;
+                }
+                cont++;
+            }
+        }
+    }
+    if(ficha==6)
+    {
+
+    }
+    if(ficha==7)
+    {
+
+    }
+
+    return false;
+}
+
+bool Ventana::movimientoValido(int ficha, bool color, int xCelda, int yCelda)
+{
+    return sePuedeMoverFicha(ficha,color,xCelda,yCelda);
 }
