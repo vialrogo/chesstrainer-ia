@@ -36,7 +36,7 @@ void Ficha::animatePosition(const QPointF& end)
     // 2 second duration animation
     anim->setDuration(100);
     // position to start animation
-    //anim->setStartValue(start);
+//    anim->setStartValue(start);
     // end position of animation
     anim->setEndValue(end);
     // easing curve

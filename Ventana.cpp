@@ -167,7 +167,6 @@ void Ventana::crearTablero()
     borrarTablero();
     tablerito->pintarCuadricula();
     tablerito->crearFichas(posBlancasX,posBlancasY,posNegrasX,posNegrasY);
-    tablerito->setEstado(estado);
 }
 
 void Ventana::crearEstadoDeArreglos()
@@ -234,7 +233,7 @@ void Ventana::game(int nivel) // Facil=0, Medio=1, Dificil=2
         cout<<"Empieza un juego intermedio"<<endl;
 
     if(nivel==2)
-        cout<<"Empieza un juego difícil"<<endl;
+        cout<<"Empieza un juego elda, yCelda);difícil"<<endl;
 }
 
 /*
@@ -260,13 +259,14 @@ int Ventana::numeroDeFicha(int xCelda, int yCelda)
 
 void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
 {
-    //Debuggin
-    cout<<"Ficha seleccionada = "<<ficha<<" Color = "<<color<<endl;
+//    cout<<"Ficha seleccionada = "<<xCelda<<","<<yCelda<<endl;
 
     if(estado[yCelda][xCelda]!=' ') //Se cliqueo en una ficha
     {
         ficha = numeroDeFicha(xCelda,yCelda);
         color = colorDeficha(xCelda,yCelda);
+
+        cout<<"Ficha seleccionada = "<<ficha<<" Color = "<<color<<endl;
 
         if(xSelected==-1 && ySelected==-1) //No hay ninguna ficha seleccionada
         {
@@ -297,8 +297,21 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
         if(xSelected!=-1 && ySelected!=-1)
         {
             // verificar si el movimiento es válido
-            tablerito->iniciarAnimacion(ficha,color,xSelected, ySelected, xCelda,yCelda);
+
+            tablerito->iniciarAnimacion(ficha, color, xSelected, ySelected, xCelda, yCelda);
+            tablerito->seleccionarFicha(xSelected,ySelected);
+            xSelected=-1;
+            ySelected=-1;
+
+            if(color) {
+                posBlancasX[ficha]=xCelda;
+                posBlancasY[ficha]=yCelda;
+            }else {
+                posNegrasX[ficha]=xCelda;
+                posNegrasY[ficha]=yCelda;
+            }
+
+            crearEstadoDeArreglos();
         }
     }
 }
-

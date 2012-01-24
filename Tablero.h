@@ -23,9 +23,7 @@ public:
     void crearFichas(int* posBlancasX, int* posBlancasY, int* posNegrasX, int* posNegrasY);
     void pintarCuadricula();
     void iniciarAnimacion(int ficha, bool color, int xIni, int yIni, int xFin, int yFin);
-    void pararAnimacion(); //Candidata a DEPRECATE
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
-    void setEstado(char** estado_in);
     void seleccionarFicha(int xFicha, int yFicha);
     void seleccionarFicha(int xFicha, int yFicha, int xAnterior, int yAnterior);
 
@@ -36,13 +34,14 @@ private:
     bool color;
     int tipoMovimiento;
     int signo;
+    QPoint* posicionesFichasBlancas;
+    QPoint* posicionesFichasNegras;
 
     //Variables Tablero
     int deltaX;
     int deltaY;
     int anchoCelda;
     int altoCelda;
-    char** estado;
     QColor colorFichaSeleccionada;
     QGraphicsRectItem *** matrizCuadrados;
     Ficha** imagenesFichasBlancas;
