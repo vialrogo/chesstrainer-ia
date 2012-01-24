@@ -3,12 +3,15 @@
 Tablero::Tablero()
 {
     //Variables globales
-    deltaX=30+1; //Quemados en el código!! se definen en Ventana::pintarCuadricula()
-    deltaY=30+1; //Quemados en el código!! se definen en Ventana::pintarCuadricula()
+    deltaX=31; //Quemados en el código!! se definen en Ventana::pintarCuadricula()
+    deltaY=31; //Quemados en el código!! se definen en Ventana::pintarCuadricula()
     anchoCelda = 80; //Quemados en el código!! se definen en Ventana::pintarCuadricula()
     altoCelda = 80; //Quemados en el código!! se definen en Ventana::pintarCuadricula()
 
     colorFichaSeleccionada=QColor(0,180,180,255);
+
+    posicionesFichasBlancas= new QPoint[8];
+    posicionesFichasNegras= new QPoint[8];
 
     //Inicializo la matriz de cuadros
     matrizCuadrados = new QGraphicsRectItem**[6];
@@ -63,6 +66,9 @@ void Tablero::crearFichas(int *posBlancasX, int *posBlancasY, int *posNegrasX, i
 
         imagenesFichasNegras[i]->setOffset(posNegrasX[i]*anchoCelda+deltaX,posNegrasY[i]*altoCelda+deltaY);
         this->addItem(imagenesFichasNegras[i]);
+
+        posicionesFichasNegras[i]=QPoint(0,0);
+        posicionesFichasBlancas[i]=QPoint(0,0);
     }
 }
 
@@ -159,11 +165,6 @@ void Tablero::pintarCuadricula()
 
 }
 
-void Tablero::setEstado(char ** estado_in)
-{
-    estado=estado_in;
-}
-
 void Tablero::iniciarAnimacion(int ficha_in, bool color_in, int xIni, int yIni, int xFin, int yFin)
 {
     cout<<"Entró a Iniciar animacion"<<endl;
@@ -243,30 +244,23 @@ void Tablero::animar()
 */
 void Tablero::moverFicha(int ficha, bool color, int dx, int dy)
 {
-    cout<<"Entró a mover ficha.  ficha: "<<ficha<<" color: "<<color<<" dx: "<<dx<<" dy: "<<dy<<endl;
-
-    int offsetX;
-    int offsetY;
+    int posX;
+    int posY;
 
     if(color)
     {
-//        offsetX = imagenesFichasBlancas[ficha]->offset().rx();
-//        offsetY = imagenesFichasBlancas[ficha]->offset().ry();
-        imagenesFichasBlancas[ficha]->animatePosition(QPointF(dx*anchoCelda,dy*altoCelda));
-//        imagenesFichasBlancas[ficha]->setOffset(offsetX+dx*anchoCelda,offsetY+dy*altoCelda);
+        posX = posicionesFichasBlancas[ficha].rx() + dx*anchoCelda;
+        posY = posicionesFichasBlancas[ficha].ry() + dy*altoCelda;
+        imagenesFichasBlancas[ficha]->animatePosition(QPointF(posX,posY));
+        posicionesFichasBlancas[ficha].setX(posX);
+        posicionesFichasBlancas[ficha].setY(posY);
     }
     else
     {
-        cout<<"offset "<<imagenesFichasNegras[ficha]->offset().rx()<<" "<<imagenesFichasNegras[ficha]->offset().ry()<<endl;
-        offsetX = imagenesFichasNegras[ficha]->offset().rx();
-        offsetY = imagenesFichasNegras[ficha]->offset().ry();
-        imagenesFichasNegras[ficha]->animatePosition(QPointF(dx*anchoCelda,dy*altoCelda));
-        imagenesFichasNegras[ficha]->setOffset(offsetX+dx*anchoCelda,offsetY+dy*altoCelda);
-        cout<<"offset "<<imagenesFichasNegras[ficha]->offset().rx()<<" "<<imagenesFichasNegras[ficha]->offset().ry()<<endl;
+        posX = posicionesFichasNegras[ficha].rx() + dx*anchoCelda;
+        posY = posicionesFichasNegras[ficha].ry() + dy*altoCelda;
+        imagenesFichasNegras[ficha]->animatePosition(QPointF(posX,posY));
+        posicionesFichasNegras[ficha].setX(posX);
+        posicionesFichasNegras[ficha].setY(posY);
     }
-}
-
-void Tablero::pararAnimacion()
-{
-    timer->stop();
 }
