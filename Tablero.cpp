@@ -110,7 +110,6 @@ void Tablero::seleccionarFicha(int xFicha, int yFicha)
 
 void Tablero::seleccionarFicha(int xFicha, int yFicha, int xAnterior, int yAnterior)
 {
-
     matrizCuadrados[yFicha][xFicha]->setBrush(colorFichaSeleccionada);
 
     if((xAnterior+yAnterior)%2==0)
@@ -165,10 +164,11 @@ void Tablero::pintarCuadricula()
 
 }
 
+/*
+    Este método es llamado siempore con un movimiento válido
+*/
 void Tablero::iniciarAnimacion(int ficha_in, bool color_in, int xIni, int yIni, int xFin, int yFin)
 {
-    cout<<"Entró a Iniciar animacion"<<endl;
-
     int dx = xFin-xIni;
     int dy = yFin-yIni;
     ficha=ficha_in;
@@ -205,7 +205,17 @@ void Tablero::iniciarAnimacion(int ficha_in, bool color_in, int xIni, int yIni, 
     }
     else //Caballo
     {
+        tiempo=3;
+        tipoMovimiento=4;
 
+        if(dx==1 && dy==-2) signo = 1;
+        if(dx==2 && dy==-1) signo = 2;
+        if(dx==2 && dy==1)  signo = 3;
+        if(dx==1 && dy==2)  signo = 4;
+        if(dx==-1 && dy==2) signo = 5;
+        if(dx==-2 && dy==1) signo = 6;
+        if(dx==-2 && dy==-1)signo = 7;
+        if(dx==-1 && dy==-2)signo = 8;
     }
 
     timer->start(100);
@@ -216,13 +226,12 @@ void Tablero::iniciarAnimacion(int ficha_in, bool color_in, int xIni, int yIni, 
                         1 = horizontal
                         2 = DiagonalPrincipal
                         3 = DiagonalSecundaria
+                        4 = Caballo
 
     signo: es positivo hacia la derecha y abajo. Para las diagonales, crece hacia abajo
 */
 void Tablero::animar()
 {
-    cout<<"Entró a animar"<<endl;
-
     if(tiempo==0)
     {
         timer->stop();
@@ -235,6 +244,49 @@ void Tablero::animar()
         if(tipoMovimiento==1) moverFicha(ficha, color, signo, 0);
         if(tipoMovimiento==2) moverFicha(ficha, color, signo, signo);
         if(tipoMovimiento==3) moverFicha(ficha, color, (-1*signo), signo);
+        if(tipoMovimiento==4)
+        {
+            if(signo==1)
+            {
+                if(tiempo>0) moverFicha(ficha, color, 0, -1);
+                else moverFicha(ficha, color, 1, 0);
+            }
+            if(signo==2)
+            {
+                if(tiempo>0) moverFicha(ficha, color, 1, 0);
+                else moverFicha(ficha, color, 0, -1);
+            }
+            if(signo==3)
+            {
+                if(tiempo>0) moverFicha(ficha, color, 1, 0);
+                else moverFicha(ficha, color, 0, 1);
+            }
+            if(signo==4)
+            {
+                if(tiempo>0) moverFicha(ficha, color, 0, 1);
+                else moverFicha(ficha, color, 1, 0);
+            }
+            if(signo==5)
+            {
+                if(tiempo>0) moverFicha(ficha, color, 0, 1);
+                else moverFicha(ficha, color, -1, 0);
+            }
+            if(signo==6)
+            {
+                if(tiempo>0) moverFicha(ficha, color, -1, 0);
+                else moverFicha(ficha, color, 0, 1);
+            }
+            if(signo==7)
+            {
+                if(tiempo>0) moverFicha(ficha, color, -1, 0);
+                else moverFicha(ficha, color, 0, -1);
+            }
+            if(signo==8)
+            {
+                if(tiempo>0) moverFicha(ficha, color, 0, -1);
+                else moverFicha(ficha, color, -1, 0);
+            }
+        }
     }
 }
 
