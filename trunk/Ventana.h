@@ -33,6 +33,8 @@ private:
     Tablero* tablerito;
     MiniMax* minimax;
     void game(int nivel);
+    bool movimientoValido(int ficha, bool color, int xCelda, int yCelda);
+    bool sePuedeMoverFicha(int ficha, bool color, int xCelda, int yCelda);
 
 public:
     explicit Ventana(QWidget *parent = 0);
