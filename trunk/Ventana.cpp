@@ -259,8 +259,6 @@ int Ventana::numeroDeFicha(int xCelda, int yCelda)
 
 void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
 {
-//    cout<<"Ficha seleccionada = "<<xCelda<<","<<yCelda<<endl;
-
     if(estado[yCelda][xCelda]!=' ') //Se cliqueo en una ficha
     {
         ficha = numeroDeFicha(xCelda,yCelda);
