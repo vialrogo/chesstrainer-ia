@@ -201,6 +201,7 @@ void Ventana::crearEstadoDeArreglos()
 
 void Ventana::imprimirEstado()
 {
+    //Para imprimir la matriz
     for (int i = 0; i < 6; ++i) {
         cout<<"+---+---+---+---+---+---+"<<endl;
         for (int j = 0; j < 6; ++j) {
@@ -209,6 +210,19 @@ void Ventana::imprimirEstado()
         cout<<"|"<<endl;
     }
     cout<<"+---+---+---+---+---+---+"<<endl<<endl;
+
+    //Para imprimir los arreglos
+    cout<<"+-------+---+---+---+---+---+---+---+---+"<<endl;
+    cout<<"| Color | P | P | P | P | H | B | Q | K |"<<endl;
+    cout<<"+-------+---+---+---+---+---+---+---+---+"<<endl;
+    cout<<"|Blanco |";
+    for (int i = 0; i < 8; ++i) cout<<posBlancasX[i]<<","<<posBlancasY[i]<<"|";
+    cout<<endl;
+    cout<<"+-------+---+---+---+---+---+---+---+---+"<<endl;
+    cout<<"|Negro  |";
+    for (int i = 0; i < 8; ++i) cout<<posNegrasX[i]<<","<<posNegrasY[i]<<"|";
+    cout<<endl;
+    cout<<"+-------+---+---+---+---+---+---+---+---+"<<endl<<endl;
 }
 
 void Ventana::newGame()
@@ -255,11 +269,13 @@ int Ventana::numeroDeFicha(int xCelda, int yCelda)
         if ((posBlancasX[i]==xCelda && posBlancasY[i]==yCelda) || (posNegrasX[i]==xCelda && posNegrasY[i]==yCelda))
             return i;
     }
-    return -1; //Algo muy malo pasó :S
+    cout<<"Algo muy malo pasó :S"<<endl;
+    return -1;
 }
 
 void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
 {
+    cout<<"xCelda: "<<xCelda<<" yCelda: "<<yCelda<<endl;
     if(estado[yCelda][xCelda]!=' ') //Se cliqueo en una ficha
     {
         ficha = numeroDeFicha(xCelda,yCelda);
@@ -283,8 +299,12 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
             }
             else //Se cliqueo en una ficha, cuando ya había OTRA seleccionada
             {
-                if(false) /** <- Aquí va si la ficha es de color contrario*/  //Se cliqueó en una ficha del color contrario (o la come, o es inválido)
+                cout<<"ficha: "<<numeroDeFicha(xSelected,ySelected);
+                cout<<" color: "<<colorDeficha(xSelected,ySelected);
+                cout<<" destino: "<<xCelda<<","<<yCelda<<endl;
+                if(movimientoValido(numeroDeFicha(xSelected,ySelected),colorDeficha(xSelected,ySelected),xCelda,yCelda)) /** <- Aquí va si la ficha es de color contrario*/  //Se cliqueó en una ficha del color contrario (o la come, o es inválido)
                 {
+                    cout<<"Se come la ficha!!"<<endl;
                 }
                 else // Se cliqueó en una ficha del mismo color (cambio de ficha seleccionada)
                 {
@@ -319,7 +339,7 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
 
                 crearEstadoDeArreglos();
             }
-            else //El movimiento no es inválido
+            else //El movimiento es inválido
             {
 
             }
@@ -360,11 +380,8 @@ bool Ventana::sePuedeMoverFicha(int ficha, bool color, int xCelda, int yCelda)
         {
             if(ficha<4 && dx==0) return false; //El peon no puede comer de frente
 
-            if(color && ctmp>97) return true;
-            else return false;
-
-            if(!color && ctmp<82) return true;
-            else return false;
+            if(ctmp>97) return color;
+            else return !color;
         }
         else
         {
@@ -399,11 +416,8 @@ bool Ventana::sePuedeMoverFicha(int ficha, bool color, int xCelda, int yCelda)
             {
                 if(ctmp!=' ')
                 {
-                    if(color && ctmp>97) return true;
-                    else return false;
-
-                    if(!color && ctmp<82) return true;
-                    else return false;
+                    if(ctmp>97) return color;
+                    else return !color;
                 }
                 else
                 {
