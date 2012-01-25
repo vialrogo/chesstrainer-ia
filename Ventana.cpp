@@ -255,6 +255,7 @@ int Ventana::numeroDeFicha(int xCelda, int yCelda)
         if ((posBlancasX[i]==xCelda && posBlancasY[i]==yCelda) || (posNegrasX[i]==xCelda && posNegrasY[i]==yCelda))
             return i;
     }
+    return -1; //Algo muy malo pasó :S
 }
 
 void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
@@ -346,57 +347,75 @@ bool Ventana::sePuedeMoverFicha(int ficha, bool color, int xCelda, int yCelda)
     int dx = xCelda - xOrigen;
     int dy = yCelda - yOrigen;
 
-    if(ficha<4)
+    if(ficha<5 || ficha==7) //Peones, Caballo o Rey
     {
-        if(color && dy==-1 && (abs(dx)<2)) return true; //Peon blanco
-        if(!color && dy==1 && (abs(dx)<2)) return true;//Peon negro
-    }
-    if(ficha==4)
-    {
+        if( ficha<4 && color && (dy!=-1 || abs(dx)>1 )) return false; //Peon blanco
+        if( ficha<4 && !color && (dy!=1 || abs(dx)>1 )) return false;//Peon negro
+        if( ficha==4 && ( abs(dx)+abs(dy)!=3 || dx==0 || dy==0 )) return false; //Caballo
+        if( ficha==7 && ( abs(dx)>1 || abs(dy)>1) ) return false; //Rey
 
+        ctmp=estado[yCelda][xCelda];
+
+        if(ctmp!=' ')
+        {
+            if(ficha<4 && dx==0) return false; //El peon no puede comer de frente
+
+            if(color && ctmp>97) return true;
+            else return false;
+
+            if(!color && ctmp<82) return true;
+            else return false;
+        }
+        else
+        {
+            if(ficha<4 && dx!=0) return false; //El peon no puede avanzar en diagonal si no es comiendo
+
+            return true;
+        }
     }
-    if(ficha==5)
+    if(ficha==5 || ficha==6) //Alfil o Reina
     {
         if(abs(dx)==abs(dy))
         {
-            cont=1;
             xx = dx>0? 1 : -1;
             yy = dy>0? 1 : -1;
+        }
 
-            while (true)
+        if (dx==0 || dy==0)
+        {
+            if(ficha==5) return false; //El alfil no se puede mover de frente
+
+            xx = dx==0? 0 : dx>0? 1 : -1;
+            yy = dy==0? 0 : dy>0? 1 : -1;
+        }
+
+        cont=1;
+
+        while (true)
+        {
+            ctmp=estado[yOrigen + yy*cont][xOrigen + xx*cont];
+
+            if ((xOrigen + xx*cont == xCelda) && (yOrigen + yy*cont == yCelda))
             {
-                ctmp=estado[yOrigen + yy*cont][xOrigen + xx*cont];
-
-                if ((xOrigen + xx*cont == xCelda) && (yOrigen + yy*cont == yCelda))
+                if(ctmp!=' ')
                 {
-                    if(ctmp!=' ')
-                    {
-                        if(color && ctmp>97) return true;
-                        else return false;
+                    if(color && ctmp>97) return true;
+                    else return false;
 
-                        if(!color && ctmp<82) return true;
-                        else return false;
-                    }
-                    else
-                    {
-                        return true;
-                    }
+                    if(!color && ctmp<82) return true;
+                    else return false;
                 }
                 else
                 {
-                    if(ctmp!=' ') return false;
+                    return true;
                 }
-                cont++;
             }
+            else
+            {
+                if(ctmp!=' ') return false;
+            }
+            cont++;
         }
-    }
-    if(ficha==6)
-    {
-
-    }
-    if(ficha==7)
-    {
-
     }
 
     return false;

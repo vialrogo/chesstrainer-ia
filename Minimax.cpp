@@ -477,7 +477,7 @@ string MiniMax::tomarDesicion()
 
     hijos=expandir(inicial);
 
-    int i=0;
+    int idx=0; // VARG: cambié esta varible de i a idx porque tenía conflicto con el for
 
     while (!hijos.isEmpty()) {
         cout<<hijos.front()->getQuiensoy()<<endl;
@@ -490,8 +490,8 @@ string MiniMax::tomarDesicion()
         }
         cout<<"+---+---+---+---+---+---+"<<endl<<endl;
         hijos.removeFirst();
-        i++;
-        cout<<i<<endl;
+        idx++;
+        cout<<idx<<endl;
     }
 
     cout<<"Y ESTO?"<<endl;
@@ -717,6 +717,7 @@ bool MiniMax::verificarJaque(bool color)
     return respuesta;
 }
 
+/*
 int main()
 {
     char **est=new char*[6];
@@ -780,4 +781,4 @@ int main()
     obj.definirVariables(est,blancasX,blancasY,negrasX,negrasY);
     obj.tomarDesicion();
     cout<<"ESTO SALE?"<<endl;
-}
+}*/
