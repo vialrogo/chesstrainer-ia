@@ -7,6 +7,8 @@
 #include <QStack>
 #include <QVector>
 #include <QList>
+#include <iostream>
+#include <sstream>
 
 using namespace std;
 

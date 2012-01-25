@@ -68,3 +68,8 @@ int Nodo::getNivel()
 {
     return nivel;
 }
+
+string Nodo::getQuiensoy()
+{
+    return quienSoy;
+}
