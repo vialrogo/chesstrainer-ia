@@ -275,7 +275,9 @@ int Ventana::numeroDeFicha(int xCelda, int yCelda)
 
 void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
 {
+    cout<<"--------------------------------------------"<<endl;
     cout<<"xCelda: "<<xCelda<<" yCelda: "<<yCelda<<endl;
+
     if(estado[yCelda][xCelda]!=' ') //Se cliqueo en una ficha
     {
         ficha = numeroDeFicha(xCelda,yCelda);
@@ -285,6 +287,7 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
 
         if(xSelected==-1 && ySelected==-1) //No hay ninguna ficha seleccionada
         {
+            cout<<"no había ficha seleccionada"<<endl;
             tablerito->seleccionarFicha(xCelda,yCelda);
             xSelected=xCelda;
             ySelected=yCelda;
@@ -305,6 +308,9 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
                 if(movimientoValido(numeroDeFicha(xSelected,ySelected),colorDeficha(xSelected,ySelected),xCelda,yCelda)) /** <- Aquí va si la ficha es de color contrario*/  //Se cliqueó en una ficha del color contrario (o la come, o es inválido)
                 {
                     cout<<"Se come la ficha!!"<<endl;
+                    tablerito->seleccionarFicha(xSelected,ySelected);
+                    xSelected=-1;
+                    ySelected=-1;
                 }
                 else // Se cliqueó en una ficha del mismo color (cambio de ficha seleccionada)
                 {
@@ -320,9 +326,15 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
     {
         if(xSelected!=-1 && ySelected!=-1) //Ya había una ficha seleccionada
         {
+            cout<<"blanco depues de ficha seleccionada"<<endl;
+
             /** falta verificar si el movimiento es válido */
 
-            if(movimientoValido(ficha,color,xCelda,yCelda)) /** <- falta verificar si el movimiento es válido */ //El movimiento es válido
+            bool bandera = movimientoValido(ficha,color,xCelda,yCelda);
+
+            cout<<"calculó bandera"<<endl;
+
+            if(bandera) //El movimiento es válido
             {
                 tablerito->iniciarAnimacion(ficha, color, xSelected, ySelected, xCelda, yCelda);
                 tablerito->seleccionarFicha(xSelected,ySelected);
@@ -341,8 +353,15 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
             }
             else //El movimiento es inválido
             {
-
+                cout<<"movimiento inválido"<<endl;
+                tablerito->seleccionarFicha(xSelected,ySelected);
+                xSelected=-1;
+                ySelected=-1;
             }
+        }
+        else
+        {
+            cout<<"aquí no pasa nada"<<endl;
         }
     }
 }
@@ -392,18 +411,22 @@ bool Ventana::sePuedeMoverFicha(int ficha, bool color, int xCelda, int yCelda)
     }
     if(ficha==5 || ficha==6) //Alfil o Reina
     {
+        cout<<"quiero saber si el "<<ficha<<" "<<color<<" puede llegar a "<<xCelda<<","<<yCelda<<endl;
         if(abs(dx)==abs(dy))
         {
             xx = dx>0? 1 : -1;
             yy = dy>0? 1 : -1;
         }
-
-        if (dx==0 || dy==0)
+        else if (dx==0 || dy==0)
         {
             if(ficha==5) return false; //El alfil no se puede mover de frente
 
             xx = dx==0? 0 : dx>0? 1 : -1;
             yy = dy==0? 0 : dy>0? 1 : -1;
+        }
+        else
+        {
+            return false;
         }
 
         cont=1;
