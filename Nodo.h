@@ -30,6 +30,7 @@ public:
     int* getPosNegrasY();
     string getDecision();
     int getNivel();
+    string getQuiensoy();
 };
 
 #endif // NODO_H
