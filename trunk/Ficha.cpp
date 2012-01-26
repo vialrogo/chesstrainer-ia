@@ -4,6 +4,8 @@ Ficha::Ficha() :
     QObject(0), QGraphicsPixmapItem(0)
 {
     setCacheMode(DeviceCoordinateCache);
+    X=0;
+    Y=0;
 }
 
 Ficha::Ficha(const QPixmap& pixmap) :
@@ -52,4 +54,24 @@ void Ficha::animatePosition(const QPointF& end)
 void Ficha::animationFinished()
 {
     // This slot is called when animation ends
+}
+
+int Ficha::getX()
+{
+    return X;
+}
+
+int Ficha::getY()
+{
+    return Y;
+}
+
+void Ficha::setX(int X_in)
+{
+    X=X_in;
+}
+
+void Ficha::setY(int Y_in)
+{
+    Y=Y_in;
 }

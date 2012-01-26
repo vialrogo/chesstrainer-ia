@@ -34,8 +34,6 @@ private:
     bool color;
     int tipoMovimiento;
     int signo;
-    QPoint* posicionesFichasBlancas;
-    QPoint* posicionesFichasNegras;
 
     //Variables Tablero
     int deltaX;

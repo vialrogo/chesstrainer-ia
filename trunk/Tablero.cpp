@@ -10,9 +10,6 @@ Tablero::Tablero()
 
     colorFichaSeleccionada=QColor(0,180,180,255);
 
-    posicionesFichasBlancas= new QPoint[8];
-    posicionesFichasNegras= new QPoint[8];
-
     //Inicializo la matriz de cuadros
     matrizCuadrados = new QGraphicsRectItem**[6];
     for (int i = 0; i < 6; ++i)
@@ -67,8 +64,10 @@ void Tablero::crearFichas(int *posBlancasX, int *posBlancasY, int *posNegrasX, i
         imagenesFichasNegras[i]->setOffset(posNegrasX[i]*anchoCelda+deltaX,posNegrasY[i]*altoCelda+deltaY);
         this->addItem(imagenesFichasNegras[i]);
 
-        posicionesFichasNegras[i]=QPoint(0,0);
-        posicionesFichasBlancas[i]=QPoint(0,0);
+        imagenesFichasBlancas[i]->setX(0);
+        imagenesFichasBlancas[i]->setY(0);
+        imagenesFichasNegras[i]->setX(0);
+        imagenesFichasNegras[i]->setY(0);
     }
 }
 
@@ -301,18 +300,18 @@ void Tablero::moverFicha(int ficha, bool color, int dx, int dy)
 
     if(color)
     {
-        posX = posicionesFichasBlancas[ficha].rx() + dx*anchoCelda;
-        posY = posicionesFichasBlancas[ficha].ry() + dy*altoCelda;
+        posX = imagenesFichasBlancas[ficha]->getX() + dx*anchoCelda;
+        posY = imagenesFichasBlancas[ficha]->getY() + dy*altoCelda;
         imagenesFichasBlancas[ficha]->animatePosition(QPointF(posX,posY));
-        posicionesFichasBlancas[ficha].setX(posX);
-        posicionesFichasBlancas[ficha].setY(posY);
+        imagenesFichasBlancas[ficha]->setX(posX);
+        imagenesFichasBlancas[ficha]->setY(posY);
     }
     else
     {
-        posX = posicionesFichasNegras[ficha].rx() + dx*anchoCelda;
-        posY = posicionesFichasNegras[ficha].ry() + dy*altoCelda;
+        posX = imagenesFichasNegras[ficha]->getX() + dx*anchoCelda;
+        posY = imagenesFichasNegras[ficha]->getY() + dy*altoCelda;
         imagenesFichasNegras[ficha]->animatePosition(QPointF(posX,posY));
-        posicionesFichasNegras[ficha].setX(posX);
-        posicionesFichasNegras[ficha].setY(posY);
+        imagenesFichasNegras[ficha]->setX(posX);
+        imagenesFichasNegras[ficha]->setY(posY);
     }
 }
