@@ -31,6 +31,10 @@ class Ficha : public QObject, public QGraphicsPixmapItem
         void animatePosition(const QPointF& end);
         QRectF boundingRect() const;
 
+        int getX();
+        int getY();
+        void setX(int X_in);
+        void setY(int Y_in);
         int type() const
         {
             return PictureItemType;
@@ -41,6 +45,8 @@ class Ficha : public QObject, public QGraphicsPixmapItem
 
     private:
         QSizeF m_size;
+        int X;
+        int Y;
 };
 
 #endif // FICHAS_H
