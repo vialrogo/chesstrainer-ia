@@ -96,7 +96,7 @@ void Ventana::crearTablero()
     posBlancasX[7]=ptmp.rx();
     posBlancasY[7]=ptmp.ry();
     vect.remove(tmp);
-    crearEstadoDeArreglos();
+    crearEstadoDeArreglos(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
     minimax->definirVariables(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
 
     //Coloco Rey Negro
@@ -107,7 +107,7 @@ void Ventana::crearTablero()
         posNegrasX[7]= ptmp.rx();
         posNegrasY[7]= ptmp.ry();
         vect.remove(tmp);
-        crearEstadoDeArreglos();
+        crearEstadoDeArreglos(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
         minimax->definirVariables(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
 
         if(minimax->verificarJaque(true))
@@ -127,7 +127,7 @@ void Ventana::crearTablero()
         posBlancasX[i]= ptmp.rx();
         posBlancasY[i]= ptmp.ry();
         vect.remove(tmp);
-        crearEstadoDeArreglos();
+        crearEstadoDeArreglos(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
         minimax->definirVariables(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
 
         if(minimax->verificarJaque(false))
@@ -147,7 +147,7 @@ void Ventana::crearTablero()
         posNegrasX[i]= ptmp.rx();
         posNegrasY[i]= ptmp.ry();
         vect.remove(tmp);
-        crearEstadoDeArreglos();
+        crearEstadoDeArreglos(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
         minimax->definirVariables(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
 
         if(minimax->verificarJaque(true))
@@ -156,7 +156,7 @@ void Ventana::crearTablero()
             i++;
     }
 
-    imprimirEstado();
+    imprimirEstado(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
 
     //Crea el mapa (parte gráfica)
     ui->graphicsView->setHidden(false);
@@ -169,43 +169,43 @@ void Ventana::crearTablero()
     tablerito->crearFichas(posBlancasX,posBlancasY,posNegrasX,posNegrasY);
 }
 
-void Ventana::crearEstadoDeArreglos()
+void Ventana::crearEstadoDeArreglos(char **estado_in, int *posBlancasX_in, int *posBlancasY_in, int *posNegrasX_in, int *posNegrasY_in)
 {
     //Vacio la matriz
     for (int i = 0; i < 6; ++i) {
         for (int j = 0; j < 6; ++j) {
-            estado[i][j]=' ';
+            estado_in[i][j]=' ';
         }
     }
 
     for (int i = 0; i < 8; ++i)
     {
-        if(posBlancasY[i]!=-1 && posBlancasX[i]!=-1)
+        if(posBlancasY_in[i]!=-1 && posBlancasX_in[i]!=-1)
         {
-            if(i<4) estado[posBlancasY[i]][posBlancasX[i]]='P';
-            if(i==4) estado[posBlancasY[i]][posBlancasX[i]]='C';
-            if(i==5) estado[posBlancasY[i]][posBlancasX[i]]='B';
-            if(i==6) estado[posBlancasY[i]][posBlancasX[i]]='Q';
-            if(i==7) estado[posBlancasY[i]][posBlancasX[i]]='K';
+            if(i<4) estado_in[posBlancasY_in[i]][posBlancasX_in[i]]='P';
+            if(i==4) estado_in[posBlancasY_in[i]][posBlancasX_in[i]]='C';
+            if(i==5) estado_in[posBlancasY_in[i]][posBlancasX_in[i]]='B';
+            if(i==6) estado_in[posBlancasY_in[i]][posBlancasX_in[i]]='Q';
+            if(i==7) estado_in[posBlancasY_in[i]][posBlancasX_in[i]]='K';
         }
-        if(posNegrasY[i]!=-1 && posNegrasX[i]!=-1)
+        if(posNegrasY_in[i]!=-1 && posNegrasX_in[i]!=-1)
         {
-            if(i<4) estado[posNegrasY[i]][posNegrasX[i]]='p';
-            if(i==4) estado[posNegrasY[i]][posNegrasX[i]]='c';
-            if(i==5) estado[posNegrasY[i]][posNegrasX[i]]='b';
-            if(i==6) estado[posNegrasY[i]][posNegrasX[i]]='q';
-            if(i==7) estado[posNegrasY[i]][posNegrasX[i]]='k';
+            if(i<4) estado_in[posNegrasY_in[i]][posNegrasX_in[i]]='p';
+            if(i==4) estado_in[posNegrasY_in[i]][posNegrasX_in[i]]='c';
+            if(i==5) estado_in[posNegrasY_in[i]][posNegrasX_in[i]]='b';
+            if(i==6) estado_in[posNegrasY_in[i]][posNegrasX_in[i]]='q';
+            if(i==7) estado_in[posNegrasY_in[i]][posNegrasX_in[i]]='k';
         }
     }
 }
 
-void Ventana::imprimirEstado()
+void Ventana::imprimirEstado(char **estado_in, int *posBlancasX_in, int *posBlancasY_in, int *posNegrasX_in, int *posNegrasY_in)
 {
     //Para imprimir la matriz
     for (int i = 0; i < 6; ++i) {
         cout<<"+---+---+---+---+---+---+"<<endl;
         for (int j = 0; j < 6; ++j) {
-            cout<<"| "<<estado[i][j]<<" ";
+            cout<<"| "<<estado_in[i][j]<<" ";
         }
         cout<<"|"<<endl;
     }
@@ -216,11 +216,25 @@ void Ventana::imprimirEstado()
     cout<<"| Color | P | P | P | P | H | B | Q | K |"<<endl;
     cout<<"+-------+---+---+---+---+---+---+---+---+"<<endl;
     cout<<"|Blanco |";
-    for (int i = 0; i < 8; ++i) cout<<posBlancasX[i]<<","<<posBlancasY[i]<<"|";
+    for (int i = 0; i < 8; ++i)
+    {
+        if(posBlancasX_in[i]==-1) cout<<" -";
+        else cout<<posBlancasX_in[i]<<",";
+
+        if(posBlancasY_in[i]==-1) cout<<" |";
+        else cout<<posBlancasY_in[i]<<"|";
+    }
     cout<<endl;
     cout<<"+-------+---+---+---+---+---+---+---+---+"<<endl;
     cout<<"|Negro  |";
-    for (int i = 0; i < 8; ++i) cout<<posNegrasX[i]<<","<<posNegrasY[i]<<"|";
+    for (int i = 0; i < 8; ++i)
+    {
+        if(posNegrasX_in[i]==-1) cout<<" -";
+        else cout<<posNegrasX_in[i]<<",";
+
+        if(posNegrasY_in[i]==-1) cout<<" |";
+        else cout<<posNegrasY_in[i]<<"|";
+    }
     cout<<endl;
     cout<<"+-------+---+---+---+---+---+---+---+---+"<<endl<<endl;
 }
@@ -288,9 +302,9 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
             xSelected=xCelda;
             ySelected=yCelda;
         }
-        else
+        else //Ya había una ficha seleccionada
         {
-            if(xSelected==xCelda && ySelected==yCelda) //Se volvió a cliclear en la ficha seleccionada
+            if(xSelected==xCelda && ySelected==yCelda) //Se volvió a cliclear en la ficha previamente seleccionada
             {
                 tablerito->seleccionarFicha(xCelda,yCelda);
                 xSelected=-1;
@@ -301,14 +315,16 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
                 ficha_tmp=numeroDeFicha(xSelected,ySelected);
                 color_tmp=colorDeficha(xSelected,ySelected);
 
-                if(movimientoValido(ficha_tmp,color_tmp,xCelda,yCelda)) //Se cliqueó en una ficha del color contrario (o la come, o es inválido)
+                if(sePuedeMoverFicha(ficha_tmp,color_tmp,xCelda,yCelda)) //Se cliqueó en una ficha del color contrario y se la puede comer
                 {
-                    tablerito->seleccionarFicha(xSelected,ySelected);
-                    matarFicha(ficha_global,color_global);
-                    tablerito->iniciarAnimacion(ficha_tmp, color_tmp, xSelected, ySelected, xCelda, yCelda);
-                    xSelected=-1;
-                    ySelected=-1;
-
+                    //Actualizar todos los estados
+                    if(color_global) {
+                        posBlancasX[ficha_global]=-1;
+                        posBlancasY[ficha_global]=-1;
+                    } else {
+                        posNegrasX[ficha_global]=-1;
+                        posNegrasY[ficha_global]=-1;
+                    }
                     if(color_tmp) {
                         posBlancasX[ficha_tmp]=xCelda;
                         posBlancasY[ficha_tmp]=yCelda;
@@ -317,9 +333,43 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
                         posNegrasY[ficha_tmp]=yCelda;
                     }
 
-                    crearEstadoDeArreglos();
+                    crearEstadoDeArreglos(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
+                    minimax->definirVariables(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
+
+                    if(minimax->verificarJaque(color_tmp)) //El movimiento produce jaque, así que se anula
+                    {
+                        //Actualizar todos los estados
+                        if(color_global) {
+                            posBlancasX[ficha_global]=xCelda;
+                            posBlancasY[ficha_global]=yCelda;
+                        } else {
+                            posNegrasX[ficha_global]=xCelda;
+                            posNegrasY[ficha_global]=yCelda;
+                        }
+                        if(color_tmp) {
+                            posBlancasX[ficha_tmp]=xSelected;
+                            posBlancasY[ficha_tmp]=ySelected;
+                        }else {
+                            posNegrasX[ficha_tmp]=xSelected;
+                            posNegrasY[ficha_tmp]=ySelected;
+                        }
+
+                        crearEstadoDeArreglos(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
+                        minimax->definirVariables(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
+                    }
+                    else //el movimiento no produce jaque así que se dibuja
+                    {
+                        //Animar el movimiento de comerse la ficha
+                        tablerito->eliminarFicha(ficha_global,color_global);
+                        tablerito->iniciarAnimacion(ficha_tmp, color_tmp, xSelected, ySelected, xCelda, yCelda);
+                    }
+
+                    //Qutar la selección a la ficha
+                    tablerito->seleccionarFicha(xSelected,ySelected);
+                    xSelected=-1;
+                    ySelected=-1;
                 }
-                else // Se cliqueó en una ficha del mismo color (cambio de ficha seleccionada)
+                else // Se cliqueó en una ficha que no se puede comer
                 {
                     tablerito->seleccionarFicha(xCelda,yCelda,xSelected,ySelected);
                     xSelected=xCelda;
@@ -333,10 +383,12 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
     {
         if(xSelected!=-1 && ySelected!=-1) //Ya había una ficha seleccionada
         {
-            if(movimientoValido(numeroDeFicha(xSelected,ySelected),colorDeficha(xSelected,ySelected),xCelda,yCelda)) //El movimiento es válido
-            {
-                tablerito->iniciarAnimacion(ficha_global, color_global, xSelected, ySelected, xCelda, yCelda);
+            ficha_tmp=numeroDeFicha(xSelected,ySelected);
+            color_tmp=colorDeficha(xSelected,ySelected);
 
+            if(sePuedeMoverFicha(ficha_tmp,color_tmp,xCelda,yCelda)) //El movimiento es válido
+            {
+                //Actualizar todos los estados
                 if(color_global) {
                     posBlancasX[ficha_global]=xCelda;
                     posBlancasY[ficha_global]=yCelda;
@@ -345,9 +397,30 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
                     posNegrasY[ficha_global]=yCelda;
                 }
 
-                crearEstadoDeArreglos();
+                crearEstadoDeArreglos(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
+                minimax->definirVariables(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
+
+                if(minimax->verificarJaque(color_global)) //El movimiento produce jaque, así que se anula
+                {
+                    if(color_global) {
+                        posBlancasX[ficha_global]=xSelected;
+                        posBlancasY[ficha_global]=ySelected;
+                    }else {
+                        posNegrasX[ficha_global]=xSelected;
+                        posNegrasY[ficha_global]=ySelected;
+                    }
+
+                    crearEstadoDeArreglos(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
+                    minimax->definirVariables(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
+                }
+                else //el movimiento no produce jaque así que se dibuja
+                {
+                    //Animación
+                    tablerito->iniciarAnimacion(ficha_global, color_global, xSelected, ySelected, xCelda, yCelda);
+                }
             }
 
+            //Se quita la seleccion de la ficha
             tablerito->seleccionarFicha(xSelected,ySelected);
             xSelected=-1;
             ySelected=-1;
@@ -446,23 +519,3 @@ bool Ventana::sePuedeMoverFicha(int ficha, bool color, int xCelda, int yCelda)
     return false;
 }
 
-bool Ventana::movimientoValido(int ficha, bool color, int xCelda, int yCelda)
-{
-    return sePuedeMoverFicha(ficha,color,xCelda,yCelda);
-}
-
-void Ventana::matarFicha(int ficha, bool color)
-{
-    if(color)
-    {
-        posBlancasX[ficha]=-1;
-        posBlancasY[ficha]=-1;
-    }
-    else
-    {
-        posNegrasX[ficha]=-1;
-        posNegrasY[ficha]=-1;
-    }
-
-    tablerito->eliminarFicha(ficha,color);
-}
