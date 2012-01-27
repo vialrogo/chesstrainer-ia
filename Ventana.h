@@ -23,8 +23,8 @@ private:
     int H;
     int xSelected;
     int ySelected;
-    int ficha;
-    bool color;
+    int ficha_global;
+    bool color_global;
     int *posBlancasX;
     int *posBlancasY;
     int *posNegrasX;
@@ -46,6 +46,7 @@ public:
     bool colorDeficha(int xCelda, int yCelda);
     int numeroDeFicha(int xCelda, int yCelda);
     void imprimirEstado();
+    void matarFicha(int ficha, bool color);
 
 public slots:
     void acercaDe();

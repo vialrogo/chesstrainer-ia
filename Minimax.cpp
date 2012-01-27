@@ -422,6 +422,7 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
                                 quienSoyTmp<<posNegrasX[i];
                                 quienSoyTmp<<posNegrasY[i];
                                 quienSoy=quienSoyTmp.str();
+
                                 respuesta.push_back(new Nodo(elNodo,elNodo->getNivel()+1,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,quienSoy));
                             }
                             count++;
@@ -429,36 +430,36 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
                     }
                 }
             }
-//            else if(i==7) //Rey
-//            {
-//                for (int j = 0; j < 8; j++)
-//                {
-//                    //Recuperar los datos del padre
-//                    definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
-//                    stringstream quienSoyTmp;
+            else if(i==7) //Rey
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    //Recuperar los datos del padre
+                    definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
+                    stringstream quienSoyTmp;
 
-//                    val=sePuedeMover(posNegrasX[i]+mapa.getDxRey(j),posNegrasY[i]+mapa.getDyRey(j),i,false);
-//                    if(val!=-2)
-//                    {
-//                        estado[posNegrasX[i]][posNegrasY[i]]=' ';
-//                        estado[posNegrasX[i]+mapa.getDxRey(j)][posNegrasY[i]+mapa.getDyRey(j)]=mapa.getNegra(i);
-//                        posNegrasX[i]+=mapa.getDxRey(j);
-//                        posNegrasY[i]+=mapa.getDyRey(j);
+                    val=sePuedeMover(posNegrasX[i]+mapa.getDxRey(j),posNegrasY[i]+mapa.getDyRey(j),i,false);
+                    if(val!=-2)
+                    {
+                        estado[posNegrasX[i]][posNegrasY[i]]=' ';
+                        estado[posNegrasX[i]+mapa.getDxRey(j)][posNegrasY[i]+mapa.getDyRey(j)]=mapa.getNegra(i);
+                        posNegrasX[i]+=mapa.getDxRey(j);
+                        posNegrasY[i]+=mapa.getDyRey(j);
 
-//                        if(val!=-1)
-//                        {
-//                            posBlancasX[val]=-1;
-//                            posBlancasY[val]=-1;
-//                        }
+                        if(val!=-1)
+                        {
+                            posBlancasX[val]=-1;
+                            posBlancasY[val]=-1;
+                        }
 
-//                        quienSoyTmp<<i;
-//                        quienSoyTmp<<posNegrasX[i];
-//                        quienSoyTmp<<posNegrasY[i];
-//                        quienSoy=quienSoyTmp.str();
-//                        respuesta.push_back(new Nodo(elNodo,elNodo->getNivel()+1,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,quienSoy));
-//                    }
-//                }
-//            }
+                        quienSoyTmp<<i;
+                        quienSoyTmp<<posNegrasX[i];
+                        quienSoyTmp<<posNegrasY[i];
+                        quienSoy=quienSoyTmp.str();
+                        respuesta.push_back(new Nodo(elNodo,elNodo->getNivel()+1,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,quienSoy));
+                    }
+                }
+            }
         }
     }
 
@@ -479,12 +480,18 @@ string MiniMax::tomarDesicion()
 
     int idx=0; // VARG: cambié esta varible de i a idx porque tenía conflicto con el for
 
+    char **estTmp;
+    string idiota;
+
     while (!hijos.isEmpty()) {
-        cout<<hijos.front()->getQuiensoy()<<endl;
+        estTmp=hijos.front()->getEstado();
+        idiota=hijos.front()->getQuiensoy();
+
+        cout<<idiota.c_str()<<endl;
         for (int i = 0; i < 6; ++i) {
             cout<<"+---+---+---+---+---+---+"<<endl;
             for (int j = 0; j < 6; ++j) {
-                cout<<"| "<<hijos.front()->getEstado()[j][i]<<" ";
+                cout<<"| "<<estTmp[j][i]<<" ";
             }
             cout<<"|"<<endl;
         }
@@ -717,7 +724,6 @@ bool MiniMax::verificarJaque(bool color)
     return respuesta;
 }
 
-/*
 int main()
 {
     char **est=new char*[6];
@@ -781,4 +787,4 @@ int main()
     obj.definirVariables(est,blancasX,blancasY,negrasX,negrasY);
     obj.tomarDesicion();
     cout<<"ESTO SALE?"<<endl;
-}*/
+}

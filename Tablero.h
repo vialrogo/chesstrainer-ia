@@ -26,12 +26,13 @@ public:
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
     void seleccionarFicha(int xFicha, int yFicha);
     void seleccionarFicha(int xFicha, int yFicha, int xAnterior, int yAnterior);
+    void eliminarFicha(int ficha, bool color);
 
 private:
     //Variables Animación
     int tiempo;
-    int ficha;
-    bool color;
+    int ficha_global;
+    bool color_global;
     int tipoMovimiento;
     int signo;
 

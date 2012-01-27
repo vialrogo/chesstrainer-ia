@@ -170,10 +170,10 @@ void Tablero::iniciarAnimacion(int ficha_in, bool color_in, int xIni, int yIni, 
 {
     int dx = xFin-xIni;
     int dy = yFin-yIni;
-    ficha=ficha_in;
-    color=color_in;
+    ficha_global=ficha_in;
+    color_global=color_in;
 
-    if (ficha!=4) //Todas menos el caballo
+    if (ficha_global!=4) //Todas menos el caballo
     {
         if(dx==0 && dy!=0) //Movimiento vertical
         {
@@ -239,51 +239,51 @@ void Tablero::animar()
     else
     {
         tiempo--;
-        if(tipoMovimiento==0) moverFicha(ficha, color, 0, signo);
-        if(tipoMovimiento==1) moverFicha(ficha, color, signo, 0);
-        if(tipoMovimiento==2) moverFicha(ficha, color, signo, signo);
-        if(tipoMovimiento==3) moverFicha(ficha, color, (-1*signo), signo);
+        if(tipoMovimiento==0) moverFicha(ficha_global, color_global, 0, signo);
+        if(tipoMovimiento==1) moverFicha(ficha_global, color_global, signo, 0);
+        if(tipoMovimiento==2) moverFicha(ficha_global, color_global, signo, signo);
+        if(tipoMovimiento==3) moverFicha(ficha_global, color_global, (-1*signo), signo);
         if(tipoMovimiento==4)
         {
             if(signo==1)
             {
-                if(tiempo>0) moverFicha(ficha, color, 0, -1);
-                else moverFicha(ficha, color, 1, 0);
+                if(tiempo>0) moverFicha(ficha_global, color_global, 0, -1);
+                else moverFicha(ficha_global, color_global, 1, 0);
             }
             if(signo==2)
             {
-                if(tiempo>0) moverFicha(ficha, color, 1, 0);
-                else moverFicha(ficha, color, 0, -1);
+                if(tiempo>0) moverFicha(ficha_global, color_global, 1, 0);
+                else moverFicha(ficha_global, color_global, 0, -1);
             }
             if(signo==3)
             {
-                if(tiempo>0) moverFicha(ficha, color, 1, 0);
-                else moverFicha(ficha, color, 0, 1);
+                if(tiempo>0) moverFicha(ficha_global, color_global, 1, 0);
+                else moverFicha(ficha_global, color_global, 0, 1);
             }
             if(signo==4)
             {
-                if(tiempo>0) moverFicha(ficha, color, 0, 1);
-                else moverFicha(ficha, color, 1, 0);
+                if(tiempo>0) moverFicha(ficha_global, color_global, 0, 1);
+                else moverFicha(ficha_global, color_global, 1, 0);
             }
             if(signo==5)
             {
-                if(tiempo>0) moverFicha(ficha, color, 0, 1);
-                else moverFicha(ficha, color, -1, 0);
+                if(tiempo>0) moverFicha(ficha_global, color_global, 0, 1);
+                else moverFicha(ficha_global, color_global, -1, 0);
             }
             if(signo==6)
             {
-                if(tiempo>0) moverFicha(ficha, color, -1, 0);
-                else moverFicha(ficha, color, 0, 1);
+                if(tiempo>0) moverFicha(ficha_global, color_global, -1, 0);
+                else moverFicha(ficha_global, color_global, 0, 1);
             }
             if(signo==7)
             {
-                if(tiempo>0) moverFicha(ficha, color, -1, 0);
-                else moverFicha(ficha, color, 0, -1);
+                if(tiempo>0) moverFicha(ficha_global, color_global, -1, 0);
+                else moverFicha(ficha_global, color_global, 0, -1);
             }
             if(signo==8)
             {
-                if(tiempo>0) moverFicha(ficha, color, 0, -1);
-                else moverFicha(ficha, color, -1, 0);
+                if(tiempo>0) moverFicha(ficha_global, color_global, 0, -1);
+                else moverFicha(ficha_global, color_global, -1, 0);
             }
         }
     }
@@ -313,5 +313,19 @@ void Tablero::moverFicha(int ficha, bool color, int dx, int dy)
         imagenesFichasNegras[ficha]->animatePosition(QPointF(posX,posY));
         imagenesFichasNegras[ficha]->setX(posX);
         imagenesFichasNegras[ficha]->setY(posY);
+    }
+}
+
+void Tablero::eliminarFicha(int ficha, bool color) //Es temporal, toca arreglarlo
+{
+    if (color)
+    {
+        this->removeItem(imagenesFichasBlancas[ficha]);
+        imagenesFichasBlancas[ficha]->setEnabled(false);
+    }
+    else
+    {
+        this->removeItem(imagenesFichasNegras[ficha]);
+        imagenesFichasNegras[ficha]->setEnabled(false);
     }
 }
