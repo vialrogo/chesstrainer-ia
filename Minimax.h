@@ -15,12 +15,12 @@ using namespace std;
 class MiniMax
 {
 private:
+    int nivel;
     char **estado;
     int *posBlancasX;
     int *posBlancasY;
     int *posNegrasX;
     int *posNegrasY;
-    int nivel;
 
     Mapa mapa;
     int calcularHeuristica(Nodo *elNodo);

@@ -512,10 +512,10 @@ void MiniMax::definirVariables(char **estadoIn, int *posBlancasXIn, int *posBlan
     for (int i = 0; i < 6; i++) {
         estado[i]=new char[6];
     }
-    posBlancasX=new int[7];
-    posBlancasY=new int[7];
-    posNegrasX=new int[7];
-    posNegrasY=new int[7];
+    posBlancasX=new int[8];
+    posBlancasY=new int[8];
+    posNegrasX=new int[8];
+    posNegrasY=new int[8];
 
     for (int i = 0; i < 6; i++) {
         for (int j = 0; j < 6; j++) {
@@ -723,7 +723,7 @@ bool MiniMax::verificarJaque(bool color)
 
     return respuesta;
 }
-
+/*
 int main()
 {
     char **est=new char*[6];
@@ -787,4 +787,4 @@ int main()
     obj.definirVariables(est,blancasX,blancasY,negrasX,negrasY);
     obj.tomarDesicion();
     cout<<"ESTO SALE?"<<endl;
-}
+}*/

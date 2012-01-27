@@ -33,7 +33,6 @@ private:
     Tablero* tablerito;
     MiniMax* minimax;
     void game(int nivel);
-    bool movimientoValido(int ficha, bool color, int xCelda, int yCelda);
     bool sePuedeMoverFicha(int ficha, bool color, int xCelda, int yCelda);
 
 public:
@@ -42,11 +41,10 @@ public:
     Ui::Ventana *ui;
     void borrarTablero();
     void crearTablero();
-    void crearEstadoDeArreglos();
+    void crearEstadoDeArreglos(char ** estado_in, int* posBlancasX_in, int* posBlancasY_in, int* posNegrasX_in, int* posNegrasY_in);
     bool colorDeficha(int xCelda, int yCelda);
     int numeroDeFicha(int xCelda, int yCelda);
-    void imprimirEstado();
-    void matarFicha(int ficha, bool color);
+    void imprimirEstado(char ** estado_in, int* posBlancasX_in, int* posBlancasY_in, int* posNegrasX_in, int* posNegrasY_in);
 
 public slots:
     void acercaDe();
