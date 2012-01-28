@@ -8,6 +8,8 @@ Ventana::Ventana(QWidget *parent) :
     ui->setupUi(this);
     this->setWindowTitle("Project ChessTrainer-IA");
 
+    tokenJugador=true; //token de quien tiene el turno
+
     //Dimenciones de la escena --> FALTA AJUSTAR!!!
     W=540; //80x6 de ancho por celda + 30x2 de los bordes
     H=540; //80x6 de largo por celda + 30x2 de los bordes
@@ -249,18 +251,38 @@ void Ventana::newGame()
 /*
   Facil: nivel=0, Medio: nivel=1
 */
-void Ventana::game(int nivel) {
+void Ventana::game(int nivel)
+{
     minimax = new MiniMax(nivel);
     crearTablero();
 
-    if(nivel==0)
-        cout<<"Empieza un juego fácil"<<endl;
+    minimax->definirVariables(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
 
-    if(nivel==1)
-        cout<<"Empieza un juego intermedio"<<endl;
+    cout<<"va a tomar la desición"<<endl;
 
-    if(nivel==2)
-        cout<<"Empieza un juego elda, yCelda);difícil"<<endl;
+    string salida = minimax->tomarDesicion();
+
+    cout<<"tiene la salida"<<endl;
+
+    QString qsalida = QString::fromStdString(salida);
+
+    int ficha;
+    int xFinal;
+    int yFinal;
+
+    if(salida=="") cout<<"Ganó parce!!!! :D"<<endl;
+    else
+    {
+        ficha = qsalida.at(0).digitValue();
+        xFinal = qsalida.at(1).digitValue();
+        yFinal = qsalida.at(2).digitValue();
+
+        cliquearonEnCelda(posBlancasX[ficha], posBlancasY[ficha]);
+        cliquearonEnCelda(xFinal,yFinal);
+
+        tokenJugador=!tokenJugador;
+    }
+
 }
 
 /*
@@ -287,6 +309,8 @@ int Ventana::numeroDeFicha(int xCelda, int yCelda)
 
 void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
 {
+    if(tokenJugador) return; //No es el turno del negro
+
     int ficha_tmp;
     bool color_tmp;
 
@@ -297,8 +321,7 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
 
         if(xSelected==-1 && ySelected==-1) //No hay ninguna ficha seleccionada
         {
-            if(color_global) return; //El humano no puede jugar con blancas
-
+            if(color_global!=tokenJugador) return; //No es el turno de ese jugador
             tablerito->seleccionarFicha(xCelda,yCelda);
             xSelected=xCelda;
             ySelected=yCelda;
@@ -372,7 +395,7 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
                 }
                 else // Se cliqueó en una ficha que no se puede comer
                 {
-                    if(color_global)//El humano no puede jugar con blancas
+                    if(color_global!=tokenJugador)//No es el turno de ese jugador
                     {
                         tablerito->seleccionarFicha(xSelected,ySelected);
                         xSelected=-1;
