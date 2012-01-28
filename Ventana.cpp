@@ -40,7 +40,6 @@ Ventana::Ventana(QWidget *parent) :
     connect(ui->actionNew_Game,SIGNAL(triggered()),this,SLOT(newGame()));
     connect(ui->pushButtonEasy,SIGNAL(clicked()),this,SLOT(gameEasy()));
     connect(ui->pushButtonMedium,SIGNAL(clicked()),this,SLOT(gameMedium()));
-    connect(ui->pushButtonHard,SIGNAL(clicked()),this,SLOT(gameHard()));
     connect(tablerito,SIGNAL(celdaCliqueada(int,int)),this,SLOT(cliquearonEnCelda(int,int)));
 }
 
@@ -162,7 +161,6 @@ void Ventana::crearTablero()
     ui->graphicsView->setHidden(false);
     ui->pushButtonEasy->setHidden(true);
     ui->pushButtonMedium->setHidden(true);
-    ui->pushButtonHard->setHidden(true);
 
     borrarTablero();
     tablerito->pintarCuadricula();
@@ -246,10 +244,9 @@ void Ventana::newGame()
     ui->graphicsView->setHidden(true);
     ui->pushButtonEasy->setHidden(false);
     ui->pushButtonMedium->setHidden(false);
-    ui->pushButtonHard->setHidden(false);
 }
 
-void Ventana::game(int nivel) // Facil=0, Medio=1, Dificil=2
+void Ventana::game(int nivel) // Facil=0, Medio=1
 {
     minimax = new MiniMax(nivel);
     crearTablero();
