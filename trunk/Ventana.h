@@ -51,7 +51,6 @@ public slots:
     void newGame();
     void gameEasy(){game(0);};
     void gameMedium(){game(1);};
-    void gameHard(){game(2);};
     void cliquearonEnCelda(int xCelda, int yCelda);
 
 };
