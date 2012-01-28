@@ -5,7 +5,6 @@
 #include "Mapa.h"
 #include "Nodo.h"
 #include <QStack>
-#include <QVector>
 #include <QList>
 #include <iostream>
 #include <sstream>

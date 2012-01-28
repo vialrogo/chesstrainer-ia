@@ -14,13 +14,14 @@ private:
     int *posNegrasY;
     char **estado;
     int nivel;
-    double valor;
+    int valor;
     string quienSoy;
     string decision;
     Nodo* padre;
 
 public:
     Nodo(Nodo* padreIn, int nivelIn, int *posBlancasXIn, int *posBlancasYIn, int *posNegrasXIn, int *posNegrasYIn, char **estadoIn, string quienSoyIn);
+    ~Nodo();
     void actualizarDesicion(int valorIn, string cualHijo);
 
     char** getEstado();
@@ -28,6 +29,7 @@ public:
     int* getPosBlancasY();
     int* getPosNegrasX();
     int* getPosNegrasY();
+    Nodo* getPadre();
     string getDecision();
     int getNivel();
     string getQuiensoy();
