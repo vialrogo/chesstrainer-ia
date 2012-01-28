@@ -468,42 +468,42 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
 
 string MiniMax::tomarDesicion()
 {
-    Nodo *inicial=new Nodo(0,1,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,"original");
+    Nodo *inicial=new Nodo(0,0,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,"original");
+    Nodo *actual=inicial;
+    int heuristicaTmp=0;
+    string decision;
 
     //Inicia expandiendo el nodo
-    QStack<Nodo*> plia;//Para expandirlos.
-    QVector<Nodo*> vector;//para después eliminarlos
-
+    QStack<Nodo*> pila;//Para expandirlos.
+    QList<Nodo*> aBorrar;//para después eliminarlos
     QList<Nodo*> hijos;//donde se colocan los hijos generados
 
-    hijos=expandir(inicial);
+    pila.push_front(inicial);
 
-    int idx=0; // VARG: cambié esta varible de i a idx porque tenía conflicto con el for
+    while (!pila.isEmpty()) {
+        hijos=expandir(actual);
+        pila.push_front(hijos);
 
-    char **estTmp;
-    string idiota;
+        actual=pila.front();
 
-    while (!hijos.isEmpty()) {
-        estTmp=hijos.front()->getEstado();
-        idiota=hijos.front()->getQuiensoy();
+        aBorrar.push_back(actual);
+        pila.pop_front();
 
-        cout<<idiota.c_str()<<endl;
-        for (int i = 0; i < 6; ++i) {
-            cout<<"+---+---+---+---+---+---+"<<endl;
-            for (int j = 0; j < 6; ++j) {
-                cout<<"| "<<estTmp[j][i]<<" ";
-            }
-            cout<<"|"<<endl;
+        if(actual->getNivel()==nivel)
+        {
+            heuristicaTmp=calcularHeuristica(actual);
+            actual->actualizarDesicion(heuristicaTmp,actual->getQuiensoy());
         }
-        cout<<"+---+---+---+---+---+---+"<<endl<<endl;
-        hijos.removeFirst();
-        idx++;
-        cout<<idx<<endl;
     }
 
-    cout<<"Y ESTO?"<<endl;
+    decision=inicial->getDecision();
 
-    return inicial->getDecision();
+    for (int i = 0; i < aBorrar.size(); i++) {
+        delete aBorrar.front();
+        aBorrar.pop_front();
+    }
+
+    return decision;
 }
 
 void MiniMax::definirVariables(char **estadoIn, int *posBlancasXIn, int *posBlancasYIn, int *posNegrasXIn, int *posNegrasYIn)
@@ -723,6 +723,7 @@ bool MiniMax::verificarJaque(bool color)
 
     return respuesta;
 }
+
 /*
 int main()
 {

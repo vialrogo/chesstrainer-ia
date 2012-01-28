@@ -15,22 +15,50 @@ Nodo::Nodo(Nodo* padreIn, int nivelIn, int *posBlancasXIn, int *posBlancasYIn, i
     valor=0;
 }
 
+Nodo::~Nodo()
+{
+    for(int i = 0; i < 7; i++)
+    {
+        delete estado[i];
+        estado[i]=0;
+    }
+    delete estado;
+    estado=0;
+
+    delete posBlancasX;
+    delete posBlancasY;
+    delete posNegrasX;
+    delete posNegrasY;
+    posBlancasX=0;
+    posBlancasY=0;
+    posNegrasX=0;
+    posNegrasY=0;
+
+    padre=0;
+}
+
 //para quien soy: Mayúscula=blancas Minúscula=negras; B=alfil, H=Caballo, K=rey, P=peón, Q=reina
 void Nodo::actualizarDesicion(int valorIn, string cualHijo)
 {
-    if(nivel%2==0){
-        if(valor<=valorIn)
+    if(padre!=0)
+    {
+        if(nivel%2==0)
         {
-            valor=valorIn;
-            decision=cualHijo;
+           if(valor<=valorIn)
+           {
+               valor=valorIn;
+               decision=cualHijo;
+           }
         }
-    }
-    else{
-        if(valor>=valorIn)
+        else
         {
-            valor=valorIn;
-            decision=cualHijo;
+            if(valor>=valorIn)
+           {
+               valor=valorIn;
+               decision=cualHijo;
+           }
         }
+        padre->actualizarDesicion(valor,quienSoy);
     }
 }
 
@@ -72,4 +100,9 @@ int Nodo::getNivel()
 string Nodo::getQuiensoy()
 {
     return quienSoy;
+}
+
+Nodo* Nodo::getPadre()
+{
+    return padre;
 }
