@@ -248,22 +248,28 @@ void Ventana::newGame()
     ui->pushButtonMedium->setHidden(false);
 }
 
+
+void Ventana::gameEasy()
+{
+    minimax = new MiniMax(0);
+    crearTablero();
+    emit game();
+}
+
+void Ventana::gameMedium()
+{
+    minimax = new MiniMax(0);
+    crearTablero();
+    emit game();
+}
+
 /*
   Facil: nivel=0, Medio: nivel=1
 */
-void Ventana::game(int nivel)
+void Ventana::game()
 {
-    minimax = new MiniMax(nivel);
-    crearTablero();
-
     minimax->definirVariables(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
-
-    cout<<"va a tomar la desición"<<endl;
-
     string salida = minimax->tomarDesicion();
-
-    cout<<"tiene la salida"<<endl;
-
     QString qsalida = QString::fromStdString(salida);
 
     int ficha;
@@ -279,10 +285,7 @@ void Ventana::game(int nivel)
 
         cliquearonEnCelda(posBlancasX[ficha], posBlancasY[ficha]);
         cliquearonEnCelda(xFinal,yFinal);
-
-        tokenJugador=!tokenJugador;
     }
-
 }
 
 /*
@@ -309,8 +312,6 @@ int Ventana::numeroDeFicha(int xCelda, int yCelda)
 
 void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
 {
-    if(tokenJugador) return; //No es el turno del negro
-
     int ficha_tmp;
     bool color_tmp;
 
@@ -386,6 +387,8 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
                         //Animar el movimiento de comerse la ficha
                         tablerito->eliminarFicha(ficha_global,color_global);
                         tablerito->iniciarAnimacion(ficha_tmp, color_tmp, xSelected, ySelected, xCelda, yCelda);
+
+                        tokenJugador=!tokenJugador;//Pasa el control a otro jugador
                     }
 
                     //Qutar la selección a la ficha
@@ -450,6 +453,8 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
                 {
                     //Animación
                     tablerito->iniciarAnimacion(ficha_global, color_global, xSelected, ySelected, xCelda, yCelda);
+
+                    tokenJugador=!tokenJugador;//Pasa el control a otro jugador
                 }
             }
 
@@ -459,6 +464,8 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
             ySelected=-1;
         }
     }
+
+    if(tokenJugador) emit game(); //Si el turno quedó en las blancas, que jueguen
 }
 
 bool Ventana::sePuedeMoverFicha(int ficha, bool color, int xCelda, int yCelda)

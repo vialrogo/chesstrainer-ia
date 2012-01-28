@@ -33,7 +33,6 @@ private:
     char** estado;
     Tablero* tablerito;
     MiniMax* minimax;
-    void game(int nivel);
     bool sePuedeMoverFicha(int ficha, bool color, int xCelda, int yCelda);
 
 public:
@@ -50,10 +49,12 @@ public:
 public slots:
     void acercaDe();
     void newGame();
-    void gameEasy(){game(0);};
-    void gameMedium(){game(1);};
+    void gameEasy();
+    void gameMedium();
     void cliquearonEnCelda(int xCelda, int yCelda);
 
+private slots:
+    void game();
 };
 
 #endif // VENTANA_H
