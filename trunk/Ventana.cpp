@@ -246,8 +246,10 @@ void Ventana::newGame()
     ui->pushButtonMedium->setHidden(false);
 }
 
-void Ventana::game(int nivel) // Facil=0, Medio=1
-{
+/*
+  Facil: nivel=0, Medio: nivel=1
+*/
+void Ventana::game(int nivel) {
     minimax = new MiniMax(nivel);
     crearTablero();
 
@@ -295,12 +297,17 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
 
         if(xSelected==-1 && ySelected==-1) //No hay ninguna ficha seleccionada
         {
+            if(color_global) return; //El humano no puede jugar con blancas
+
             tablerito->seleccionarFicha(xCelda,yCelda);
             xSelected=xCelda;
             ySelected=yCelda;
         }
         else //Ya había una ficha seleccionada
         {
+            ficha_tmp=numeroDeFicha(xSelected,ySelected);
+            color_tmp=colorDeficha(xSelected,ySelected);
+
             if(xSelected==xCelda && ySelected==yCelda) //Se volvió a cliclear en la ficha previamente seleccionada
             {
                 tablerito->seleccionarFicha(xCelda,yCelda);
@@ -309,9 +316,6 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
             }
             else //Se cliqueo en una ficha, cuando ya había OTRA seleccionada
             {
-                ficha_tmp=numeroDeFicha(xSelected,ySelected);
-                color_tmp=colorDeficha(xSelected,ySelected);
-
                 if(sePuedeMoverFicha(ficha_tmp,color_tmp,xCelda,yCelda)) //Se cliqueó en una ficha del color contrario y se la puede comer
                 {
                     //Actualizar todos los estados
@@ -368,9 +372,18 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
                 }
                 else // Se cliqueó en una ficha que no se puede comer
                 {
-                    tablerito->seleccionarFicha(xCelda,yCelda,xSelected,ySelected);
-                    xSelected=xCelda;
-                    ySelected=yCelda;
+                    if(color_global)//El humano no puede jugar con blancas
+                    {
+                        tablerito->seleccionarFicha(xSelected,ySelected);
+                        xSelected=-1;
+                        ySelected=-1;
+                    }
+                    else
+                    {
+                        tablerito->seleccionarFicha(xCelda,yCelda,xSelected,ySelected);
+                        xSelected=xCelda;
+                        ySelected=yCelda;
+                    }
                 }
             }
 
