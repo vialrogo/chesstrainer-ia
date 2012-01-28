@@ -468,6 +468,7 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
 
 string MiniMax::tomarDesicion()
 {
+    bool enJaque=verificarJaque(true);
     Nodo *inicial=new Nodo(0,0,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,"original");
     Nodo *actual=inicial;
     int heuristicaTmp=0;
@@ -502,6 +503,10 @@ string MiniMax::tomarDesicion()
         delete aBorrar.front();
         aBorrar.pop_front();
     }
+
+    if(enJaque)
+        if (verificarJaque(true))
+            return "";
 
     return decision;
 }
