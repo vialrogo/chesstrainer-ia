@@ -483,7 +483,11 @@ string MiniMax::tomarDesicion()
 
     while (!pila.isEmpty()) {
         hijos=expandir(actual);
-        pila.push_front(hijos);
+
+        while (!hijos.isEmpty()) {
+            pila.push_front(hijos.back());
+            hijos.pop_back();
+        }
 
         actual=pila.front();
 
