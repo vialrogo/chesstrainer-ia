@@ -81,6 +81,7 @@ void MiniMax::imprimir(Nodo *elNodo)
 
 QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
 {
+    definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY(),false);
     QList<Nodo*> respuesta;
 
     //La información del padre será almacenada en las variables de la clase
@@ -88,7 +89,7 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
 
     int count=0, val=0, dx=0, dy=0;
 
-    for (int i = 0; i < 8; i++) {//Intentar mover todas las fichas
+    for (int i = 0; i < 8; i++){//Intentar mover todas las fichas
 
         if(elNodo->getNivel()%2==0) //blancas
         {
