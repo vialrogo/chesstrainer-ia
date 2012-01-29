@@ -38,11 +38,24 @@ int MiniMax::calcularHeuristica(Nodo *elNodo)
     return resultado;
 }
 
+void MiniMax::imprimir(char** estado_in)
+{
+    //Para imprimir la matriz
+    for (int i = 0; i < 6; ++i) {
+        cout<<"+---+---+---+---+---+---+"<<endl;
+        for (int j = 0; j < 6; ++j) {
+            cout<<"| "<<estado_in[i][j]<<" ";
+        }
+        cout<<"|"<<endl;
+    }
+    cout<<"+---+---+---+---+---+---+"<<endl<<endl;
+}
+
 QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
 {
     QList<Nodo*> respuesta;
-    //La información del padre será almacenada en las variables de la clase
 
+    //La información del padre será almacenada en las variables de la clase
     string quienSoy="";
 
     int count=0, val=0, dx=0, dy=0;
@@ -148,7 +161,7 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
             }
             else if(i==5 || i==6) //Alfil o Reina (diagonales)
             {
-                for (int j = 0; j < 4; ++j)
+                for (int j = 0; j < 4; j++)
                 {
                     count=1;
                     do
@@ -422,7 +435,6 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
                                 quienSoyTmp<<posNegrasX[i];
                                 quienSoyTmp<<posNegrasY[i];
                                 quienSoy=quienSoyTmp.str();
-
                                 respuesta.push_back(new Nodo(elNodo,elNodo->getNivel()+1,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,quienSoy));
                             }
                             count++;
@@ -481,36 +493,40 @@ string MiniMax::tomarDesicion()
 
     pila.push_front(inicial);
 
-    while (!pila.isEmpty()) {
+//    while (!pila.isEmpty()) {
         hijos=expandir(actual);
 
-        while (!hijos.isEmpty()) {
-            pila.push_front(hijos.back());
-            hijos.pop_back();
-        }
+//        while (!hijos.isEmpty()) {
+//            cout<<"Hijos: "<<hijos.size();
+//            cout<<"nivel hijo: "<<hijos.back()->getNivel()<<endl;
+//            pila.push_front(hijos.back());
+//            hijos.pop_back();
+//        }
 
-        actual=pila.front();
+//        actual=pila.front();
 
-        aBorrar.push_back(actual);
-        pila.pop_front();
+//        aBorrar.push_back(actual);
+//        pila.pop_front();
 
-        if(actual->getNivel()==nivel)
-        {
-            heuristicaTmp=calcularHeuristica(actual);
-            actual->actualizarDesicion(heuristicaTmp,actual->getQuiensoy());
-        }
-    }
+//        if(actual->getNivel()==nivel)
+//        {
+//            heuristicaTmp=calcularHeuristica(actual);
+//            actual->actualizarDesicion(heuristicaTmp,actual->getQuiensoy());
+//        }
+//    }
 
+//    cout<<"después del while"<<endl;
+//    cout<<inicial->getDecision()<<endl;
     decision=inicial->getDecision();
 
-    for (int i = 0; i < aBorrar.size(); i++) {
-        delete aBorrar.front();
-        aBorrar.pop_front();
-    }
+//    for (int i = 0; i < aBorrar.size(); i++) {
+//        delete aBorrar.front();
+//        aBorrar.pop_front();
+//    }
 
-    if(enJaque)
-        if (verificarJaque(true))
-            return "";
+//    if(enJaque)
+//        if (verificarJaque(true))
+//            return "";
 
     return decision;
 }
@@ -597,11 +613,10 @@ int MiniMax::sePuedeMover(int xDestino, int yDestino, int ficha, bool color)
 }
 
 /*
-    B = 66    b = 98
-    C = 67    c = 99
-    K = 75    k = 107
-    P = 80    p = 112
-    Q = 81    q = 113
+    A=65
+    H=72
+    a=97
+    h=104
 
     color=false => negras / color=true => blancas
 
@@ -640,7 +655,7 @@ bool MiniMax::verificarJaque(bool color)
             if(estado[yy][xx] == ' ')
                 count++;
             else{
-                if(estado[yy][xx] == (81+delta) || estado[yy][xx] == (66+delta))
+                if(estado[yy][xx] == (70+delta) || estado[yy][xx] == (71+delta))
                     return true;
                 else
                 {
@@ -671,7 +686,7 @@ bool MiniMax::verificarJaque(bool color)
             if(estado[yy][xx] == ' ')
                 count++;
             else{
-                if(estado[yy][xx] == (81+delta))
+                if(estado[yy][xx] == (71+delta))
                     return true;
                 else
                 {
@@ -691,7 +706,7 @@ bool MiniMax::verificarJaque(bool color)
         if(xx<0 || xx>5 || yy<0 || yy>5)
             continue;
         else
-            if(estado[yy][xx] == (67+delta))
+            if(estado[yy][xx] == (69+delta))
                 return true;
     }
 
@@ -699,21 +714,21 @@ bool MiniMax::verificarJaque(bool color)
     if(color)
     {
         if(reyX>0 && reyY>0)
-            if(estado[reyY-1][reyX-1] == 112)
+            if(estado[reyY-1][reyX-1]>96 && estado[reyY-1][reyX-1]<101)
                 return true;
 
         if(reyX<5 && reyY>0)
-            if(estado[reyY-1][reyX+1] == 112)
+            if(estado[reyY-1][reyX+1]>96 && estado[reyY-1][reyX+1]<101)
                 return true;
     }
     else
     {
         if(reyX>0 && reyY<5)
-            if(estado[reyY+1][reyX-1] == 80)
+            if(estado[reyY+1][reyX-1]<69 && estado[reyY+1][reyX-1]>64)
                 return true;
 
         if(reyX<5 && reyY<5)
-            if(estado[reyY+1][reyX+1] == 80)
+            if(estado[reyY+1][reyX+1]<69 && estado[reyY+1][reyX+1]>64)
                 return true;
     }
 
@@ -726,7 +741,7 @@ bool MiniMax::verificarJaque(bool color)
         if(xx<0 || xx>5 || yy<0 || yy>5)
             continue;
         else
-            if(estado[yy][xx] == (75+delta))
+            if(estado[yy][xx] == (72+delta))
                 return true;
     }
 
