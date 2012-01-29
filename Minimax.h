@@ -29,7 +29,7 @@ private:
 public:
     MiniMax(int nivelIn);
     string tomarDesicion();
-    void definirVariables(char **estadoIn, int *posBlancasXIn, int *posBlancasYIn, int *posNegrasXIn, int *posNegrasYIn);
+    void definirVariables(char **estadoIn, int *posBlancasXIn, int *posBlancasYIn, int *posNegrasXIn, int *posNegrasYIn, bool copia);
     bool verificarJaque(bool color);
     int sePuedeMover(int xDestino, int yDestino, int ficha, bool color);
 };

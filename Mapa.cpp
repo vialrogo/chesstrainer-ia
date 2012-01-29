@@ -2,12 +2,19 @@
 
 //Definicion de variables estaticas
 
-int Mapa::peon[6][6]={{2,2,2,2,2,2},
-                      {4,5,5,5,5,4},
-                      {4,5,5,5,5,4},
-                      {4,5,5,5,5,4},
-                      {4,5,5,5,5,4},
-                      {4,5,5,5,5,4}};
+int Mapa::peonBlanco[6][6]={{2,2,2,2,2,2},
+                            {4,5,5,5,5,4},
+                            {4,5,5,5,5,4},
+                            {4,5,5,5,5,4},
+                            {4,5,5,5,5,4},
+                            {4,5,5,5,5,4}};
+
+int Mapa::peonNegro[6][6]={{4,5,5,5,5,4},
+                           {4,5,5,5,5,4},
+                           {4,5,5,5,5,4},
+                           {4,5,5,5,5,4},
+                           {4,5,5,5,5,4},
+                           {2,2,2,2,2,2}};
 
 int Mapa::caballoAlfil[6][6]={{13,14,14,14,14,13},
                               {14,15,15,15,15,14},
@@ -56,10 +63,16 @@ Mapa::Mapa()
 {
 }
 
-int Mapa::pesoPeon(int x, int y)
+int Mapa::pesoPeonBlanco(int x, int y)
 {
     if(x==-1 && y==-1) return 0;
-    return Mapa::peon[x][y];
+    return Mapa::peonBlanco[x][y];
+}
+
+int Mapa::pesoPeonNegro(int x, int y)
+{
+    if(x==-1 && y==-1) return 0;
+    return Mapa::peonNegro[x][y];
 }
 
 int Mapa::pesoCaballoAlfil(int x, int y)
