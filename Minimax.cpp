@@ -45,7 +45,7 @@ void MiniMax::imprimir(Nodo *elNodo)
     for (int i = 0; i < 6; ++i) {
         cout<<"+---+---+---+---+---+---+"<<endl;
         for (int j = 0; j < 6; ++j) {
-            cout<<"| "<<elNodo->getEstado()[j][i]<<" ";
+            cout<<"| "<<elNodo->getEstado()[i][j]<<" ";
         }
         cout<<"|"<<endl;
     }
@@ -102,12 +102,12 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
                     definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
                     stringstream quienSoyTmp1;
 
-                    val=sePuedeMover(posBlancasX[i],posBlancasY[i]-1,i,true);
+                    val=sePuedeMover(posBlancasX[i]-1,posBlancasY[i],i,true);
                     if(val==-1)
                     {
                         estado[posBlancasX[i]][posBlancasY[i]]=' ';
-                        estado[posBlancasX[i]][posBlancasY[i]-1]=mapa.getBlanca(i);
-                        posBlancasY[i]=posBlancasY[i]-1;
+                        estado[posBlancasX[i]-1][posBlancasY[i]]=mapa.getBlanca(i);
+                        posBlancasX[i]=posBlancasX[i]-1;
                         quienSoyTmp1<<i;
                         quienSoyTmp1<<posBlancasX[i];
                         quienSoyTmp1<<posBlancasY[i];
@@ -142,13 +142,13 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
                     definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
                     stringstream quienSoyTmp3;
 
-                    val=sePuedeMover(posBlancasX[i]+1,posBlancasY[i]-1,i,true);
+                    val=sePuedeMover(posBlancasX[i]-1,posBlancasY[i]+1,i,true);
                     if(val!=-2)
                     {
                         estado[posBlancasX[i]][posBlancasY[i]]=' ';
-                        estado[posBlancasX[i]+1][posBlancasY[i]-1]=mapa.getBlanca(i);
-                        posBlancasX[i]=posBlancasX[i]+1;
-                        posBlancasY[i]=posBlancasY[i]-1;
+                        estado[posBlancasX[i]-1][posBlancasY[i]+1]=mapa.getBlanca(i);
+                        posBlancasX[i]=posBlancasX[i]-1;
+                        posBlancasY[i]=posBlancasY[i]+1;
 
                         posNegrasX[val]=-1;
                         posNegrasY[val]=-1;
@@ -310,12 +310,12 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
                     definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
                     stringstream quienSoyTmp1;
 
-                    val=sePuedeMover(posNegrasX[i],posNegrasY[i]+1,i,false);
+                    val=sePuedeMover(posNegrasX[i]+1,posNegrasY[i],i,false);
                     if(val==-1)
                     {
                         estado[posNegrasX[i]][posNegrasY[i]]=' ';
-                        estado[posNegrasX[i]][posNegrasY[i]+1]=mapa.getNegra(i);
-                        posNegrasY[i]=posNegrasY[i]+1;
+                        estado[posNegrasX[i]+1][posNegrasY[i]]=mapa.getNegra(i);
+                        posNegrasX[i]=posNegrasX[i]+1;
                         quienSoyTmp1<<i;
                         quienSoyTmp1<<posNegrasX[i];
                         quienSoyTmp1<<posNegrasY[i];
@@ -328,13 +328,13 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
                     definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
                     stringstream quienSoyTmp2;
 
-                    val=sePuedeMover(posNegrasX[i]-1,posNegrasY[i]+1,i,false);
+                    val=sePuedeMover(posNegrasX[i]+1,posNegrasY[i]-1,i,false);
                     if(val!=-2)
                     {
-                        estado[posNegrasX[i]-1][posNegrasY[i]+1]=' ';
-                        estado[posNegrasX[i]-1][posNegrasY[i]+1]=mapa.getNegra(i);
-                        posNegrasX[i]=posNegrasX[i]-1;
-                        posNegrasY[i]=posNegrasY[i]+1;
+                        estado[posNegrasX[i]][posNegrasY[i]]=' ';
+                        estado[posNegrasX[i]+1][posNegrasY[i]-1]=mapa.getNegra(i);
+                        posNegrasX[i]=posNegrasX[i]+1;
+                        posNegrasY[i]=posNegrasY[i]-1;
 
                         posBlancasX[val]=-1;
                         posBlancasY[val]=-1;
@@ -353,7 +353,7 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
                     val=sePuedeMover(posNegrasX[i]+1,posNegrasY[i]+1,i,false);
                     if(val!=-2)
                     {
-                        estado[posNegrasX[i]+1][posNegrasY[i]+1]=' ';
+                        estado[posNegrasX[i]][posNegrasY[i]]=' ';
                         estado[posNegrasX[i]+1][posNegrasY[i]+1]=mapa.getNegra(i);
                         posNegrasX[i]=posNegrasX[i]+1;
                         posNegrasY[i]=posNegrasY[i]+1;
@@ -516,46 +516,49 @@ string MiniMax::tomarDesicion()
 {
     bool enJaque=verificarJaque(true);
     Nodo *inicial=new Nodo(0,0,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,"original");
-    Nodo *actual=inicial;
-    int heuristicaTmp=0;
-    string decision;
+    imprimir(inicial);
+    cout<<"En jaque: "<<enJaque<<endl;
 
-    //Inicia expandiendo el nodo
-    QStack<Nodo*> pila;//Para expandirlos.
-    QList<Nodo*> aBorrar;//para después eliminarlos
-    QList<Nodo*> hijos;//donde se colocan los hijos generados
+//    Nodo *actual=inicial;
+//    int heuristicaTmp=0;
+    string decision="";
 
-    pila.push_front(inicial);
+//    //Inicia expandiendo el nodo
+//    QStack<Nodo*> pila;//Para expandirlos.
+//    QList<Nodo*> aBorrar;//para después eliminarlos
+//    QList<Nodo*> hijos;//donde se colocan los hijos generados
 
-    while (!pila.isEmpty()) {
-        actual=pila.front();
-        pila.pop_front();
+//    pila.push_front(inicial);
 
-        if(actual->getNivel()==nivel)
-        {
-            heuristicaTmp=calcularHeuristica(actual);
-            actual->actualizarDesicion(heuristicaTmp,actual->getQuiensoy());
-        }
-        else
-        {
-            hijos=expandir(actual);
-            while (!hijos.isEmpty()) {
-                pila.push_front(hijos.back());
-                hijos.pop_back();
-            }
-        }
-        aBorrar.push_back(actual);
-    }
-    decision=inicial->getDecision();
+//    while (!pila.isEmpty()) {
+//        actual=pila.front();
+//        pila.pop_front();
 
-    while (!aBorrar.isEmpty()) {
-//        delete aBorrar.front();
-        aBorrar.pop_front();
-    }
+//        if(actual->getNivel()==nivel)
+//        {
+//            heuristicaTmp=calcularHeuristica(actual);
+//            actual->actualizarDesicion(heuristicaTmp,actual->getQuiensoy());
+//        }
+//        else
+//        {
+//            hijos=expandir(actual);
+//            while (!hijos.isEmpty()) {
+//                pila.push_front(hijos.back());
+//                hijos.pop_back();
+//            }
+//        }
+//        aBorrar.push_back(actual);
+//    }
+//    decision=inicial->getDecision();
 
-    if(enJaque)
-        if (verificarJaque(true))
-            return "";
+//    while (!aBorrar.isEmpty()) {
+////        delete aBorrar.front();
+//        aBorrar.pop_front();
+//    }
+
+//    if(enJaque)
+//        if (verificarJaque(true))
+//            return "";
 
     return decision;
 }
@@ -600,7 +603,7 @@ int MiniMax::sePuedeMover(int xDestino, int yDestino, int ficha, bool color)
     //Verificar Peones
     if(ficha<4 && color) //Peones Blancos
     {
-        if(xDestino==posBlancasX[ficha] && yDestino==(posBlancasY[ficha]-1))
+        if(xDestino==posBlancasX[ficha]-1 && yDestino==(posBlancasY[ficha]))
         {
             if(estado[xDestino][yDestino]==' ') return -1;
             else return -2;
@@ -613,7 +616,7 @@ int MiniMax::sePuedeMover(int xDestino, int yDestino, int ficha, bool color)
     }
     else if(ficha<4 && !color) //Peones Negros
     {
-        if(xDestino==posNegrasX[ficha] && yDestino==(posNegrasY[ficha]+1))
+        if(xDestino==posNegrasX[ficha]+1 && yDestino==(posNegrasY[ficha]))
         {
             if(estado[xDestino][yDestino]==' ') return -1;
             else return -2;
@@ -681,10 +684,10 @@ bool MiniMax::verificarJaque(bool color)
         }
         else
         {
-            if(estado[yy][xx] == ' ')
+            if(estado[xx][yy] == ' ')
                 count++;
             else{
-                if(estado[yy][xx] == (70+delta) || estado[yy][xx] == (71+delta))
+                if(estado[xx][yy] == (70+delta) || estado[xx][yy] == (71+delta))
                     return true;
                 else
                 {
@@ -712,10 +715,10 @@ bool MiniMax::verificarJaque(bool color)
         }
         else
         {
-            if(estado[yy][xx] == ' ')
+            if(estado[xx][yy] == ' ')
                 count++;
             else{
-                if(estado[yy][xx] == (71+delta))
+                if(estado[xx][yy] == (71+delta))
                     return true;
                 else
                 {
@@ -735,7 +738,7 @@ bool MiniMax::verificarJaque(bool color)
         if(xx<0 || xx>5 || yy<0 || yy>5)
             continue;
         else
-            if(estado[yy][xx] == (69+delta))
+            if(estado[xx][yy] == (69+delta))
                 return true;
     }
 
@@ -743,21 +746,21 @@ bool MiniMax::verificarJaque(bool color)
     if(color)
     {
         if(reyX>0 && reyY>0)
-            if(estado[reyY-1][reyX-1]>96 && estado[reyY-1][reyX-1]<101)
+            if(estado[reyX-1][reyY-1]>96 && estado[reyX-1][reyY-1]<101)
                 return true;
 
-        if(reyX<5 && reyY>0)
-            if(estado[reyY-1][reyX+1]>96 && estado[reyY-1][reyX+1]<101)
+        if(reyX>0 && reyY<5)
+            if(estado[reyX-1][reyY+1]>96 && estado[reyX-1][reyY+1]<101)
                 return true;
     }
     else
     {
-        if(reyX>0 && reyY<5)
-            if(estado[reyY+1][reyX-1]<69 && estado[reyY+1][reyX-1]>64)
+        if(reyX<5 && reyY>0)
+            if(estado[reyX+1][reyY-1]<69 && estado[reyX+1][reyY-1]>64)
                 return true;
 
         if(reyX<5 && reyY<5)
-            if(estado[reyY+1][reyX+1]<69 && estado[reyY+1][reyX+1]>64)
+            if(estado[reyX+1][reyY+1]<69 && estado[reyX+1][reyY+1]>64)
                 return true;
     }
 
@@ -795,47 +798,23 @@ int main()
     int *negrasX = new int[8];
     int *negrasY = new int[8];
 
-//    blancasX[0]=0; blancasX[1]=2; blancasX[2]=4; blancasX[3]=3; blancasX[4]=1; blancasX[5]=2; blancasX[6]=3; blancasX[7]=5;
-//    blancasY[0]=4; blancasY[1]=4; blancasY[2]=4; blancasY[3]=2; blancasY[4]=1; blancasY[5]=2; blancasY[6]=3; blancasY[7]=4;
+    blancasX[0]=0; blancasX[1]=1; blancasX[2]=2; blancasX[3]=3; blancasX[4]=0; blancasX[5]=2; blancasX[6]=1; blancasX[7]=3;
+    blancasY[0]=1; blancasY[1]=1; blancasY[2]=1; blancasY[3]=1; blancasY[4]=0; blancasY[5]=0; blancasY[6]=0; blancasY[7]=2;
 
-//    negrasX[0]=0; negrasX[1]=3; negrasX[2]=4; negrasX[3]=5; negrasX[4]=2; negrasX[5]=4; negrasX[6]=4; negrasX[7]=5;
-//    negrasY[0]=3; negrasY[1]=1; negrasY[2]=1; negrasY[3]=3; negrasY[4]=5; negrasY[5]=2; negrasY[6]=0; negrasY[7]=0;
-
-    negrasX[0]=0; negrasX[1]=2; negrasX[2]=4; negrasX[3]=3; negrasX[4]=1; negrasX[5]=2; negrasX[6]=3; negrasX[7]=5;
-    negrasY[0]=4; negrasY[1]=4; negrasY[2]=4; negrasY[3]=2; negrasY[4]=1; negrasY[5]=2; negrasY[6]=3; negrasY[7]=4;
-
-    blancasX[0]=0; blancasX[1]=3; blancasX[2]=4; blancasX[3]=5; blancasX[4]=2; blancasX[5]=4; blancasX[6]=4; blancasX[7]=5;
-    blancasY[0]=3; blancasY[1]=1; blancasY[2]=1; blancasY[3]=3; blancasY[4]=5; blancasY[5]=2; blancasY[6]=0; blancasY[7]=0;
+    negrasX[0]=0; negrasX[1]=1; negrasX[2]=2; negrasX[3]=3; negrasX[4]=0; negrasX[5]=1; negrasX[6]=4; negrasX[7]=5;
+    negrasY[0]=5; negrasY[1]=5; negrasY[2]=5; negrasY[3]=5; negrasY[4]=2; negrasY[5]=3; negrasY[6]=4; negrasY[7]=5;
 
     for (int i = 0; i < 8; i++)
     {
         if(blancasY[i]!=-1 && blancasX[i]!=-1)
         {
-            if(i<4) est[blancasX[i]][blancasY[i]]='P';
-            if(i==4) est[blancasX[i]][blancasY[i]]='H';
-            if(i==5) est[blancasX[i]][blancasY[i]]='B';
-            if(i==6) est[blancasX[i]][blancasY[i]]='Q';
-            if(i==7) est[blancasX[i]][blancasY[i]]='K';
+            est[blancasY[i]][blancasX[i]]=(i+65);
         }
         if(negrasY[i]!=-1 && negrasX[i]!=-1)
         {
-            if(i<4) est[negrasX[i]][negrasY[i]]='p';
-            if(i==4) est[negrasX[i]][negrasY[i]]='h';
-            if(i==5) est[negrasX[i]][negrasY[i]]='b';
-            if(i==6) est[negrasX[i]][negrasY[i]]='q';
-            if(i==7) est[negrasX[i]][negrasY[i]]='k';
+            est[negrasY[i]][negrasX[i]]=(i+97);
         }
     }
-
-    cout<<"original"<<endl<<endl;
-    for (int i = 0; i < 6; ++i) {
-        cout<<"+---+---+---+---+---+---+"<<endl;
-        for (int j = 0; j < 6; ++j) {
-            cout<<"| "<<est[j][i]<<" ";
-        }
-        cout<<"|"<<endl;
-    }
-    cout<<"+---+---+---+---+---+---+"<<endl<<endl;
 
     MiniMax obj(2);
     obj.definirVariables(est,blancasX,blancasY,negrasX,negrasY);
