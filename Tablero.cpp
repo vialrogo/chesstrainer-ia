@@ -58,10 +58,10 @@ void Tablero::crearFichas(int *posBlancasX, int *posBlancasY, int *posNegrasX, i
             imagenesFichasNegras[i]=new Ficha(QSizeF(540,540),QPixmap("Imagenes/k.png"),this);
         }
 
-        imagenesFichasBlancas[i]->setOffset(posBlancasY[i]*anchoCelda+deltaY,posBlancasX[i]*altoCelda+deltaX);
+        imagenesFichasBlancas[i]->setOffset(posBlancasX[i]*anchoCelda+deltaX,posBlancasY[i]*altoCelda+deltaY);
         this->addItem(imagenesFichasBlancas[i]);
 
-        imagenesFichasNegras[i]->setOffset(posNegrasY[i]*anchoCelda+deltaY,posNegrasX[i]*altoCelda+deltaX);
+        imagenesFichasNegras[i]->setOffset(posNegrasX[i]*anchoCelda+deltaX,posNegrasY[i]*altoCelda+deltaY);
         this->addItem(imagenesFichasNegras[i]);
 
         imagenesFichasBlancas[i]->setX(0);
@@ -75,8 +75,8 @@ void Tablero::mousePressEvent(QGraphicsSceneMouseEvent* mouseevent)
 {
     //Se optiene la posición donde se dio clic
     QPointF posicion = mouseevent->scenePos();
-    double ypos = posicion.rx(); //Ojo, van trocados a proposito
-    double xpos = posicion.ry(); //Ojo, van trocados a proposito
+    double xpos = posicion.rx();
+    double ypos = posicion.ry();
 
     //Con esto se sale si se ha dado clic fuera del tablero
     if(xpos<=deltaX || ypos<=deltaY || xpos>=480+deltaX || ypos>=480+deltaY) return;
@@ -128,13 +128,13 @@ void Tablero::pintarCuadricula()
     {
         for (int j = 0; j < 6; ++j)
         {
-            matrizCuadrados[i][j] = new QGraphicsRectItem(i*altoCelda+deltaY,j*anchoCelda+deltaX,anchoCelda,altoCelda,0,this);
-            matrizCuadrados[i][j]->setPen(QColor(180,180,180,255));//Color de linea
+            matrizCuadrados[j][i] = new QGraphicsRectItem(i*altoCelda+deltaY,j*anchoCelda+deltaX,anchoCelda,altoCelda,0,this);
+            matrizCuadrados[j][i]->setPen(QColor(180,180,180,255));//Color de linea
 
             if((i+j)%2==0)
-                matrizCuadrados[i][j]->setBrush(QColor(255,255,255,255));//Cuadros Blancos
+                matrizCuadrados[j][i]->setBrush(QColor(255,255,255,255));//Cuadros Blancos
             else
-                matrizCuadrados[i][j]->setBrush(QColor(0,0,0,255));//Cuadros Negros
+                matrizCuadrados[j][i]->setBrush(QColor(0,0,0,255));//Cuadros Negros
         }
     }
 
@@ -149,16 +149,16 @@ void Tablero::pintarCuadricula()
     {
         QGraphicsTextItem* letraSuperior = new QGraphicsTextItem(letras[i],0,this);
         letraSuperior->setFont(fuente);
-        letraSuperior->setPos(deltaY+40+(i*80),dyletras);
+        letraSuperior->setPos(deltaX+40+(i*80),dyletras);
         QGraphicsTextItem* letraInferior = new QGraphicsTextItem(letras[i],0,this);
         letraInferior->setFont(fuente);
-        letraInferior->setPos(deltaY+40+(i*80),deltaX+480+dyletras);
+        letraInferior->setPos(deltaX+40+(i*80),deltaY+480+dyletras);
         QGraphicsTextItem* numeroSuperior = new QGraphicsTextItem(numeros[i],0,this);
         numeroSuperior->setFont(fuente);
-        numeroSuperior->setPos(dxnumeros,deltaX+40+(i*80));
+        numeroSuperior->setPos(dxnumeros,deltaY+40+(i*80));
         QGraphicsTextItem* numeroInferior = new QGraphicsTextItem(numeros[i],0,this);
         numeroInferior->setFont(fuente);
-        numeroInferior->setPos(deltaY+480+dxnumeros,deltaX+40+(i*80));
+        numeroInferior->setPos(deltaX+480+dxnumeros,deltaY+40+(i*80));
     }
 
 }
@@ -168,8 +168,8 @@ void Tablero::pintarCuadricula()
 */
 void Tablero::iniciarAnimacion(int ficha_in, bool color_in, int xIni, int yIni, int xFin, int yFin)
 {
-    int dy = xFin-xIni;
-    int dx = yFin-yIni;
+    int dx = xFin-xIni;
+    int dy = yFin-yIni;
     ficha_global=ficha_in;
     color_global=color_in;
 

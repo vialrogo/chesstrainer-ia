@@ -45,7 +45,7 @@ void MiniMax::imprimir(Nodo *elNodo)
     for (int i = 0; i < 6; ++i) {
         cout<<"+---+---+---+---+---+---+"<<endl;
         for (int j = 0; j < 6; ++j) {
-            cout<<"| "<<elNodo->getEstado()[i][j]<<" ";
+            cout<<"| "<<elNodo->getEstado()[j][i]<<" ";
         }
         cout<<"|"<<endl;
     }
@@ -516,7 +516,6 @@ string MiniMax::tomarDesicion()
 {
     bool enJaque=verificarJaque(true);
     Nodo *inicial=new Nodo(0,0,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,"original");
-    imprimir(inicial);
     Nodo *actual=inicial;
     int heuristicaTmp=0;
     string decision;
@@ -682,10 +681,10 @@ bool MiniMax::verificarJaque(bool color)
         }
         else
         {
-            if(estado[xx][yy] == ' ')
+            if(estado[yy][xx] == ' ')
                 count++;
             else{
-                if(estado[xx][yy] == (70+delta) || estado[xx][yy] == (71+delta))
+                if(estado[yy][xx] == (70+delta) || estado[yy][xx] == (71+delta))
                     return true;
                 else
                 {
@@ -713,10 +712,10 @@ bool MiniMax::verificarJaque(bool color)
         }
         else
         {
-            if(estado[xx][yy] == ' ')
+            if(estado[yy][xx] == ' ')
                 count++;
             else{
-                if(estado[xx][yy] == (71+delta))
+                if(estado[yy][xx] == (71+delta))
                     return true;
                 else
                 {
@@ -736,7 +735,7 @@ bool MiniMax::verificarJaque(bool color)
         if(xx<0 || xx>5 || yy<0 || yy>5)
             continue;
         else
-            if(estado[xx][yy] == (69+delta))
+            if(estado[yy][xx] == (69+delta))
                 return true;
     }
 
@@ -744,21 +743,21 @@ bool MiniMax::verificarJaque(bool color)
     if(color)
     {
         if(reyX>0 && reyY>0)
-            if(estado[reyX-1][reyY-1]>96 && estado[reyX-1][reyY-1]<101)
+            if(estado[reyY-1][reyX-1]>96 && estado[reyY-1][reyX-1]<101)
                 return true;
 
         if(reyX<5 && reyY>0)
-            if(estado[reyX-1][reyY+1]>96 && estado[reyX-1][reyY+1]<101)
+            if(estado[reyY-1][reyX+1]>96 && estado[reyY-1][reyX+1]<101)
                 return true;
     }
     else
     {
         if(reyX>0 && reyY<5)
-            if(estado[reyX+1][reyY-1]<69 && estado[reyX+1][reyY-1]>64)
+            if(estado[reyY+1][reyX-1]<69 && estado[reyY+1][reyX-1]>64)
                 return true;
 
         if(reyX<5 && reyY<5)
-            if(estado[reyX+1][reyY+1]<69 && estado[reyX+1][reyY+1]>64)
+            if(estado[reyY+1][reyX+1]<69 && estado[reyY+1][reyX+1]>64)
                 return true;
     }
 
@@ -771,7 +770,7 @@ bool MiniMax::verificarJaque(bool color)
         if(xx<0 || xx>5 || yy<0 || yy>5)
             continue;
         else
-            if(estado[xx][yy] == (72+delta))
+            if(estado[yy][xx] == (72+delta))
                 return true;
     }
 
