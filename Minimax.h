@@ -24,7 +24,7 @@ private:
     Mapa mapa;
     int calcularHeuristica(Nodo *elNodo);
     QList<Nodo*> expandir (Nodo *elNodo);
-    void imprimir(char** estado_in);
+    void imprimir(Nodo *elNodo);
 
 public:
     MiniMax(int nivelIn);

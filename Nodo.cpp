@@ -12,7 +12,7 @@ Nodo::Nodo(Nodo* padreIn, int nivelIn, int *posBlancasXIn, int *posBlancasYIn, i
 
     quienSoy=quienSoyIn;
     decision="";
-    valor=0;
+    valor=(nivel%2==0)? -100000 : 100000;
 }
 
 Nodo::~Nodo()
@@ -34,31 +34,29 @@ Nodo::~Nodo()
     posNegrasX=0;
     posNegrasY=0;
 
-    padre=0;
+//    padre=0;
 }
 
 //para quien soy: Mayúscula=blancas Minúscula=negras; B=alfil, H=Caballo, K=rey, P=peón, Q=reina
 void Nodo::actualizarDesicion(int valorIn, string cualHijo)
 {
-    if(padre!=0)
+    if(nivel%2==0)
     {
-        if(nivel%2==0)
-        {
-           if(valor<=valorIn)
-           {
-               valor=valorIn;
-               decision=cualHijo;
-           }
-        }
-        else
-        {
-            if(valor>=valorIn)
-           {
-               valor=valorIn;
-               decision=cualHijo;
-           }
-        }
-        padre->actualizarDesicion(valor,quienSoy);
+       if(valor<=valorIn)
+       {
+           valor=valorIn;
+           decision=cualHijo;
+           if(padre!=0) padre->actualizarDesicion(valor,quienSoy);
+       }
+    }
+    else
+    {
+        if(valor>=valorIn)
+       {
+           valor=valorIn;
+           decision=cualHijo;
+           if(padre!=0) padre->actualizarDesicion(valor,quienSoy);
+       }
     }
 }
 
@@ -105,4 +103,9 @@ string Nodo::getQuiensoy()
 Nodo* Nodo::getPadre()
 {
     return padre;
+}
+
+int Nodo::getValor()
+{
+    return valor;
 }

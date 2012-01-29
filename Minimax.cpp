@@ -38,17 +38,45 @@ int MiniMax::calcularHeuristica(Nodo *elNodo)
     return resultado;
 }
 
-void MiniMax::imprimir(char** estado_in)
+void MiniMax::imprimir(Nodo *elNodo)
 {
+    cout<<elNodo->getQuiensoy()<<endl;
     //Para imprimir la matriz
     for (int i = 0; i < 6; ++i) {
         cout<<"+---+---+---+---+---+---+"<<endl;
         for (int j = 0; j < 6; ++j) {
-            cout<<"| "<<estado_in[i][j]<<" ";
+            cout<<"| "<<elNodo->getEstado()[j][i]<<" ";
         }
         cout<<"|"<<endl;
     }
     cout<<"+---+---+---+---+---+---+"<<endl<<endl;
+
+    //Para imprimir los arreglos
+    cout<<"+-------+---+---+---+---+---+---+---+---+"<<endl;
+    cout<<"| Color | A | B | C | D | E | F | G | H |"<<endl;
+    cout<<"+-------+---+---+---+---+---+---+---+---+"<<endl;
+    cout<<"|Blanco |";
+    for (int i = 0; i < 8; ++i)
+    {
+        if(elNodo->getPosBlancasX()[i]==-1) cout<<" -";
+        else cout<<elNodo->getPosBlancasX()[i]<<",";
+
+        if(elNodo->getPosBlancasY()[i]==-1) cout<<" |";
+        else cout<<elNodo->getPosBlancasY()[i]<<"|";
+    }
+    cout<<endl;
+    cout<<"+-------+---+---+---+---+---+---+---+---+"<<endl;
+    cout<<"|Negro  |";
+    for (int i = 0; i < 8; ++i)
+    {
+        if(elNodo->getPosNegrasX()[i]==-1) cout<<" -";
+        else cout<<elNodo->getPosNegrasX()[i]<<",";
+
+        if(elNodo->getPosNegrasY()[i]==-1) cout<<" |";
+        else cout<<elNodo->getPosNegrasY()[i]<<"|";
+    }
+    cout<<endl;
+    cout<<"+-------+---+---+---+---+---+---+---+---+"<<endl<<endl;
 }
 
 QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
@@ -64,123 +92,88 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
 
         if(elNodo->getNivel()%2==0) //blancas
         {
-            if(i<4) //peones
+            if(posBlancasX[i]!=-1 && posBlancasY[i]!=-1)
             {
-
-                //Mover hacia arriba
-                //Recuperar los datos del padre
-                definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
-                stringstream quienSoyTmp1;
-
-                val=sePuedeMover(posBlancasX[i],posBlancasY[i]-1,i,true);
-                if(val==-1)
+                if(i<4) //peones
                 {
-                    estado[posBlancasX[i]][posBlancasY[i]]=' ';
-                    estado[posBlancasX[i]][posBlancasY[i]-1]=mapa.getBlanca(i);
-                    posBlancasY[i]=posBlancasY[i]-1;
-                    quienSoyTmp1<<i;
-                    quienSoyTmp1<<posBlancasX[i];
-                    quienSoyTmp1<<posBlancasY[i];
-                    quienSoy=quienSoyTmp1.str();
-                    respuesta.push_back(new Nodo(elNodo,elNodo->getNivel()+1,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,quienSoy));
-                }
 
-                //Mover diagonal arriba izquierda
-                //Recuperar los datos del padre
-                definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
-                stringstream quienSoyTmp2;
-
-                val=sePuedeMover(posBlancasX[i]-1,posBlancasY[i]-1,i,true);
-                if(val!=-2)
-                {
-                    estado[posBlancasX[i]][posBlancasY[i]]=' ';
-                    estado[posBlancasX[i]-1][posBlancasY[i]-1]=mapa.getBlanca(i);
-                    posBlancasX[i]=posBlancasX[i]-1;
-                    posBlancasY[i]=posBlancasY[i]-1;
-
-                    posNegrasX[val]=-1;
-                    posNegrasY[val]=-1;
-                    quienSoyTmp2<<i;
-                    quienSoyTmp2<<posBlancasX[i];
-                    quienSoyTmp2<<posBlancasY[i];
-                    quienSoy=quienSoyTmp2.str();
-                    respuesta.push_back(new Nodo(elNodo,elNodo->getNivel()+1,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,quienSoy));
-                }
-
-                //Mover diagonal arriba derecha
-                //Recuperar los datos del padre
-                definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
-                stringstream quienSoyTmp3;
-
-                val=sePuedeMover(posBlancasX[i]+1,posBlancasY[i]-1,i,true);
-                if(val!=-2)
-                {
-                    estado[posBlancasX[i]][posBlancasY[i]]=' ';
-                    estado[posBlancasX[i]+1][posBlancasY[i]-1]=mapa.getBlanca(i);
-                    posBlancasX[i]=posBlancasX[i]+1;
-                    posBlancasY[i]=posBlancasY[i]-1;
-
-                    posNegrasX[val]=-1;
-                    posNegrasY[val]=-1;
-                    quienSoyTmp3<<i;
-                    quienSoyTmp3<<posBlancasX[i];
-                    quienSoyTmp3<<posBlancasY[i];
-                    quienSoy=quienSoyTmp3.str();
-                    respuesta.push_back(new Nodo(elNodo,elNodo->getNivel()+1,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,quienSoy));
-                }
-            }
-            else if(i==4) //Caballo
-            {
-                for (int j = 0; j < 8; j++)
-                {
+                    //Mover hacia arriba
                     //Recuperar los datos del padre
                     definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
-                    stringstream quienSoyTmp;
+                    stringstream quienSoyTmp1;
 
-                    val=sePuedeMover(posBlancasX[i]+mapa.getDxCaballo(j),posBlancasY[i]+mapa.getDyCaballo(j),i,true);
+                    val=sePuedeMover(posBlancasX[i],posBlancasY[i]-1,i,true);
+                    if(val==-1)
+                    {
+                        estado[posBlancasX[i]][posBlancasY[i]]=' ';
+                        estado[posBlancasX[i]][posBlancasY[i]-1]=mapa.getBlanca(i);
+                        posBlancasY[i]=posBlancasY[i]-1;
+                        quienSoyTmp1<<i;
+                        quienSoyTmp1<<posBlancasX[i];
+                        quienSoyTmp1<<posBlancasY[i];
+                        quienSoy=quienSoyTmp1.str();
+                        respuesta.push_back(new Nodo(elNodo,elNodo->getNivel()+1,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,quienSoy));
+                    }
+
+                    //Mover diagonal arriba izquierda
+                    //Recuperar los datos del padre
+                    definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
+                    stringstream quienSoyTmp2;
+
+                    val=sePuedeMover(posBlancasX[i]-1,posBlancasY[i]-1,i,true);
                     if(val!=-2)
                     {
                         estado[posBlancasX[i]][posBlancasY[i]]=' ';
-                        estado[posBlancasX[i]+mapa.getDxCaballo(j)][posBlancasY[i]+mapa.getDyCaballo(j)]=mapa.getBlanca(i);
-                        posBlancasX[i]+=mapa.getDxCaballo(j);
-                        posBlancasY[i]+=mapa.getDyCaballo(j);
+                        estado[posBlancasX[i]-1][posBlancasY[i]-1]=mapa.getBlanca(i);
+                        posBlancasX[i]=posBlancasX[i]-1;
+                        posBlancasY[i]=posBlancasY[i]-1;
 
-                        if(val!=-1)
-                        {
-                            posNegrasX[val]=-1;
-                            posNegrasY[val]=-1;
-                        }
+                        posNegrasX[val]=-1;
+                        posNegrasY[val]=-1;
+                        quienSoyTmp2<<i;
+                        quienSoyTmp2<<posBlancasX[i];
+                        quienSoyTmp2<<posBlancasY[i];
+                        quienSoy=quienSoyTmp2.str();
+                        respuesta.push_back(new Nodo(elNodo,elNodo->getNivel()+1,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,quienSoy));
+                    }
 
-                        quienSoyTmp<<i;
-                        quienSoyTmp<<posBlancasX[i];
-                        quienSoyTmp<<posBlancasY[i];
-                        quienSoy=quienSoyTmp.str();
+                    //Mover diagonal arriba derecha
+                    //Recuperar los datos del padre
+                    definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
+                    stringstream quienSoyTmp3;
+
+                    val=sePuedeMover(posBlancasX[i]+1,posBlancasY[i]-1,i,true);
+                    if(val!=-2)
+                    {
+                        estado[posBlancasX[i]][posBlancasY[i]]=' ';
+                        estado[posBlancasX[i]+1][posBlancasY[i]-1]=mapa.getBlanca(i);
+                        posBlancasX[i]=posBlancasX[i]+1;
+                        posBlancasY[i]=posBlancasY[i]-1;
+
+                        posNegrasX[val]=-1;
+                        posNegrasY[val]=-1;
+                        quienSoyTmp3<<i;
+                        quienSoyTmp3<<posBlancasX[i];
+                        quienSoyTmp3<<posBlancasY[i];
+                        quienSoy=quienSoyTmp3.str();
                         respuesta.push_back(new Nodo(elNodo,elNodo->getNivel()+1,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,quienSoy));
                     }
                 }
-            }
-            else if(i==5 || i==6) //Alfil o Reina (diagonales)
-            {
-                for (int j = 0; j < 4; j++)
+                else if(i==4) //Caballo
                 {
-                    count=1;
-                    do
+                    for (int j = 0; j < 8; j++)
                     {
                         //Recuperar los datos del padre
                         definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
                         stringstream quienSoyTmp;
 
-                        dx=mapa.getDxDiago(j)*count;
-                        dy=mapa.getDyDiago(j)*count;
-
-                        val=sePuedeMover(posBlancasX[i]+dx,posBlancasY[i]+dy,i,true);
-
+                        val=sePuedeMover(posBlancasX[i]+mapa.getDxCaballo(j),posBlancasY[i]+mapa.getDyCaballo(j),i,true);
                         if(val!=-2)
                         {
                             estado[posBlancasX[i]][posBlancasY[i]]=' ';
-                            estado[posBlancasX[i]+dx][posBlancasY[i]+dy]=mapa.getBlanca(i);
-                            posBlancasX[i]+=dx;
-                            posBlancasY[i]+=dy;
+                            estado[posBlancasX[i]+mapa.getDxCaballo(j)][posBlancasY[i]+mapa.getDyCaballo(j)]=mapa.getBlanca(i);
+                            posBlancasX[i]+=mapa.getDxCaballo(j);
+                            posBlancasY[i]+=mapa.getDyCaballo(j);
 
                             if(val!=-1)
                             {
@@ -194,12 +187,11 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
                             quienSoy=quienSoyTmp.str();
                             respuesta.push_back(new Nodo(elNodo,elNodo->getNivel()+1,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,quienSoy));
                         }
-                        count++;
-                    } while (val==-1);
+                    }
                 }
-                if(i==6) //Reina (Rectas)
+                else if(i==5 || i==6) //Alfil o Reina (diagonales)
                 {
-                    for (int j = 0; j < 4; ++j)
+                    for (int j = 0; j < 4; j++)
                     {
                         count=1;
                         do
@@ -208,8 +200,8 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
                             definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
                             stringstream quienSoyTmp;
 
-                            dx=mapa.getDxRectas(j)*count;
-                            dy=mapa.getDyRectas(j)*count;
+                            dx=mapa.getDxDiago(j)*count;
+                            dy=mapa.getDyDiago(j)*count;
 
                             val=sePuedeMover(posBlancasX[i]+dx,posBlancasY[i]+dy,i,true);
 
@@ -235,157 +227,161 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
                             count++;
                         } while (val==-1);
                     }
-                }
-            }
-            else if(i==7) //Rey
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    //Recuperar los datos del padre
-                    definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
-                    stringstream quienSoyTmp;
-
-                    val=sePuedeMover(posBlancasX[i]+mapa.getDxRey(j),posBlancasY[i]+mapa.getDyRey(j),i,true);
-                    if(val!=-2)
+                    if(i==6) //Reina (Rectas)
                     {
-                        estado[posBlancasX[i]][posBlancasY[i]]=' ';
-                        estado[posBlancasX[i]+mapa.getDxRey(j)][posBlancasY[i]+mapa.getDyRey(j)]=mapa.getBlanca(i);
-                        posBlancasX[i]+=mapa.getDxRey(j);
-                        posBlancasY[i]+=mapa.getDyRey(j);
-
-                        if(val!=-1)
+                        for (int j = 0; j < 4; ++j)
                         {
-                            posNegrasX[val]=-1;
-                            posNegrasY[val]=-1;
-                        }
+                            count=1;
+                            do
+                            {
+                                //Recuperar los datos del padre
+                                definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
+                                stringstream quienSoyTmp;
 
-                        quienSoyTmp<<i;
-                        quienSoyTmp<<posBlancasX[i];
-                        quienSoyTmp<<posBlancasY[i];
-                        quienSoy=quienSoyTmp.str();
-                        respuesta.push_back(new Nodo(elNodo,elNodo->getNivel()+1,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,quienSoy));
+                                dx=mapa.getDxRectas(j)*count;
+                                dy=mapa.getDyRectas(j)*count;
+
+                                val=sePuedeMover(posBlancasX[i]+dx,posBlancasY[i]+dy,i,true);
+
+                                if(val!=-2)
+                                {
+                                    estado[posBlancasX[i]][posBlancasY[i]]=' ';
+                                    estado[posBlancasX[i]+dx][posBlancasY[i]+dy]=mapa.getBlanca(i);
+                                    posBlancasX[i]+=dx;
+                                    posBlancasY[i]+=dy;
+
+                                    if(val!=-1)
+                                    {
+                                        posNegrasX[val]=-1;
+                                        posNegrasY[val]=-1;
+                                    }
+
+                                    quienSoyTmp<<i;
+                                    quienSoyTmp<<posBlancasX[i];
+                                    quienSoyTmp<<posBlancasY[i];
+                                    quienSoy=quienSoyTmp.str();
+                                    respuesta.push_back(new Nodo(elNodo,elNodo->getNivel()+1,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,quienSoy));
+                                }
+                                count++;
+                            } while (val==-1);
+                        }
+                    }
+                }
+                else if(i==7) //Rey
+                {
+                    for (int j = 0; j < 8; j++)
+                    {
+                        //Recuperar los datos del padre
+                        definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
+                        stringstream quienSoyTmp;
+
+                        val=sePuedeMover(posBlancasX[i]+mapa.getDxRey(j),posBlancasY[i]+mapa.getDyRey(j),i,true);
+                        if(val!=-2)
+                        {
+                            estado[posBlancasX[i]][posBlancasY[i]]=' ';
+                            estado[posBlancasX[i]+mapa.getDxRey(j)][posBlancasY[i]+mapa.getDyRey(j)]=mapa.getBlanca(i);
+                            posBlancasX[i]+=mapa.getDxRey(j);
+                            posBlancasY[i]+=mapa.getDyRey(j);
+
+                            if(val!=-1)
+                            {
+                                posNegrasX[val]=-1;
+                                posNegrasY[val]=-1;
+                            }
+
+                            quienSoyTmp<<i;
+                            quienSoyTmp<<posBlancasX[i];
+                            quienSoyTmp<<posBlancasY[i];
+                            quienSoy=quienSoyTmp.str();
+                            respuesta.push_back(new Nodo(elNodo,elNodo->getNivel()+1,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,quienSoy));
+                        }
                     }
                 }
             }
         }
         else //negras
         {
-            if(i<4) //peones
+            if(posNegrasX[i]!=-1 && posBlancasY[i]!=-1)
             {
-                //Mover hacia abajo
-                //Recuperar los datos del padre
-                definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
-                stringstream quienSoyTmp1;
-
-                val=sePuedeMover(posNegrasX[i],posNegrasY[i]+1,i,false);
-                if(val==-1)
+                if(i<4) //peones
                 {
-                    estado[posNegrasX[i]][posNegrasY[i]]=' ';
-                    estado[posNegrasX[i]][posNegrasY[i]+1]=mapa.getNegra(i);
-                    posNegrasY[i]=posNegrasY[i]+1;
-                    quienSoyTmp1<<i;
-                    quienSoyTmp1<<posNegrasX[i];
-                    quienSoyTmp1<<posNegrasY[i];
-                    quienSoy=quienSoyTmp1.str();
-                    respuesta.push_back(new Nodo(elNodo,elNodo->getNivel()+1,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,quienSoy));
-                }
-
-                //Mover diagonal abajo izquierda
-                //Recuperar los datos del padre
-                definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
-                stringstream quienSoyTmp2;
-
-                val=sePuedeMover(posNegrasX[i]-1,posNegrasY[i]+1,i,false);
-                if(val!=-2)
-                {
-                    estado[posNegrasX[i]-1][posNegrasY[i]+1]=' ';
-                    estado[posNegrasX[i]-1][posNegrasY[i]+1]=mapa.getNegra(i);
-                    posNegrasX[i]=posNegrasX[i]-1;
-                    posNegrasY[i]=posNegrasY[i]+1;
-
-                    posBlancasX[val]=-1;
-                    posBlancasY[val]=-1;
-                    quienSoyTmp2<<i;
-                    quienSoyTmp2<<posNegrasX[i];
-                    quienSoyTmp2<<posNegrasY[i];
-                    quienSoy=quienSoyTmp2.str();
-                    respuesta.push_back(new Nodo(elNodo,elNodo->getNivel()+1,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,quienSoy));
-                }
-
-                //Mover diagonal abajo derecha
-                //Recuperar los datos del padre
-                definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
-                stringstream quienSoyTmp3;
-
-                val=sePuedeMover(posNegrasX[i]+1,posNegrasY[i]+1,i,false);
-                if(val!=-2)
-                {
-                    estado[posNegrasX[i]+1][posNegrasY[i]+1]=' ';
-                    estado[posNegrasX[i]+1][posNegrasY[i]+1]=mapa.getNegra(i);
-                    posNegrasX[i]=posNegrasX[i]+1;
-                    posNegrasY[i]=posNegrasY[i]+1;
-
-                    posBlancasX[val]=-1;
-                    posBlancasY[val]=-1;
-                    quienSoyTmp3<<i;
-                    quienSoyTmp3<<posNegrasX[i];
-                    quienSoyTmp3<<posNegrasY[i];
-                    quienSoy=quienSoyTmp3.str();
-                    respuesta.push_back(new Nodo(elNodo,elNodo->getNivel()+1,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,quienSoy));
-                }
-            }
-            else if(i==4) //Caballo
-            {
-                for (int j = 0; j < 8; j++)
-                {
+                    //Mover hacia abajo
                     //Recuperar los datos del padre
                     definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
-                    stringstream quienSoyTmp;
+                    stringstream quienSoyTmp1;
 
-                    val=sePuedeMover(posNegrasX[i]+mapa.getDxCaballo(j),posNegrasY[i]+mapa.getDyCaballo(j),i,false);
-                    if(val!=-2)
+                    val=sePuedeMover(posNegrasX[i],posNegrasY[i]+1,i,false);
+                    if(val==-1)
                     {
                         estado[posNegrasX[i]][posNegrasY[i]]=' ';
-                        estado[posNegrasX[i]+mapa.getDxCaballo(j)][posNegrasY[i]+mapa.getDyCaballo(j)]=mapa.getNegra(i);
-                        posNegrasX[i]+=mapa.getDxCaballo(j);
-                        posNegrasY[i]+=mapa.getDyCaballo(j);
+                        estado[posNegrasX[i]][posNegrasY[i]+1]=mapa.getNegra(i);
+                        posNegrasY[i]=posNegrasY[i]+1;
+                        quienSoyTmp1<<i;
+                        quienSoyTmp1<<posNegrasX[i];
+                        quienSoyTmp1<<posNegrasY[i];
+                        quienSoy=quienSoyTmp1.str();
+                        respuesta.push_back(new Nodo(elNodo,elNodo->getNivel()+1,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,quienSoy));
+                    }
 
-                        if(val!=-1)
-                        {
-                            posBlancasX[val]=-1;
-                            posBlancasY[val]=-1;
-                        }
+                    //Mover diagonal abajo izquierda
+                    //Recuperar los datos del padre
+                    definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
+                    stringstream quienSoyTmp2;
 
-                        quienSoyTmp<<i;
-                        quienSoyTmp<<posNegrasX[i];
-                        quienSoyTmp<<posNegrasY[i];
-                        quienSoy=quienSoyTmp.str();
+                    val=sePuedeMover(posNegrasX[i]-1,posNegrasY[i]+1,i,false);
+                    if(val!=-2)
+                    {
+                        estado[posNegrasX[i]-1][posNegrasY[i]+1]=' ';
+                        estado[posNegrasX[i]-1][posNegrasY[i]+1]=mapa.getNegra(i);
+                        posNegrasX[i]=posNegrasX[i]-1;
+                        posNegrasY[i]=posNegrasY[i]+1;
+
+                        posBlancasX[val]=-1;
+                        posBlancasY[val]=-1;
+                        quienSoyTmp2<<i;
+                        quienSoyTmp2<<posNegrasX[i];
+                        quienSoyTmp2<<posNegrasY[i];
+                        quienSoy=quienSoyTmp2.str();
+                        respuesta.push_back(new Nodo(elNodo,elNodo->getNivel()+1,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,quienSoy));
+                    }
+
+                    //Mover diagonal abajo derecha
+                    //Recuperar los datos del padre
+                    definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
+                    stringstream quienSoyTmp3;
+
+                    val=sePuedeMover(posNegrasX[i]+1,posNegrasY[i]+1,i,false);
+                    if(val!=-2)
+                    {
+                        estado[posNegrasX[i]+1][posNegrasY[i]+1]=' ';
+                        estado[posNegrasX[i]+1][posNegrasY[i]+1]=mapa.getNegra(i);
+                        posNegrasX[i]=posNegrasX[i]+1;
+                        posNegrasY[i]=posNegrasY[i]+1;
+
+                        posBlancasX[val]=-1;
+                        posBlancasY[val]=-1;
+                        quienSoyTmp3<<i;
+                        quienSoyTmp3<<posNegrasX[i];
+                        quienSoyTmp3<<posNegrasY[i];
+                        quienSoy=quienSoyTmp3.str();
                         respuesta.push_back(new Nodo(elNodo,elNodo->getNivel()+1,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,quienSoy));
                     }
                 }
-            }
-            else if(i==5 || i==6) //Alfil o Reina (diagonales)
-            {
-                for (int j = 0; j < 4; ++j)
+                else if(i==4) //Caballo
                 {
-                    count=1;
-                    do
+                    for (int j = 0; j < 8; j++)
                     {
                         //Recuperar los datos del padre
                         definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
                         stringstream quienSoyTmp;
 
-                        dx=mapa.getDxDiago(j)*count;
-                        dy=mapa.getDyDiago(j)*count;
-
-                        val=sePuedeMover(posNegrasX[i]+dx,posNegrasY[i]+dy,i,false);
-
+                        val=sePuedeMover(posNegrasX[i]+mapa.getDxCaballo(j),posNegrasY[i]+mapa.getDyCaballo(j),i,false);
                         if(val!=-2)
                         {
                             estado[posNegrasX[i]][posNegrasY[i]]=' ';
-                            estado[posNegrasX[i]+dx][posNegrasY[i]+dy]=mapa.getNegra(i);
-                            posNegrasX[i]+=dx;
-                            posNegrasY[i]+=dy;
+                            estado[posNegrasX[i]+mapa.getDxCaballo(j)][posNegrasY[i]+mapa.getDyCaballo(j)]=mapa.getNegra(i);
+                            posNegrasX[i]+=mapa.getDxCaballo(j);
+                            posNegrasY[i]+=mapa.getDyCaballo(j);
 
                             if(val!=-1)
                             {
@@ -399,12 +395,11 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
                             quienSoy=quienSoyTmp.str();
                             respuesta.push_back(new Nodo(elNodo,elNodo->getNivel()+1,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,quienSoy));
                         }
-                        count++;
-                    } while (val==-1);
+                    }
                 }
-                if(i==6) //Reina (Rectas)
+                else if(i==5 || i==6) //Alfil o Reina (diagonales)
                 {
-                    for (int j = 0; j < 4; j++)
+                    for (int j = 0; j < 4; ++j)
                     {
                         count=1;
                         do
@@ -413,8 +408,8 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
                             definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
                             stringstream quienSoyTmp;
 
-                            dx=mapa.getDxRectas(j)*count;
-                            dy=mapa.getDyRectas(j)*count;
+                            dx=mapa.getDxDiago(j)*count;
+                            dy=mapa.getDyDiago(j)*count;
 
                             val=sePuedeMover(posNegrasX[i]+dx,posNegrasY[i]+dy,i,false);
 
@@ -440,35 +435,74 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
                             count++;
                         } while (val==-1);
                     }
-                }
-            }
-            else if(i==7) //Rey
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    //Recuperar los datos del padre
-                    definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
-                    stringstream quienSoyTmp;
-
-                    val=sePuedeMover(posNegrasX[i]+mapa.getDxRey(j),posNegrasY[i]+mapa.getDyRey(j),i,false);
-                    if(val!=-2)
+                    if(i==6) //Reina (Rectas)
                     {
-                        estado[posNegrasX[i]][posNegrasY[i]]=' ';
-                        estado[posNegrasX[i]+mapa.getDxRey(j)][posNegrasY[i]+mapa.getDyRey(j)]=mapa.getNegra(i);
-                        posNegrasX[i]+=mapa.getDxRey(j);
-                        posNegrasY[i]+=mapa.getDyRey(j);
-
-                        if(val!=-1)
+                        for (int j = 0; j < 4; j++)
                         {
-                            posBlancasX[val]=-1;
-                            posBlancasY[val]=-1;
-                        }
+                            count=1;
+                            do
+                            {
+                                //Recuperar los datos del padre
+                                definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
+                                stringstream quienSoyTmp;
 
-                        quienSoyTmp<<i;
-                        quienSoyTmp<<posNegrasX[i];
-                        quienSoyTmp<<posNegrasY[i];
-                        quienSoy=quienSoyTmp.str();
-                        respuesta.push_back(new Nodo(elNodo,elNodo->getNivel()+1,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,quienSoy));
+                                dx=mapa.getDxRectas(j)*count;
+                                dy=mapa.getDyRectas(j)*count;
+
+                                val=sePuedeMover(posNegrasX[i]+dx,posNegrasY[i]+dy,i,false);
+
+                                if(val!=-2)
+                                {
+                                    estado[posNegrasX[i]][posNegrasY[i]]=' ';
+                                    estado[posNegrasX[i]+dx][posNegrasY[i]+dy]=mapa.getNegra(i);
+                                    posNegrasX[i]+=dx;
+                                    posNegrasY[i]+=dy;
+
+                                    if(val!=-1)
+                                    {
+                                        posBlancasX[val]=-1;
+                                        posBlancasY[val]=-1;
+                                    }
+
+                                    quienSoyTmp<<i;
+                                    quienSoyTmp<<posNegrasX[i];
+                                    quienSoyTmp<<posNegrasY[i];
+                                    quienSoy=quienSoyTmp.str();
+                                    respuesta.push_back(new Nodo(elNodo,elNodo->getNivel()+1,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,quienSoy));
+                                }
+                                count++;
+                            } while (val==-1);
+                        }
+                    }
+                }
+                else if(i==7) //Rey
+                {
+                    for (int j = 0; j < 8; j++)
+                    {
+                        //Recuperar los datos del padre
+                        definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY());
+                        stringstream quienSoyTmp;
+
+                        val=sePuedeMover(posNegrasX[i]+mapa.getDxRey(j),posNegrasY[i]+mapa.getDyRey(j),i,false);
+                        if(val!=-2)
+                        {
+                            estado[posNegrasX[i]][posNegrasY[i]]=' ';
+                            estado[posNegrasX[i]+mapa.getDxRey(j)][posNegrasY[i]+mapa.getDyRey(j)]=mapa.getNegra(i);
+                            posNegrasX[i]+=mapa.getDxRey(j);
+                            posNegrasY[i]+=mapa.getDyRey(j);
+
+                            if(val!=-1)
+                            {
+                                posBlancasX[val]=-1;
+                                posBlancasY[val]=-1;
+                            }
+
+                            quienSoyTmp<<i;
+                            quienSoyTmp<<posNegrasX[i];
+                            quienSoyTmp<<posNegrasY[i];
+                            quienSoy=quienSoyTmp.str();
+                            respuesta.push_back(new Nodo(elNodo,elNodo->getNivel()+1,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,quienSoy));
+                        }
                     }
                 }
             }
@@ -493,40 +527,35 @@ string MiniMax::tomarDesicion()
 
     pila.push_front(inicial);
 
-//    while (!pila.isEmpty()) {
-        hijos=expandir(actual);
+    while (!pila.isEmpty()) {
+        actual=pila.front();
+        pila.pop_front();
 
-//        while (!hijos.isEmpty()) {
-//            cout<<"Hijos: "<<hijos.size();
-//            cout<<"nivel hijo: "<<hijos.back()->getNivel()<<endl;
-//            pila.push_front(hijos.back());
-//            hijos.pop_back();
-//        }
-
-//        actual=pila.front();
-
-//        aBorrar.push_back(actual);
-//        pila.pop_front();
-
-//        if(actual->getNivel()==nivel)
-//        {
-//            heuristicaTmp=calcularHeuristica(actual);
-//            actual->actualizarDesicion(heuristicaTmp,actual->getQuiensoy());
-//        }
-//    }
-
-//    cout<<"después del while"<<endl;
-//    cout<<inicial->getDecision()<<endl;
+        if(actual->getNivel()==nivel)
+        {
+            heuristicaTmp=calcularHeuristica(actual);
+            actual->actualizarDesicion(heuristicaTmp,actual->getQuiensoy());
+        }
+        else
+        {
+            hijos=expandir(actual);
+            while (!hijos.isEmpty()) {
+                pila.push_front(hijos.back());
+                hijos.pop_back();
+            }
+        }
+        aBorrar.push_back(actual);
+    }
     decision=inicial->getDecision();
 
-//    for (int i = 0; i < aBorrar.size(); i++) {
+    while (!aBorrar.isEmpty()) {
 //        delete aBorrar.front();
-//        aBorrar.pop_front();
-//    }
+        aBorrar.pop_front();
+    }
 
-//    if(enJaque)
-//        if (verificarJaque(true))
-//            return "";
+    if(enJaque)
+        if (verificarJaque(true))
+            return "";
 
     return decision;
 }
@@ -578,8 +607,8 @@ int MiniMax::sePuedeMover(int xDestino, int yDestino, int ficha, bool color)
         }
         else
         {
-            if(estado[xDestino][yDestino]==' ' ||  estado[xDestino][yDestino]<82) return -2;
-            else return estado[xDestino][yDestino];
+            if(estado[xDestino][yDestino]==' ' ||  estado[xDestino][yDestino]<73) return -2;
+            else return estado[xDestino][yDestino]-97;
         }
     }
     else if(ficha<4 && !color) //Peones Negros
@@ -591,8 +620,8 @@ int MiniMax::sePuedeMover(int xDestino, int yDestino, int ficha, bool color)
         }
         else
         {
-            if(estado[xDestino][yDestino]==' ' ||  estado[xDestino][yDestino]>97) return -2;
-            else return estado[xDestino][yDestino];
+            if(estado[xDestino][yDestino]==' ' ||  estado[xDestino][yDestino]>96) return -2;
+            else return estado[xDestino][yDestino]-65;
         }
     }
     else //Verificar Resto
@@ -600,14 +629,14 @@ int MiniMax::sePuedeMover(int xDestino, int yDestino, int ficha, bool color)
         if (color)
         {
             if(estado[xDestino][yDestino]==' ') return -1;
-            else if( estado[xDestino][yDestino]<82) return -2;
-            else return estado[xDestino][yDestino];
+            else if( estado[xDestino][yDestino]<73) return -2;
+            else return estado[xDestino][yDestino]-97;
         }
         else
         {
             if(estado[xDestino][yDestino]==' ') return -1;
-            else if( estado[xDestino][yDestino]>97) return -2;
-            else return estado[xDestino][yDestino];
+            else if( estado[xDestino][yDestino]>96) return -2;
+            else return estado[xDestino][yDestino]-65;
         }
     }
 }
@@ -811,5 +840,5 @@ int main()
     MiniMax obj(2);
     obj.definirVariables(est,blancasX,blancasY,negrasX,negrasY);
     obj.tomarDesicion();
-    cout<<"ESTO SALE?"<<endl;
-}*/
+}
+*/
