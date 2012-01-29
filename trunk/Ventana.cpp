@@ -198,7 +198,7 @@ void Ventana::imprimirEstado(char **estado_in, int *posBlancasX_in, int *posBlan
     for (int i = 0; i < 6; ++i) {
         cout<<"+---+---+---+---+---+---+"<<endl;
         for (int j = 0; j < 6; ++j) {
-            cout<<"| "<<estado_in[i][j]<<" ";
+            cout<<"| "<<estado_in[j][i]<<" ";
         }
         cout<<"|"<<endl;
     }
@@ -244,26 +244,25 @@ void Ventana::newGame()
 
 void Ventana::gameEasy()
 {
-    minimax = new MiniMax(0);
+    minimax = new MiniMax(2);
     crearTablero();
     emit game();
 }
 
 void Ventana::gameMedium()
 {
-    minimax = new MiniMax(0);
+    minimax = new MiniMax(4);
     crearTablero();
     emit game();
 }
 
 /*
-  Facil: nivel=0, Medio: nivel=1
+  Facil: nivel=2, Medio: nivel=4
 */
 void Ventana::game()
 {
     minimax->definirVariables(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
     string salida = minimax->tomarDesicion();
-//    string salida="";
     QString qsalida = QString::fromStdString(salida);
 
     int ficha;
@@ -459,7 +458,7 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
         }
     }
 
-    if(tokenJugador) emit game(); //Si el turno quedó en las blancas, que jueguen
+//    if(tokenJugador) emit game(); //Si el turno quedó en las blancas, que jueguen
 }
 
 bool Ventana::sePuedeMoverFicha(int ficha, bool color, int xCelda, int yCelda)

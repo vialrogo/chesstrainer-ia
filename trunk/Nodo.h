@@ -2,6 +2,7 @@
 #define NODO_H
 
 #include <string>
+#include <iostream>
 
 using namespace std;
 
@@ -33,6 +34,7 @@ public:
     string getDecision();
     int getNivel();
     string getQuiensoy();
+    int getValor();
 };
 
 #endif // NODO_H
