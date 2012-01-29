@@ -52,6 +52,7 @@ public slots:
     void gameEasy();
     void gameMedium();
     void cliquearonEnCelda(int xCelda, int yCelda);
+    void cambiarJugador();
 
 private slots:
     void game();

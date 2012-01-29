@@ -748,13 +748,13 @@ bool MiniMax::verificarJaque(bool color)
                 return true;
 
         if(reyX<5 && reyY>0)
-            if(estado[reyX+1][reyY-1]>96 && estado[reyX+1][reyY-1]<101)
+            if(estado[reyX-1][reyY+1]>96 && estado[reyX-1][reyY+1]<101)
                 return true;
     }
     else
     {
         if(reyX>0 && reyY<5)
-            if(estado[reyX-1][reyY+1]<69 && estado[reyX-1][reyY+1]>64)
+            if(estado[reyX+1][reyY-1]<69 && estado[reyX+1][reyY-1]>64)
                 return true;
 
         if(reyX<5 && reyY<5)
