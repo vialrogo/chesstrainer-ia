@@ -43,6 +43,7 @@ Ventana::Ventana(QWidget *parent) :
     connect(ui->pushButtonEasy,SIGNAL(clicked()),this,SLOT(gameEasy()));
     connect(ui->pushButtonMedium,SIGNAL(clicked()),this,SLOT(gameMedium()));
     connect(tablerito,SIGNAL(celdaCliqueada(int,int)),this,SLOT(cliquearonEnCelda(int,int)));
+    connect(tablerito,SIGNAL(terminoAnimacion()),this,SLOT(cambiarJugador()));
 }
 
 Ventana::~Ventana()
@@ -261,26 +262,26 @@ void Ventana::gameMedium()
 */
 void Ventana::game()
 {
-    minimax->definirVariables(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
-    string salida = minimax->tomarDesicion();
-    QString qsalida = QString::fromStdString(salida);
+//    minimax->definirVariables(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
+//    string salida = minimax->tomarDesicion();
+//    QString qsalida = QString::fromStdString(salida);
 
-    cout<<qPrintable(qsalida)<<endl;
+//    cout<<qPrintable(qsalida)<<endl;
 
-    int ficha;
-    int xFinal;
-    int yFinal;
+//    int ficha;
+//    int xFinal;
+//    int yFinal;
 
-    if(salida=="") cout<<"Ganó parce!!!! :D"<<endl;
-    else
-    {
-        ficha = qsalida.at(0).digitValue();
-        xFinal = qsalida.at(1).digitValue();
-        yFinal = qsalida.at(2).digitValue();
+//    if(salida=="") cout<<"Ganó parce!!!! :D"<<endl;
+//    else
+//    {
+//        ficha = qsalida.at(0).digitValue();
+//        xFinal = qsalida.at(1).digitValue();
+//        yFinal = qsalida.at(2).digitValue();
 
-        cliquearonEnCelda(posBlancasX[ficha], posBlancasY[ficha]);
-        cliquearonEnCelda(xFinal,yFinal);
-    }
+//        cliquearonEnCelda(posBlancasX[ficha], posBlancasY[ficha]);
+//        cliquearonEnCelda(xFinal,yFinal);
+//    }
 }
 
 /*
@@ -383,7 +384,6 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
                         //Animar el movimiento de comerse la ficha
                         tablerito->eliminarFicha(ficha_global,color_global);
                         tablerito->iniciarAnimacion(ficha_tmp, color_tmp, xSelected, ySelected, xCelda, yCelda);
-                        tokenJugador=!tokenJugador;//Pasa el control a otro jugador
                     }
 
                     //Qutar la selección a la ficha
@@ -448,7 +448,6 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
                 {
                     //Animación
                     tablerito->iniciarAnimacion(ficha_global, color_global, xSelected, ySelected, xCelda, yCelda);
-                    tokenJugador=!tokenJugador;//Pasa el control a otro jugador
                 }
             }
 
@@ -459,7 +458,12 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
         }
     }
 
-//    if(tokenJugador) emit game(); //Si el turno quedó en las blancas, que jueguen
+}
+
+void Ventana::cambiarJugador()
+{
+    tokenJugador=!tokenJugador;//Pasa el control a otro jugador
+    if(tokenJugador) emit game(); //Si el turno quedó en las blancas, que jueguen
 }
 
 bool Ventana::sePuedeMoverFicha(int ficha, bool color, int xCelda, int yCelda)
