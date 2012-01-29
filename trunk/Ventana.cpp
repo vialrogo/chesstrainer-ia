@@ -235,6 +235,12 @@ void Ventana::imprimirEstado(char **estado_in, int *posBlancasX_in, int *posBlan
 
 void Ventana::newGame()
 {
+    tokenJugador=true;
+
+    if(xSelected!=-1 && ySelected!=-1) tablerito->seleccionarFicha(xSelected,ySelected);
+    xSelected=-1;
+    ySelected=-1;
+
     //Se vuelve a la pantalla con botones
     borrarTablero();
     ui->graphicsView->setHidden(true);
