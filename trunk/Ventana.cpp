@@ -187,8 +187,8 @@ void Ventana::crearEstadoDeArreglos(char **estado_in, int *posBlancasX_in, int *
 
     for (int i = 0; i < 8; ++i)
     {
-        if(posBlancasY_in[i]!=-1 && posBlancasX_in[i]!=-1) estado_in[posBlancasY_in[i]][posBlancasX_in[i]]=('A'+i);
-        if(posNegrasY_in[i]!=-1 && posNegrasX_in[i]!=-1) estado_in[posNegrasY_in[i]][posNegrasX_in[i]]=('a'+i);
+        if(posBlancasY_in[i]!=-1 && posBlancasX_in[i]!=-1) estado_in[posBlancasX_in[i]][posBlancasY_in[i]]=('A'+i);
+        if(posNegrasY_in[i]!=-1 && posNegrasX_in[i]!=-1) estado_in[posNegrasX_in[i]][posNegrasY_in[i]]=('a'+i);
     }
 }
 
@@ -198,7 +198,7 @@ void Ventana::imprimirEstado(char **estado_in, int *posBlancasX_in, int *posBlan
     for (int i = 0; i < 6; ++i) {
         cout<<"+---+---+---+---+---+---+"<<endl;
         for (int j = 0; j < 6; ++j) {
-            cout<<"| "<<estado_in[j][i]<<" ";
+            cout<<"| "<<estado_in[i][j]<<" ";
         }
         cout<<"|"<<endl;
     }
@@ -265,6 +265,8 @@ void Ventana::game()
     string salida = minimax->tomarDesicion();
     QString qsalida = QString::fromStdString(salida);
 
+    cout<<qPrintable(qsalida)<<endl;
+
     int ficha;
     int xFinal;
     int yFinal;
@@ -286,8 +288,7 @@ void Ventana::game()
   */
 bool Ventana::colorDeficha(int xCelda, int yCelda)
 {
-    if(estado[yCelda][xCelda]<73) return true;
-    else return false;
+    return (estado[xCelda][yCelda]<73);
 }
 
 /*
@@ -305,10 +306,12 @@ int Ventana::numeroDeFicha(int xCelda, int yCelda)
 
 void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
 {
+    cout<<"x,y : "<<xCelda<<","<<yCelda<<endl;
+
     int ficha_tmp;
     bool color_tmp;
 
-    if(estado[yCelda][xCelda]!=' ') //Se cliqueo en una ficha
+    if(estado[xCelda][yCelda]!=' ') //Se cliqueo en una ficha
     {
         ficha_global = numeroDeFicha(xCelda,yCelda);
         color_global = colorDeficha(xCelda,yCelda);
@@ -380,7 +383,6 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
                         //Animar el movimiento de comerse la ficha
                         tablerito->eliminarFicha(ficha_global,color_global);
                         tablerito->iniciarAnimacion(ficha_tmp, color_tmp, xSelected, ySelected, xCelda, yCelda);
-
                         tokenJugador=!tokenJugador;//Pasa el control a otro jugador
                     }
 
@@ -446,7 +448,6 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
                 {
                     //Animación
                     tablerito->iniciarAnimacion(ficha_global, color_global, xSelected, ySelected, xCelda, yCelda);
-
                     tokenJugador=!tokenJugador;//Pasa el control a otro jugador
                 }
             }
@@ -462,7 +463,7 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
 }
 
 bool Ventana::sePuedeMoverFicha(int ficha, bool color, int xCelda, int yCelda)
-{
+{   
     int xOrigen;
     int yOrigen;
     int xx;
@@ -483,23 +484,23 @@ bool Ventana::sePuedeMoverFicha(int ficha, bool color, int xCelda, int yCelda)
 
     if(ficha<5 || ficha==7) //Peones, Caballo o Rey
     {
-        if( ficha<4 && color && (dy!=-1 || abs(dx)>1 )) return false; //Peon blanco
-        if( ficha<4 && !color && (dy!=1 || abs(dx)>1 )) return false;//Peon negro
+        if( ficha<4 && color && (dx!=-1 || abs(dy)>1 )) return false; //Peon blanco
+        if( ficha<4 && !color && (dx!=1 || abs(dy)>1 )) return false;//Peon negro
         if( ficha==4 && ( abs(dx)+abs(dy)!=3 || dx==0 || dy==0 )) return false; //Caballo
         if( ficha==7 && ( abs(dx)>1 || abs(dy)>1) ) return false; //Rey
 
-        ctmp=estado[yCelda][xCelda];
+        ctmp=estado[xCelda][yCelda];
 
         if(ctmp!=' ')
         {
-            if(ficha<4 && dx==0) return false; //El peon no puede comer de frente
+            if(ficha<4 && dy==0) return false; //El peon no puede comer de frente
 
             if(ctmp>96) return color;
             else return !color;
         }
         else
         {
-            if(ficha<4 && dx!=0) return false; //El peon no puede avanzar en diagonal si no es comiendo
+            if(ficha<4 && dy!=0) return false; //El peon no puede avanzar en diagonal si no es comiendo
 
             return true;
         }
@@ -527,7 +528,7 @@ bool Ventana::sePuedeMoverFicha(int ficha, bool color, int xCelda, int yCelda)
 
         while (true)
         {
-            ctmp=estado[yOrigen + yy*cont][xOrigen + xx*cont];
+            ctmp=estado[xOrigen + xx*cont][yOrigen + yy*cont];
 
             if ((xOrigen + xx*cont == xCelda) && (yOrigen + yy*cont == yCelda))
             {
