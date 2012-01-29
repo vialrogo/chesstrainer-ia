@@ -46,7 +46,6 @@ void Nodo::actualizarDesicion(int valorIn, string cualHijo)
        {
            valor=valorIn;
            decision=cualHijo;
-           if(padre!=0) padre->actualizarDesicion(valor,quienSoy);
        }
     }
     else
@@ -55,7 +54,6 @@ void Nodo::actualizarDesicion(int valorIn, string cualHijo)
        {
            valor=valorIn;
            decision=cualHijo;
-           if(padre!=0) padre->actualizarDesicion(valor,quienSoy);
        }
     }
 }

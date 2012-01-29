@@ -4,7 +4,8 @@
 class Mapa
 {
 private:
-    static int peon[6][6];
+    static int peonBlanco[6][6];
+    static int peonNegro[6][6];
     static int caballoAlfil[6][6];
     static int reina[6][6];
     static int rey[6][6];
@@ -29,7 +30,8 @@ private:
 
 public:
     Mapa();
-    static int pesoPeon(int x, int y);
+    static int pesoPeonBlanco(int x, int y);
+    static int pesoPeonNegro(int x, int y);
     static int pesoCaballoAlfil(int x, int y);
     static int pesoReina(int x, int y);
     static int pesoRey(int x, int y);
