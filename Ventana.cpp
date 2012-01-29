@@ -157,6 +157,13 @@ void Ventana::crearTablero()
             i++;
     }
 
+    //Debugueo incompleto
+//    posNegrasX[0]=1; posNegrasX[1]=1; posNegrasX[2]=1; posNegrasX[3]=5; posNegrasX[4]=; posNegrasX[5]=2; posNegrasX[6]=3; posNegrasX[7]=5;
+//    posNegrasY[0]=1; posNegrasY[1]=2; posNegrasY[2]=3; posNegrasY[3]=4; posNegrasY[4]=; posNegrasY[5]=2; posNegrasY[6]=3; posNegrasY[7]=4;
+
+//    posBlancasX[0]=0; posBlancasX[1]=3; posBlancasX[2]=4; posBlancasX[3]=5; posBlancasX[4]=2; posBlancasX[5]=4; posBlancasX[6]=4; posBlancasX[7]=5;
+//    posBlancasY[0]=3; posBlancasY[1]=1; posBlancasY[2]=1; posBlancasY[3]=3; posBlancasY[4]=5; posBlancasY[5]=2; posBlancasY[6]=0; posBlancasY[7]=0;
+
     imprimirEstado(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
 
     //Crea el mapa (parte gráfica)
@@ -180,22 +187,8 @@ void Ventana::crearEstadoDeArreglos(char **estado_in, int *posBlancasX_in, int *
 
     for (int i = 0; i < 8; ++i)
     {
-        if(posBlancasY_in[i]!=-1 && posBlancasX_in[i]!=-1)
-        {
-            if(i<4) estado_in[posBlancasY_in[i]][posBlancasX_in[i]]='P';
-            if(i==4) estado_in[posBlancasY_in[i]][posBlancasX_in[i]]='C';
-            if(i==5) estado_in[posBlancasY_in[i]][posBlancasX_in[i]]='B';
-            if(i==6) estado_in[posBlancasY_in[i]][posBlancasX_in[i]]='Q';
-            if(i==7) estado_in[posBlancasY_in[i]][posBlancasX_in[i]]='K';
-        }
-        if(posNegrasY_in[i]!=-1 && posNegrasX_in[i]!=-1)
-        {
-            if(i<4) estado_in[posNegrasY_in[i]][posNegrasX_in[i]]='p';
-            if(i==4) estado_in[posNegrasY_in[i]][posNegrasX_in[i]]='c';
-            if(i==5) estado_in[posNegrasY_in[i]][posNegrasX_in[i]]='b';
-            if(i==6) estado_in[posNegrasY_in[i]][posNegrasX_in[i]]='q';
-            if(i==7) estado_in[posNegrasY_in[i]][posNegrasX_in[i]]='k';
-        }
+        if(posBlancasY_in[i]!=-1 && posBlancasX_in[i]!=-1) estado_in[posBlancasY_in[i]][posBlancasX_in[i]]=('A'+i);
+        if(posNegrasY_in[i]!=-1 && posNegrasX_in[i]!=-1) estado_in[posNegrasY_in[i]][posNegrasX_in[i]]=('a'+i);
     }
 }
 
@@ -270,6 +263,7 @@ void Ventana::game()
 {
     minimax->definirVariables(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
     string salida = minimax->tomarDesicion();
+//    string salida="";
     QString qsalida = QString::fromStdString(salida);
 
     int ficha;
@@ -293,7 +287,7 @@ void Ventana::game()
   */
 bool Ventana::colorDeficha(int xCelda, int yCelda)
 {
-    if(estado[yCelda][xCelda]<82) return true;
+    if(estado[yCelda][xCelda]<73) return true;
     else return false;
 }
 
@@ -501,7 +495,7 @@ bool Ventana::sePuedeMoverFicha(int ficha, bool color, int xCelda, int yCelda)
         {
             if(ficha<4 && dx==0) return false; //El peon no puede comer de frente
 
-            if(ctmp>97) return color;
+            if(ctmp>96) return color;
             else return !color;
         }
         else
@@ -540,7 +534,7 @@ bool Ventana::sePuedeMoverFicha(int ficha, bool color, int xCelda, int yCelda)
             {
                 if(ctmp!=' ')
                 {
-                    if(ctmp>97) return color;
+                    if(ctmp>96) return color;
                     else return !color;
                 }
                 else
