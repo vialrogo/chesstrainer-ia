@@ -8,6 +8,10 @@ Ventana::Ventana(QWidget *parent) :
     ui->setupUi(this);
     this->setWindowTitle("Project ChessTrainer-IA");
 
+    //Inicializo semilla aleatoria
+    QTime time = QTime::currentTime();
+    qsrand((uint)time.msec());
+
     tokenJugador=true; //token de quien tiene el turno
 
     //Dimenciones de la escena --> FALTA AJUSTAR!!!
@@ -37,6 +41,8 @@ Ventana::Ventana(QWidget *parent) :
     ui->graphicsView->setScene(tablerito);
     ui->graphicsView->setHidden(true);
 
+    timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(game()));
     connect(ui->actionQuit, SIGNAL(triggered()),this,SLOT(close()));
     connect(ui->actionAbout,SIGNAL(triggered()),this,SLOT(acercaDe()));
     connect(ui->actionNew_Game,SIGNAL(triggered()),this,SLOT(newGame()));
@@ -86,9 +92,7 @@ void Ventana::crearTablero()
         }
     }
 
-    //Inicializo semilla aleatoria
-    QTime time = QTime::currentTime();
-    qsrand((uint)time.msec());
+    //Variables temporales
     int tmp;
     QPoint ptmp;
 
@@ -252,14 +256,14 @@ void Ventana::gameEasy()
 {
     minimax = new MiniMax(2);
     crearTablero();
-    emit game();
+    timer->start(2000);
 }
 
 void Ventana::gameMedium()
 {
     minimax = new MiniMax(4);
     crearTablero();
-    emit game();
+    timer->start(2000);
 }
 
 /*
@@ -267,6 +271,9 @@ void Ventana::gameMedium()
 */
 void Ventana::game()
 {
+    //Si el timer esta corriendo lo para
+    timer->stop();
+
     crearEstadoDeArreglos(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
     minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,true);
     string salida = minimax->tomarDesicion();
@@ -467,7 +474,7 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
 void Ventana::cambiarJugador()
 {
     tokenJugador=!tokenJugador;//Pasa el control a otro jugador
-    if(tokenJugador) emit game(); //Si el turno quedó en las blancas, que jueguen
+    if(tokenJugador) game(); //Si el turno quedó en las blancas, que jueguen
 }
 
 bool Ventana::sePuedeMoverFicha(int ficha, bool color, int xCelda, int yCelda)
