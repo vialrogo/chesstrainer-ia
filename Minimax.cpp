@@ -529,7 +529,7 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
 string MiniMax::tomarDesicion()
 {
     Nodo *inicial=new Nodo(0,0,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,"original");
-    imprimir(inicial);
+//    imprimir(inicial);
     Nodo *actual;
     int heuristicaTmp=0;
     string decision="";
