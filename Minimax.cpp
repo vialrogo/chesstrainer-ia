@@ -9,31 +9,22 @@ MiniMax::MiniMax(int nivelIn)
 int MiniMax::calcularHeuristica(Nodo *elNodo)
 {
     int resultado=0;
-    int *xBlancas=elNodo->getPosBlancasX();
-    int *yBlancas=elNodo->getPosBlancasY();
-    int *xNegras=elNodo->getPosNegrasX();
-    int *yNegras=elNodo->getPosNegrasY();
 
     for (int var = 0; var < 4; var++) {
-        resultado+=mapa.pesoPeonBlanco(xBlancas[var],yBlancas[var]);
+        resultado+=mapa.pesoPeonBlanco(elNodo->getPosBlancasX()[var],elNodo->getPosBlancasY()[var]);
     }
-    resultado+=mapa.pesoCaballoAlfil(xBlancas[4],yBlancas[4]);
-    resultado+=mapa.pesoCaballoAlfil(xBlancas[5],yBlancas[5]);
-    resultado+=mapa.pesoReina(xBlancas[6],yBlancas[6]);
-    resultado+=mapa.pesoRey(xBlancas[7],yBlancas[7]);
+    resultado+=mapa.pesoCaballoAlfil(elNodo->getPosBlancasX()[4],elNodo->getPosBlancasY()[4]);
+    resultado+=mapa.pesoCaballoAlfil(elNodo->getPosBlancasX()[5],elNodo->getPosBlancasY()[5]);
+    resultado+=mapa.pesoReina(elNodo->getPosBlancasX()[6],elNodo->getPosBlancasY()[6]);
+    resultado+=mapa.pesoRey(elNodo->getPosBlancasX()[7],elNodo->getPosBlancasY()[7]);
 
     for (int var = 0; var < 4; var++) {
-        resultado-=mapa.pesoPeonNegro(xNegras[var],yNegras[var]);
+        resultado-=mapa.pesoPeonNegro(elNodo->getPosNegrasX()[var],elNodo->getPosNegrasY()[var]);
     }
-    resultado-=mapa.pesoCaballoAlfil(xNegras[4],yNegras[4]);
-    resultado-=mapa.pesoCaballoAlfil(xNegras[5],yNegras[5]);
-    resultado-=mapa.pesoReina(xNegras[6],yNegras[6]);
-    resultado-=mapa.pesoRey(xNegras[7],yNegras[7]);
-
-    delete xBlancas;
-    delete yBlancas;
-    delete xNegras;
-    delete yNegras;
+    resultado-=mapa.pesoCaballoAlfil(elNodo->getPosNegrasX()[4],elNodo->getPosNegrasY()[4]);
+    resultado-=mapa.pesoCaballoAlfil(elNodo->getPosNegrasX()[5],elNodo->getPosNegrasY()[5]);
+    resultado-=mapa.pesoReina(elNodo->getPosNegrasX()[6],elNodo->getPosNegrasY()[6]);
+    resultado-=mapa.pesoRey(elNodo->getPosNegrasX()[7],elNodo->getPosNegrasY()[7]);
 
     return resultado;
 }
@@ -92,9 +83,63 @@ void MiniMax::imprimir(char **estadoIn)
     cout<<"+---+---+---+---+---+---+"<<endl<<endl;
 }
 
+int* MiniMax::copiarBlancasX(int *blancasIn)
+{
+    int *respuesta=new int[8];
+    for (int i = 0; i < 8; i++)
+        respuesta[i]=blancasIn[i];
+
+    return respuesta;
+}
+
+int* MiniMax::copiarBlancasY(int *blancasIn)
+{
+    int *respuesta=new int[8];
+    for (int i = 0; i < 8; i++)
+        respuesta[i]=blancasIn[i];
+
+    return respuesta;
+}
+
+int* MiniMax::copiarNegrasX(int *negrasIn)
+{
+    int *respuesta=new int[8];
+    for (int i = 0; i < 8; i++)
+        respuesta[i]=negrasIn[i];
+
+    return respuesta;
+}
+
+int* MiniMax::copiarNegrasY(int *negrasIn)
+{
+    int *respuesta=new int[8];
+    for (int i = 0; i < 8; i++)
+        respuesta[i]=negrasIn[i];
+
+    return respuesta;
+}
+
+char** MiniMax::copiarEstado(char **estadoIn)
+{
+    char **respuesta=new char*[6];
+    for (int i = 0; i < 6; i++)
+        respuesta[i]=new char[6];
+
+    for (int i = 0; i < 6; i++)
+        for (int j = 0; j < 6; j++)
+            respuesta[i][j]=estadoIn[i][j];
+
+    return respuesta;
+}
+
 QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
 {    
     QList<Nodo*> respuesta;
+    int *posBlancasX;
+    int *posBlancasY;
+    int *posNegrasX;
+    int *posNegrasY;
+    char **estado;
 
     //La información del padre será almacenada en las variables de la clase
     string quienSoy="";
@@ -102,7 +147,12 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
     int count=0, val=0, dx=0, dy=0;
 
     for (int i = 0; i < 8; i++){//Intentar mover todas las fichas
-        definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY(),false);
+        //Los datos del padre
+        posBlancasX=copiarBlancasX(elNodo->getPosBlancasX());
+        posBlancasY=copiarBlancasY(elNodo->getPosBlancasY());
+        posNegrasX=copiarNegrasX(elNodo->getPosNegrasX());
+        posNegrasY=copiarNegrasY(elNodo->getPosNegrasY());
+        estado=copiarEstado(elNodo->getEstado());
 
         if(elNodo->getNivel()%2==0) //blancas
         {
@@ -113,10 +163,14 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
 
                     //Mover hacia arriba
                     //Recuperar los datos del padre
-                    definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY(),true);
+                    posBlancasX=copiarBlancasX(elNodo->getPosBlancasX());
+                    posBlancasY=copiarBlancasY(elNodo->getPosBlancasY());
+                    posNegrasX=copiarNegrasX(elNodo->getPosNegrasX());
+                    posNegrasY=copiarNegrasY(elNodo->getPosNegrasY());
+                    estado=copiarEstado(elNodo->getEstado());
                     stringstream quienSoyTmp1;
 
-                    val=sePuedeMover(posBlancasX[i]-1,posBlancasY[i],i,true);
+                    val=sePuedeMover(estado,posBlancasX[i],posBlancasY[i],posBlancasX[i]-1,posBlancasY[i],i,true);
                     if(val==-1)
                     {
                         estado[posBlancasX[i]][posBlancasY[i]]=' ';
@@ -131,10 +185,14 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
 
                     //Mover diagonal arriba izquierda
                     //Recuperar los datos del padre
-                    definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY(),true);
+                    posBlancasX=copiarBlancasX(elNodo->getPosBlancasX());
+                    posBlancasY=copiarBlancasY(elNodo->getPosBlancasY());
+                    posNegrasX=copiarNegrasX(elNodo->getPosNegrasX());
+                    posNegrasY=copiarNegrasY(elNodo->getPosNegrasY());
+                    estado=copiarEstado(elNodo->getEstado());
                     stringstream quienSoyTmp2;
 
-                    val=sePuedeMover(posBlancasX[i]-1,posBlancasY[i]-1,i,true);
+                    val=sePuedeMover(estado,posBlancasX[i],posBlancasY[i],posBlancasX[i]-1,posBlancasY[i]-1,i,true);
                     if(val!=-2)
                     {
                         estado[posBlancasX[i]][posBlancasY[i]]=' ';
@@ -153,10 +211,14 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
 
                     //Mover diagonal arriba derecha
                     //Recuperar los datos del padre
-                    definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY(),true);
+                    posBlancasX=copiarBlancasX(elNodo->getPosBlancasX());
+                    posBlancasY=copiarBlancasY(elNodo->getPosBlancasY());
+                    posNegrasX=copiarNegrasX(elNodo->getPosNegrasX());
+                    posNegrasY=copiarNegrasY(elNodo->getPosNegrasY());
+                    estado=copiarEstado(elNodo->getEstado());
                     stringstream quienSoyTmp3;
 
-                    val=sePuedeMover(posBlancasX[i]-1,posBlancasY[i]+1,i,true);
+                    val=sePuedeMover(estado,posBlancasX[i],posBlancasY[i],posBlancasX[i]-1,posBlancasY[i]+1,i,true);
                     if(val!=-2)
                     {
                         estado[posBlancasX[i]][posBlancasY[i]]=' ';
@@ -178,10 +240,14 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
                     for (int j = 0; j < 8; j++)
                     {
                         //Recuperar los datos del padre
-                        definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY(),true);
+                        posBlancasX=copiarBlancasX(elNodo->getPosBlancasX());
+                        posBlancasY=copiarBlancasY(elNodo->getPosBlancasY());
+                        posNegrasX=copiarNegrasX(elNodo->getPosNegrasX());
+                        posNegrasY=copiarNegrasY(elNodo->getPosNegrasY());
+                        estado=copiarEstado(elNodo->getEstado());
                         stringstream quienSoyTmp;
 
-                        val=sePuedeMover(posBlancasX[i]+mapa.getDxCaballo(j),posBlancasY[i]+mapa.getDyCaballo(j),i,true);
+                        val=sePuedeMover(estado,posBlancasX[i],posBlancasY[i],posBlancasX[i]+mapa.getDxCaballo(j),posBlancasY[i]+mapa.getDyCaballo(j),i,true);
                         if(val!=-2)
                         {
                             estado[posBlancasX[i]][posBlancasY[i]]=' ';
@@ -211,13 +277,17 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
                         do
                         {
                             //Recuperar los datos del padre
-                            definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY(),true);
+                            posBlancasX=copiarBlancasX(elNodo->getPosBlancasX());
+                            posBlancasY=copiarBlancasY(elNodo->getPosBlancasY());
+                            posNegrasX=copiarNegrasX(elNodo->getPosNegrasX());
+                            posNegrasY=copiarNegrasY(elNodo->getPosNegrasY());
+                            estado=copiarEstado(elNodo->getEstado());
                             stringstream quienSoyTmp;
 
                             dx=mapa.getDxDiago(j)*count;
                             dy=mapa.getDyDiago(j)*count;
 
-                            val=sePuedeMover(posBlancasX[i]+dx,posBlancasY[i]+dy,i,true);
+                            val=sePuedeMover(estado,posBlancasX[i],posBlancasY[i],posBlancasX[i]+dx,posBlancasY[i]+dy,i,true);
 
                             if(val!=-2)
                             {
@@ -249,13 +319,17 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
                             do
                             {
                                 //Recuperar los datos del padre
-                                definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY(),true);
+                                posBlancasX=copiarBlancasX(elNodo->getPosBlancasX());
+                                posBlancasY=copiarBlancasY(elNodo->getPosBlancasY());
+                                posNegrasX=copiarNegrasX(elNodo->getPosNegrasX());
+                                posNegrasY=copiarNegrasY(elNodo->getPosNegrasY());
+                                estado=copiarEstado(elNodo->getEstado());
                                 stringstream quienSoyTmp;
 
                                 dx=mapa.getDxRectas(j)*count;
                                 dy=mapa.getDyRectas(j)*count;
 
-                                val=sePuedeMover(posBlancasX[i]+dx,posBlancasY[i]+dy,i,true);
+                                val=sePuedeMover(estado,posBlancasX[i],posBlancasY[i],posBlancasX[i]+dx,posBlancasY[i]+dy,i,true);
 
                                 if(val!=-2)
                                 {
@@ -286,10 +360,14 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
                     for (int j = 0; j < 8; j++)
                     {
                         //Recuperar los datos del padre
-                        definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY(),true);
+                        posBlancasX=copiarBlancasX(elNodo->getPosBlancasX());
+                        posBlancasY=copiarBlancasY(elNodo->getPosBlancasY());
+                        posNegrasX=copiarNegrasX(elNodo->getPosNegrasX());
+                        posNegrasY=copiarNegrasY(elNodo->getPosNegrasY());
+                        estado=copiarEstado(elNodo->getEstado());
                         stringstream quienSoyTmp;
 
-                        val=sePuedeMover(posBlancasX[i]+mapa.getDxRey(j),posBlancasY[i]+mapa.getDyRey(j),i,true);
+                        val=sePuedeMover(estado,posBlancasX[i],posBlancasY[i],posBlancasX[i]+mapa.getDxRey(j),posBlancasY[i]+mapa.getDyRey(j),i,true);
                         if(val!=-2)
                         {
                             estado[posBlancasX[i]][posBlancasY[i]]=' ';
@@ -321,10 +399,14 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
                 {
                     //Mover hacia abajo
                     //Recuperar los datos del padre
-                    definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY(),true);
+                    posBlancasX=copiarBlancasX(elNodo->getPosBlancasX());
+                    posBlancasY=copiarBlancasY(elNodo->getPosBlancasY());
+                    posNegrasX=copiarNegrasX(elNodo->getPosNegrasX());
+                    posNegrasY=copiarNegrasY(elNodo->getPosNegrasY());
+                    estado=copiarEstado(elNodo->getEstado());
                     stringstream quienSoyTmp1;
 
-                    val=sePuedeMover(posNegrasX[i]+1,posNegrasY[i],i,false);
+                    val=sePuedeMover(estado,posNegrasX[i],posNegrasY[i],posNegrasX[i]+1,posNegrasY[i],i,false);
                     if(val==-1)
                     {
                         estado[posNegrasX[i]][posNegrasY[i]]=' ';
@@ -339,10 +421,14 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
 
                     //Mover diagonal abajo izquierda
                     //Recuperar los datos del padre
-                    definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY(),true);
+                    posBlancasX=copiarBlancasX(elNodo->getPosBlancasX());
+                    posBlancasY=copiarBlancasY(elNodo->getPosBlancasY());
+                    posNegrasX=copiarNegrasX(elNodo->getPosNegrasX());
+                    posNegrasY=copiarNegrasY(elNodo->getPosNegrasY());
+                    estado=copiarEstado(elNodo->getEstado());
                     stringstream quienSoyTmp2;
 
-                    val=sePuedeMover(posNegrasX[i]+1,posNegrasY[i]-1,i,false);
+                    val=sePuedeMover(estado,posNegrasX[i],posNegrasY[i],posNegrasX[i]+1,posNegrasY[i]-1,i,false);
                     if(val!=-2)
                     {
                         estado[posNegrasX[i]][posNegrasY[i]]=' ';
@@ -361,10 +447,14 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
 
                     //Mover diagonal abajo derecha
                     //Recuperar los datos del padre
-                    definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY(),true);
+                    posBlancasX=copiarBlancasX(elNodo->getPosBlancasX());
+                    posBlancasY=copiarBlancasY(elNodo->getPosBlancasY());
+                    posNegrasX=copiarNegrasX(elNodo->getPosNegrasX());
+                    posNegrasY=copiarNegrasY(elNodo->getPosNegrasY());
+                    estado=copiarEstado(elNodo->getEstado());
                     stringstream quienSoyTmp3;
 
-                    val=sePuedeMover(posNegrasX[i]+1,posNegrasY[i]+1,i,false);
+                    val=sePuedeMover(estado,posNegrasX[i],posNegrasY[i],posNegrasX[i]+1,posNegrasY[i]+1,i,false);
                     if(val!=-2)
                     {
                         estado[posNegrasX[i]][posNegrasY[i]]=' ';
@@ -386,10 +476,14 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
                     for (int j = 0; j < 8; j++)
                     {
                         //Recuperar los datos del padre
-                        definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY(),true);
+                        posBlancasX=copiarBlancasX(elNodo->getPosBlancasX());
+                        posBlancasY=copiarBlancasY(elNodo->getPosBlancasY());
+                        posNegrasX=copiarNegrasX(elNodo->getPosNegrasX());
+                        posNegrasY=copiarNegrasY(elNodo->getPosNegrasY());
+                        estado=copiarEstado(elNodo->getEstado());
                         stringstream quienSoyTmp;
 
-                        val=sePuedeMover(posNegrasX[i]+mapa.getDxCaballo(j),posNegrasY[i]+mapa.getDyCaballo(j),i,false);
+                        val=sePuedeMover(estado,posNegrasX[i],posNegrasY[i],posNegrasX[i]+mapa.getDxCaballo(j),posNegrasY[i]+mapa.getDyCaballo(j),i,false);
                         if(val!=-2)
                         {
                             estado[posNegrasX[i]][posNegrasY[i]]=' ';
@@ -419,14 +513,17 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
                         do
                         {
                             //Recuperar los datos del padre
-                            definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY(),true);
+                            posBlancasX=copiarBlancasX(elNodo->getPosBlancasX());
+                            posBlancasY=copiarBlancasY(elNodo->getPosBlancasY());
+                            posNegrasX=copiarNegrasX(elNodo->getPosNegrasX());
+                            posNegrasY=copiarNegrasY(elNodo->getPosNegrasY());
+                            estado=copiarEstado(elNodo->getEstado());
                             stringstream quienSoyTmp;
 
                             dx=mapa.getDxDiago(j)*count;
                             dy=mapa.getDyDiago(j)*count;
 
-                            val=sePuedeMover(posNegrasX[i]+dx,posNegrasY[i]+dy,i,false);
-
+                            val=sePuedeMover(estado,posNegrasX[i],posNegrasY[i],posNegrasX[i]+dx,posNegrasY[i]+dy,i,false);
                             if(val!=-2)
                             {
                                 estado[posNegrasX[i]][posNegrasY[i]]=' ';
@@ -457,13 +554,17 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
                             do
                             {
                                 //Recuperar los datos del padre
-                                definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY(),true);
+                                posBlancasX=copiarBlancasX(elNodo->getPosBlancasX());
+                                posBlancasY=copiarBlancasY(elNodo->getPosBlancasY());
+                                posNegrasX=copiarNegrasX(elNodo->getPosNegrasX());
+                                posNegrasY=copiarNegrasY(elNodo->getPosNegrasY());
+                                estado=copiarEstado(elNodo->getEstado());
                                 stringstream quienSoyTmp;
 
                                 dx=mapa.getDxRectas(j)*count;
                                 dy=mapa.getDyRectas(j)*count;
 
-                                val=sePuedeMover(posNegrasX[i]+dx,posNegrasY[i]+dy,i,false);
+                                val=sePuedeMover(estado,posNegrasX[i],posNegrasY[i],posNegrasX[i]+dx,posNegrasY[i]+dy,i,false);
 
                                 if(val!=-2)
                                 {
@@ -494,10 +595,14 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
                     for (int j = 0; j < 8; j++)
                     {
                         //Recuperar los datos del padre
-                        definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY(),true);
+                        posBlancasX=copiarBlancasX(elNodo->getPosBlancasX());
+                        posBlancasY=copiarBlancasY(elNodo->getPosBlancasY());
+                        posNegrasX=copiarNegrasX(elNodo->getPosNegrasX());
+                        posNegrasY=copiarNegrasY(elNodo->getPosNegrasY());
+                        estado=copiarEstado(elNodo->getEstado());
                         stringstream quienSoyTmp;
 
-                        val=sePuedeMover(posNegrasX[i]+mapa.getDxRey(j),posNegrasY[i]+mapa.getDyRey(j),i,false);
+                        val=sePuedeMover(estado,posNegrasX[i],posNegrasY[i],posNegrasX[i]+mapa.getDxRey(j),posNegrasY[i]+mapa.getDyRey(j),i,false);
                         if(val!=-2)
                         {
                             estado[posNegrasX[i]][posNegrasY[i]]=' ';
@@ -526,10 +631,16 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
     return respuesta;
 }
 
-string MiniMax::tomarDesicion()
+string MiniMax::tomarDesicion(int *posBlancasX,int *posBlancasY,int *posNegrasX,int *posNegrasY,char **estado)
 {
-    Nodo *inicial=new Nodo(0,0,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,"original");
-//    imprimir(inicial);
+    int *blancasX=copiarBlancasX(posBlancasX);
+    int *blancasY=copiarBlancasY(posBlancasY);
+    int *negrasX=copiarNegrasX(posNegrasX);
+    int *negrasY=copiarNegrasY(posNegrasY);
+    char **est=copiarEstado(estado);
+
+    Nodo *inicial=new Nodo(0,0,blancasX,blancasY,negrasX,negrasY,est,"original");
+    imprimir(inicial);
     Nodo *actual;
     int heuristicaTmp=0;
     string decision="";
@@ -569,7 +680,6 @@ string MiniMax::tomarDesicion()
     }
 
     decision=inicial->getDecision();
-//    definirVariables(inicial->getEstado(),inicial->getPosBlancasX(),inicial->getPosBlancasY(),inicial->getPosNegrasX(),inicial->getPosNegrasY(),false);
 
     while(!aBorrar.isEmpty()){
         actual=aBorrar.front();
@@ -578,41 +688,6 @@ string MiniMax::tomarDesicion()
     }
 
     return decision;
-}
-
-void MiniMax::definirVariables(char **estadoIn, int *posBlancasXIn, int *posBlancasYIn, int *posNegrasXIn, int *posNegrasYIn, bool copia)
-{
-    if(copia)
-    {
-        estado=new char*[6];
-        for (int i = 0; i < 6; i++) {
-            estado[i]=new char[6];
-        }
-        posBlancasX=new int[8];
-        posBlancasY=new int[8];
-        posNegrasX=new int[8];
-        posNegrasY=new int[8];
-
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 6; j++) {
-                estado[i][j]=estadoIn[i][j];
-            }
-        }
-        for (int i = 0; i < 8; i++) {
-            posBlancasX[i]=posBlancasXIn[i];
-            posBlancasY[i]=posBlancasYIn[i];
-            posNegrasX[i]=posNegrasXIn[i];
-            posNegrasY[i]=posNegrasYIn[i];
-        }
-    }
-    else
-    {
-        estado=estadoIn;
-        posBlancasX=posBlancasXIn;
-        posBlancasY=posBlancasYIn;
-        posNegrasX=posNegrasXIn;
-        posNegrasY=posNegrasYIn;
-    }
 }
 
 /*color=false => negras
@@ -624,14 +699,14 @@ void MiniMax::definirVariables(char **estadoIn, int *posBlancasXIn, int *posBlan
             -1: Casilla libre
              #: Ficha que se come
 */
-int MiniMax::sePuedeMover(int xDestino, int yDestino, int ficha, bool color)
+int MiniMax::sePuedeMover(char **estado,int xOrigen, int yOrigen, int xDestino, int yDestino, int ficha, bool color)
 {
     if(xDestino<0 || xDestino>5 || yDestino<0 || yDestino>5) return -2;
 
     //Verificar Peones
     if(ficha<4 && color) //Peones Blancos
     {
-        if(xDestino==posBlancasX[ficha]-1 && yDestino==(posBlancasY[ficha]))
+        if(xDestino==xOrigen-1 && yDestino==yOrigen)
         {
             if(estado[xDestino][yDestino]==' ') return -1;
             else return -2;
@@ -644,7 +719,7 @@ int MiniMax::sePuedeMover(int xDestino, int yDestino, int ficha, bool color)
     }
     else if(ficha<4 && !color) //Peones Negros
     {
-        if(xDestino==posNegrasX[ficha]+1 && yDestino==(posNegrasY[ficha]))
+        if(xDestino==xOrigen+1 && yDestino==yOrigen)
         {
             if(estado[xDestino][yDestino]==' ') return -1;
             else return -2;
@@ -681,13 +756,13 @@ int MiniMax::sePuedeMover(int xDestino, int yDestino, int ficha, bool color)
     color=false => negras / color=true => blancas
 
  */
-bool MiniMax::verificarJaque(bool color)
+bool MiniMax::verificarJaque(bool color, int xRey, int yRey, char **estado)
 {
 
     int delta = color? 32 : 0;
 
-    int reyX = color? posBlancasX[7] : posNegrasX[7];
-    int reyY = color? posBlancasY[7] : posNegrasY[7];
+    int reyX = xRey;
+    int reyY = yRey;
 
     int idx=0;
     int count=1;
@@ -808,7 +883,7 @@ bool MiniMax::verificarJaque(bool color)
     return respuesta;
 }
 
-bool MiniMax::mateHumano()
+bool MiniMax::mateHumano(int *posBlancasX,int *posBlancasY,int *posNegrasX,int *posNegrasY,char **estado)
 {
     bool perdio=true;
     Nodo *inicial=new Nodo(0,1,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,"original");
@@ -817,9 +892,9 @@ bool MiniMax::mateHumano()
     while (!hijos.isEmpty()) {
         actual=hijos.front();
         hijos.pop_front();
-        definirVariables(actual->getEstado(),actual->getPosBlancasX(),actual->getPosBlancasY(),actual->getPosNegrasX(),actual->getPosNegrasY(),false);
+//        definirVariables(actual->getEstado(),actual->getPosBlancasX(),actual->getPosBlancasY(),actual->getPosNegrasX(),actual->getPosNegrasY(),false);
 
-        if(!verificarJaque(false))
+        if(!verificarJaque(false, actual->getPosNegrasX()[7], actual->getPosNegrasY()[7], actual->getEstado()))//Esto va a cambiar y hay que entregarle los parametros
             perdio=false;
 
         delete actual;
@@ -876,7 +951,6 @@ int main()
     }
 
     MiniMax obj(2);
-    obj.definirVariables(est,blancasY,blancasX,negrasY,negrasX,true);
-    obj.tomarDesicion();
+    obj.tomarDesicion(blancasY,blancasX,negrasY,negrasX,est);
 }
 */
