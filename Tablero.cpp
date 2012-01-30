@@ -3,8 +3,8 @@
 Tablero::Tablero()
 {
     //Variables globales
-    deltaX=31; //Quemados en el código!! se definen en Ventana::pintarCuadricula()
-    deltaY=31; //Quemados en el código!! se definen en Ventana::pintarCuadricula()
+    deltaX=21; //Quemados en el código!! se definen en Ventana::pintarCuadricula()
+    deltaY=81; //Quemados en el código!! se definen en Ventana::pintarCuadricula()
     anchoCelda = 80; //Quemados en el código!! se definen en Ventana::pintarCuadricula()
     altoCelda = 80; //Quemados en el código!! se definen en Ventana::pintarCuadricula()
 
@@ -30,32 +30,32 @@ void Tablero::crearFichas(int *posBlancasX, int *posBlancasY, int *posNegrasX, i
     {
         if(i<4) //Peones
         {
-            imagenesFichasBlancas[i]=new Ficha(QSizeF(540,540),QPixmap("Imagenes/P.png"),this);
-            imagenesFichasNegras[i]=new Ficha(QSizeF(540,540),QPixmap("Imagenes/p.png"),this);
+            imagenesFichasBlancas[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/P.png"),this);
+            imagenesFichasNegras[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/p.png"),this);
         }
 
         if(i==4) //Caballo
         {
-            imagenesFichasBlancas[i]=new Ficha(QSizeF(540,540),QPixmap("Imagenes/H.png"),this);
-            imagenesFichasNegras[i]=new Ficha(QSizeF(540,540),QPixmap("Imagenes/h.png"),this);
+            imagenesFichasBlancas[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/H.png"),this);
+            imagenesFichasNegras[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/h.png"),this);
         }
 
         if(i==5) //Alfil
         {
-            imagenesFichasBlancas[i]=new Ficha(QSizeF(540,540),QPixmap("Imagenes/B.png"),this);
-            imagenesFichasNegras[i]=new Ficha(QSizeF(540,540),QPixmap("Imagenes/b.png"),this);
+            imagenesFichasBlancas[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/B.png"),this);
+            imagenesFichasNegras[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/b.png"),this);
         }
 
         if(i==6) //Reina
         {
-            imagenesFichasBlancas[i]=new Ficha(QSizeF(540,540),QPixmap("Imagenes/Q.png"),this);
-            imagenesFichasNegras[i]=new Ficha(QSizeF(540,540),QPixmap("Imagenes/q.png"),this);
+            imagenesFichasBlancas[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/Q.png"),this);
+            imagenesFichasNegras[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/q.png"),this);
         }
 
         if(i==7) //Rey
         {
-            imagenesFichasBlancas[i]=new Ficha(QSizeF(540,540),QPixmap("Imagenes/K.png"),this);
-            imagenesFichasNegras[i]=new Ficha(QSizeF(540,540),QPixmap("Imagenes/k.png"),this);
+            imagenesFichasBlancas[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/K.png"),this);
+            imagenesFichasNegras[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/k.png"),this);
         }
 
         imagenesFichasBlancas[i]->setOffset(posBlancasX[i]*anchoCelda+deltaX,posBlancasY[i]*altoCelda+deltaY);
@@ -104,7 +104,7 @@ void Tablero::seleccionarFicha(int xFicha, int yFicha)
         matrizCuadrados[yFicha][xFicha]->setBrush(colorFichaSeleccionada);
     }
 
-    update(0,0,540,540);
+    update(0,0,520,640);
 }
 
 void Tablero::seleccionarFicha(int xFicha, int yFicha, int xAnterior, int yAnterior)
@@ -116,7 +116,7 @@ void Tablero::seleccionarFicha(int xFicha, int yFicha, int xAnterior, int yAnter
     else
         matrizCuadrados[yAnterior][xAnterior]->setBrush(QColor(0,0,0,255));
 
-    update(0,0,540,540);
+    update(0,0,520,640);
 }
 
 void Tablero::pintarCuadricula()
@@ -128,7 +128,7 @@ void Tablero::pintarCuadricula()
     {
         for (int j = 0; j < 6; ++j)
         {
-            matrizCuadrados[j][i] = new QGraphicsRectItem(i*altoCelda+deltaY,j*anchoCelda+deltaX,anchoCelda,altoCelda,0,this);
+            matrizCuadrados[j][i] = new QGraphicsRectItem(i*altoCelda+deltaX,j*anchoCelda+deltaY,anchoCelda,altoCelda,0,this);
             matrizCuadrados[j][i]->setPen(QColor(180,180,180,255));//Color de linea
 
             if((i+j)%2==0)
@@ -141,24 +141,24 @@ void Tablero::pintarCuadricula()
     //Texto
     QString letras[6] = {"a","b","c","d","e","f"};
     QString numeros[6] = {"1","2","3","4","5","6"};
-    QFont fuente("Times", 12, QFont::Monospace);
+    QFont fuente("Times", 11, QFont::Monospace);
     int dxnumeros=5;
-    int dyletras=4;
+    int dyletras=0;
 
     for (int i = 0; i < 6; ++i)
     {
         QGraphicsTextItem* letraSuperior = new QGraphicsTextItem(letras[i],0,this);
         letraSuperior->setFont(fuente);
-        letraSuperior->setPos(deltaX+40+(i*80),dyletras);
+        letraSuperior->setPos(deltaX+40+(i*80),dyletras+60);
         QGraphicsTextItem* letraInferior = new QGraphicsTextItem(letras[i],0,this);
         letraInferior->setFont(fuente);
-        letraInferior->setPos(deltaX+40+(i*80),deltaY+480+dyletras);
+        letraInferior->setPos(deltaX+40+(i*80),deltaY+480+dyletras-1);
         QGraphicsTextItem* numeroSuperior = new QGraphicsTextItem(numeros[i],0,this);
         numeroSuperior->setFont(fuente);
         numeroSuperior->setPos(dxnumeros,deltaY+40+(i*80));
         QGraphicsTextItem* numeroInferior = new QGraphicsTextItem(numeros[i],0,this);
         numeroInferior->setFont(fuente);
-        numeroInferior->setPos(deltaX+480+dxnumeros,deltaY+40+(i*80));
+        numeroInferior->setPos(deltaX+480+dxnumeros-3,deltaY+40+(i*80));
     }
 
 }
