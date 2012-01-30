@@ -20,6 +20,7 @@ class Ventana : public QMainWindow
 
 private:
     bool tokenJugador;
+    bool finDelJuego;
     int W;
     int H;
     int xSelected;
