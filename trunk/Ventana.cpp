@@ -20,8 +20,8 @@ Ventana::Ventana(QWidget *parent) :
     tokenJugador=true; //token de quien tiene el turno
 
     //Dimenciones de la escena --> FALTA AJUSTAR!!!
-    W=540; //80x6 de ancho por celda + 30x2 de los bordes
-    H=540; //80x6 de largo por celda + 30x2 de los bordes
+    W=520; //80x6 de ancho por celda + 20x2 de los bordes
+    H=640; //80x6 de largo por celda + 20x2 de los bordes +2x60 de fichas muertas
 
     //Arreglos con las posiciones de las fichas
     posBlancasX = new int[8];
