@@ -15,6 +15,8 @@ Ventana::Ventana(QWidget *parent) :
     //Salida de texto
     mensajeFinDeJuego = new QMessageBox(this);
 
+    //Banderas
+    finDelJuego=false;
     tokenJugador=true; //token de quien tiene el turno
 
     //Dimenciones de la escena --> FALTA AJUSTAR!!!
@@ -53,7 +55,7 @@ Ventana::Ventana(QWidget *parent) :
     connect(ui->pushButtonMedium,SIGNAL(clicked()),this,SLOT(gameMedium()));
     connect(tablerito,SIGNAL(celdaCliqueada(int,int)),this,SLOT(cliquearonEnCelda(int,int)));
     connect(tablerito,SIGNAL(terminoAnimacion()),this,SLOT(cambiarJugador()));
-//    connect(mensajeFinDeJuego,SIGNAL(buttonClicked(QAbstractButton*)),this, SLOT(newGame()));
+    connect(mensajeFinDeJuego,SIGNAL(buttonClicked(QAbstractButton*)),this, SLOT(newGame()));
 }
 
 Ventana::~Ventana()
@@ -179,10 +181,10 @@ void Ventana::crearTablero()
 //    posNegrasX[0]=3; posNegrasX[1]=-1; posNegrasX[2]=-1; posNegrasX[3]=-1; posNegrasX[4]=-1; posNegrasX[5]=-1; posNegrasX[6]=-1; posNegrasX[7]=1;
 //    posNegrasY[0]=0; posNegrasY[1]=-1; posNegrasY[2]=-1; posNegrasY[3]=-1; posNegrasY[4]=-1; posNegrasY[5]=-1; posNegrasY[6]=-1; posNegrasY[7]=2;
 
-//    crearEstadoDeArreglos(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
-//    minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
+    crearEstadoDeArreglos(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
+    minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
 
-//    imprimirEstado(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
+    imprimirEstado(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
 
     //Crea el mapa (parte gráfica)
     ui->graphicsView->setHidden(false);
@@ -384,8 +386,7 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
                     {
                         if(color_tmp==true) //Si despues del movimiento el jugador sigue en jaque, perdió
                         {
-                            mensajeFinDeJuego->setText("Ganó parce!!!! :D");
-                            mensajeFinDeJuego->exec();
+                            finDelJuego=true;
                         }
 
                         //Actualizar todos los estados
@@ -463,8 +464,7 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
                 {
                     if(color_global==true) //Si despues del movimiento el jugador sigue en jaque, perdió
                     {
-                        mensajeFinDeJuego->setText("Ganó parce!!!! :D");
-                        mensajeFinDeJuego->exec();
+                        finDelJuego=true;
                     }
 
                     if(color_global) {
@@ -490,6 +490,13 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
             xSelected=-1;
             ySelected=-1;
         }
+    }
+
+    if(finDelJuego)
+    {
+        mensajeFinDeJuego->setText("Ganó parce!!!! :D");
+        mensajeFinDeJuego->exec();
+        finDelJuego=false;
     }
 }
 
