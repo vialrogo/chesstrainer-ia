@@ -33,6 +33,7 @@ private:
     char** estado;
     Tablero* tablerito;
     MiniMax* minimax;
+    QTimer* timer;
     bool sePuedeMoverFicha(int ficha, bool color, int xCelda, int yCelda);
 
 public:

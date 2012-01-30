@@ -36,7 +36,7 @@ void Ficha::animatePosition(const QPointF& end)
     QPropertyAnimation* anim = new QPropertyAnimation(this, "pos");
 
     // 2 second duration animation
-    anim->setDuration(100);
+    anim->setDuration(200);
     // position to start animation
 //    anim->setStartValue(start);
     // end position of animation

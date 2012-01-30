@@ -217,7 +217,7 @@ void Tablero::iniciarAnimacion(int ficha_in, bool color_in, int xIni, int yIni, 
         if(dx==-1 && dy==-2)signo = 8;
     }
 
-    timer->start(100);
+    timer->start(200);
 }
 
 /*
