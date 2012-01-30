@@ -25,16 +25,16 @@ Nodo::~Nodo()
     delete[] estado;
     estado=0;
 
-//    delete[] posBlancasX;
-//    delete[] posBlancasY;
-//    delete[] posNegrasX;
-//    delete[] posNegrasY;
-//    posBlancasX=0;
-//    posBlancasY=0;
-//    posNegrasX=0;
-//    posNegrasY=0;
+    delete[] posBlancasX;
+    delete[] posBlancasY;
+    delete[] posNegrasX;
+    delete[] posNegrasY;
+    posBlancasX=0;
+    posBlancasY=0;
+    posNegrasX=0;
+    posNegrasY=0;
 
-//    padre=0;
+    padre=0;
 }
 
 //para quien soy: Mayúscula=blancas Minúscula=negras; B=alfil, H=Caballo, K=rey, P=peón, Q=reina

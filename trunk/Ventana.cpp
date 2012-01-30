@@ -109,7 +109,7 @@ void Ventana::crearTablero()
     posBlancasY[7]=ptmp.ry();
     vect.remove(tmp);
     crearEstadoDeArreglos(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
-    minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
+//    minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
 
     //Coloco Rey Negro
     while(true)
@@ -120,9 +120,9 @@ void Ventana::crearTablero()
         posNegrasY[7]= ptmp.ry();
         vect.remove(tmp);
         crearEstadoDeArreglos(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
-        minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
+//        minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
 
-        if(minimax->verificarJaque(true))
+        if(minimax->verificarJaque(true,posBlancasX[7],posBlancasY[7],estado))
             vect.append(ptmp);
         else
             break;
@@ -140,9 +140,9 @@ void Ventana::crearTablero()
         posBlancasY[i]= ptmp.ry();
         vect.remove(tmp);
         crearEstadoDeArreglos(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
-        minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
+//        minimax->|(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
 
-        if(minimax->verificarJaque(false))
+        if(minimax->verificarJaque(false,posNegrasX[7],posNegrasY[7],estado))
             vect.append(ptmp);
         else
             i++;
@@ -160,9 +160,9 @@ void Ventana::crearTablero()
         posNegrasY[i]= ptmp.ry();
         vect.remove(tmp);
         crearEstadoDeArreglos(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
-        minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
+//        minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
 
-        if(minimax->verificarJaque(true))
+        if(minimax->verificarJaque(true,posBlancasX[7],posBlancasY[7],estado))
             vect.append(ptmp);
         else
             i++;
@@ -188,7 +188,7 @@ void Ventana::crearTablero()
 //    posNegrasY[0]=2; posNegrasY[1]=-1; posNegrasY[2]=-1; posNegrasY[3]=-1; posNegrasY[4]=-1; posNegrasY[5]=-1; posNegrasY[6]=-1; posNegrasY[7]=0;
 
     crearEstadoDeArreglos(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
-    minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
+//    minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
 
     imprimirEstado(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
 
@@ -297,8 +297,8 @@ void Ventana::game()
     timer->stop();
 
     crearEstadoDeArreglos(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
-    minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,true);
-    string salida = minimax->tomarDesicion();
+//    minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,true);
+    string salida = minimax->tomarDesicion(posBlancasY,posBlancasX,posNegrasY,posNegrasX,estado);
     QString qsalida = QString::fromStdString(salida);
 
     int ficha;
@@ -341,6 +341,10 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
 {
     int ficha_tmp;
     bool color_tmp;
+    int xReyTmp;
+    int yReyTmp;
+    int xReyGlobal;
+    int yReyGlobal;
 
     if(estado[yCelda][xCelda]!=' ') //Se cliqueo en una ficha
     {
@@ -386,9 +390,11 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
                     }
 
                     crearEstadoDeArreglos(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
-                    minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
+//                    minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
+                    xReyTmp=(color_tmp)? posBlancasY[7] : posNegrasY[7];
+                    yReyTmp=(color_tmp)? posBlancasX[7] : posNegrasX[7];
 
-                    if(minimax->verificarJaque(color_tmp)) //El movimiento produce jaque, así que se anula
+                    if(minimax->verificarJaque(color_tmp,xReyTmp,yReyTmp,estado)) //El movimiento produce jaque, así que se anula
                     {
                         if(color_tmp==true) //Si despues del movimiento el jugador sigue en jaque, perdió
                         {
@@ -412,7 +418,7 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
                         }
 
                         crearEstadoDeArreglos(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
-                        minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
+//                        minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
                     }
                     else //el movimiento no produce jaque así que se dibuja
                     {
@@ -464,9 +470,11 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
                 }
 
                 crearEstadoDeArreglos(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
-                minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
+//                minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
+                xReyGlobal=(color_global)? posBlancasY[7] : posNegrasY[7];
+                yReyGlobal=(color_global)? posBlancasX[7] : posNegrasX[7];
 
-                if(minimax->verificarJaque(color_global)) //El movimiento produce jaque, así que se anula
+                if(minimax->verificarJaque(color_global,xReyGlobal,yReyGlobal,estado)) //El movimiento produce jaque, así que se anula
                 {
                     if(color_global==true) //Si despues del movimiento el jugador sigue en jaque, perdió
                     {
@@ -482,7 +490,7 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
                     }
 
                     crearEstadoDeArreglos(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
-                    minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
+//                    minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
                 }
                 else //el movimiento no produce jaque así que se dibuja
                 {
@@ -518,8 +526,8 @@ void Ventana::cambiarJugador()
         tokenJugador=!tokenJugador;//Pasa el control a otro jugador
         if(tokenJugador) game(); //Si el turno quedó en las blancas, que jueguen
         else{
-            minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
-            if(minimax->mateHumano()){
+//            minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
+            if(minimax->mateHumano(posBlancasY,posBlancasX,posNegrasY,posNegrasX,estado)){
                 mensajeFinDeJuego->setText("Perdiste");
                 mensajeFinDeJuego->exec();
             }
