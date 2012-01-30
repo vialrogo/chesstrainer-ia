@@ -79,9 +79,21 @@ void MiniMax::imprimir(Nodo *elNodo)
     cout<<"+-------+---+---+---+---+---+---+---+---+"<<endl<<endl;
 }
 
-QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
+void MiniMax::imprimir(char **estadoIn)
 {
-    definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY(),false);
+    //Para imprimir la matriz
+    for (int i = 0; i < 6; ++i) {
+        cout<<"+---+---+---+---+---+---+"<<endl;
+        for (int j = 0; j < 6; ++j) {
+            cout<<"| "<<estadoIn[i][j]<<" ";
+        }
+        cout<<"|"<<endl;
+    }
+    cout<<"+---+---+---+---+---+---+"<<endl<<endl;
+}
+
+QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
+{    
     QList<Nodo*> respuesta;
 
     //La información del padre será almacenada en las variables de la clase
@@ -90,6 +102,7 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
     int count=0, val=0, dx=0, dy=0;
 
     for (int i = 0; i < 8; i++){//Intentar mover todas las fichas
+        definirVariables(elNodo->getEstado(),elNodo->getPosBlancasX(),elNodo->getPosBlancasY(),elNodo->getPosNegrasX(),elNodo->getPosNegrasY(),false);
 
         if(elNodo->getNivel()%2==0) //blancas
         {
@@ -302,7 +315,7 @@ QList<Nodo*> MiniMax::expandir(Nodo *elNodo)
         }
         else //negras
         {
-            if(posNegrasX[i]!=-1 && posBlancasY[i]!=-1)
+            if(posNegrasX[i]!=-1 && posNegrasY[i]!=-1)
             {
                 if(i<4) //peones
                 {
@@ -548,39 +561,31 @@ string MiniMax::tomarDesicion()
         aBorrar.push_front(actual);
     }
 
+    while (!aBorrar.isEmpty()) {
+        actual=aBorrar.front();
+        if(actual->getPadre()!=0)
+            actual->getPadre()->actualizarDesicion(actual->getValor(),actual->getQuiensoy());
+//        delete aBorrar.front();
+        aBorrar.pop_front();
+    }
+
+
 //    for (int i = 0; i < aBorrar.size(); i++) {
-//        for (int i = 0; i < aBorrar.front()->getNivel(); i++) {
-//            cout<<"\t";
-//        }
-//        cout<<aBorrar.front()->getQuiensoy()<<" : "<<aBorrar.front()->getDecision();
-//        cout<<" : "<<aBorrar.front()->getValor()<<" : "<<aBorrar.front()->getNivel()<<endl;
+//        actual=aBorrar.at(i);
+//        if(actual->getPadre()!=0)
+//            actual->getPadre()->actualizarDesicion(actual->getValor(),actual->getQuiensoy());
 //    }
 
 //    while (!aBorrar.isEmpty()) {
-//        actual=aBorrar.front();
-//        if(actual->getPadre()!=0)
-//            actual->getPadre()->actualizarDesicion(actual->getValor(),actual->getQuiensoy());
+//        for (int i = 0; i < aBorrar.back()->getNivel(); i++) {
+//            cout<<"\t";
+//        }
+
+//        cout<<aBorrar.back()->getQuiensoy()<<" : "<<aBorrar.back()->getDecision();
+//        cout<<" : "<<aBorrar.back()->getValor()<<" : "<<aBorrar.back()->getNivel()<<endl;
 ////        delete aBorrar.front();
-//        aBorrar.pop_front();
+//        aBorrar.pop_back();
 //    }
-
-
-    for (int i = 0; i < aBorrar.size(); i++) {
-        actual=aBorrar.at(i);
-        if(actual->getPadre()!=0)
-            actual->getPadre()->actualizarDesicion(actual->getValor(),actual->getQuiensoy());
-    }
-
-    while (!aBorrar.isEmpty()) {
-        for (int i = 0; i < aBorrar.back()->getNivel(); i++) {
-            cout<<"\t";
-        }
-
-        cout<<aBorrar.back()->getQuiensoy()<<" : "<<aBorrar.back()->getDecision();
-        cout<<" : "<<aBorrar.back()->getValor()<<" : "<<aBorrar.back()->getNivel()<<endl;
-//        delete aBorrar.front();
-        aBorrar.pop_back();
-    }
 
     decision=inicial->getDecision();
     definirVariables(inicial->getEstado(),inicial->getPosBlancasX(),inicial->getPosBlancasY(),inicial->getPosNegrasX(),inicial->getPosNegrasY(),false);
@@ -841,11 +846,17 @@ int main()
 //    negrasX[0]=0; negrasX[1]=1; negrasX[2]=2; negrasX[3]=3; negrasX[4]=0; negrasX[5]=1; negrasX[6]=4; negrasX[7]=5;
 //    negrasY[0]=5; negrasY[1]=5; negrasY[2]=5; negrasY[3]=5; negrasY[4]=2; negrasY[5]=3; negrasY[6]=4; negrasY[7]=5;
 
-    blancasX[0]=3; blancasX[1]=3; blancasX[2]=4; blancasX[3]=5; blancasX[4]=5; blancasX[5]=5; blancasX[6]=4; blancasX[7]=4;
-    blancasY[0]=4; blancasY[1]=5; blancasY[2]=3; blancasY[3]=0; blancasY[4]=5; blancasY[5]=4; blancasY[6]=5; blancasY[7]=4;
+//    blancasX[0]=3; blancasX[1]=3; blancasX[2]=4; blancasX[3]=5; blancasX[4]=5; blancasX[5]=5; blancasX[6]=4; blancasX[7]=4;
+//    blancasY[0]=4; blancasY[1]=5; blancasY[2]=3; blancasY[3]=0; blancasY[4]=5; blancasY[5]=4; blancasY[6]=5; blancasY[7]=4;
 
-    negrasX[0]=1; negrasX[1]=4; negrasX[2]=0; negrasX[3]=2; negrasX[4]=3; negrasX[5]=1; negrasX[6]=0; negrasX[7]=0;
-    negrasY[0]=1; negrasY[1]=2; negrasY[2]=2; negrasY[3]=1; negrasY[4]=3; negrasY[5]=0; negrasY[6]=0; negrasY[7]=1;
+//    negrasX[0]=1; negrasX[1]=4; negrasX[2]=0; negrasX[3]=2; negrasX[4]=3; negrasX[5]=1; negrasX[6]=0; negrasX[7]=0;
+//    negrasY[0]=1; negrasY[1]=2; negrasY[2]=2; negrasY[3]=1; negrasY[4]=3; negrasY[5]=0; negrasY[6]=0; negrasY[7]=1;
+
+    blancasX[0]=-1; blancasX[1]=0; blancasX[2]=2; blancasX[3]=5; blancasX[4]=4; blancasX[5]=-1; blancasX[6]=-1; blancasX[7]=5;
+    blancasY[0]=-1; blancasY[1]=3; blancasY[2]=4; blancasY[3]=5; blancasY[4]=5; blancasY[5]=-1; blancasY[6]=-1; blancasY[7]=4;
+
+    negrasX[0]=2; negrasX[1]=4; negrasX[2]=5; negrasX[3]=3; negrasX[4]=-1; negrasX[5]=1; negrasX[6]=-1; negrasX[7]=3;
+    negrasY[0]=2; negrasY[1]=0; negrasY[2]=1; negrasY[3]=1; negrasY[4]=-1; negrasY[5]=0; negrasY[6]=-1; negrasY[7]=0;
 
     for (int i = 0; i < 8; i++)
     {
