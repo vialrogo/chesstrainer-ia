@@ -25,6 +25,10 @@ void Tablero::crearFichas(int *posBlancasX, int *posBlancasY, int *posNegrasX, i
 {
     imagenesFichasBlancas = new  Ficha*[8];
     imagenesFichasNegras = new  Ficha*[8];
+    imagenesFichasBlancasMinisGrises = new  Ficha*[8];
+    imagenesFichasNegrasMinisGrises = new  Ficha*[8];
+    imagenesFichasBlancasMinisNormal = new  Ficha*[8];
+    imagenesFichasNegrasMinisNormal = new  Ficha*[8];
 
     for (int i = 0; i < 8; ++i)
     {
@@ -32,37 +36,65 @@ void Tablero::crearFichas(int *posBlancasX, int *posBlancasY, int *posNegrasX, i
         {
             imagenesFichasBlancas[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/P.png"),this);
             imagenesFichasNegras[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/p.png"),this);
+            imagenesFichasBlancasMinisGrises[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/mP.png"),this);
+            imagenesFichasNegrasMinisGrises[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/mP.png"),this);
+            imagenesFichasBlancasMinisNormal[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/MP.png"),this);
+            imagenesFichasNegrasMinisNormal[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/Mp.png"),this);
         }
 
         if(i==4) //Caballo
         {
             imagenesFichasBlancas[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/H.png"),this);
             imagenesFichasNegras[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/h.png"),this);
+            imagenesFichasBlancasMinisGrises[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/mH.png"),this);
+            imagenesFichasNegrasMinisGrises[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/mH.png"),this);
+            imagenesFichasBlancasMinisNormal[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/MH.png"),this);
+            imagenesFichasNegrasMinisNormal[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/Mh.png"),this);
         }
 
         if(i==5) //Alfil
         {
             imagenesFichasBlancas[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/B.png"),this);
             imagenesFichasNegras[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/b.png"),this);
+            imagenesFichasBlancasMinisGrises[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/mB.png"),this);
+            imagenesFichasNegrasMinisGrises[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/mB.png"),this);
+            imagenesFichasBlancasMinisNormal[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/MB.png"),this);
+            imagenesFichasNegrasMinisNormal[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/Mb.png"),this);
         }
 
         if(i==6) //Reina
         {
             imagenesFichasBlancas[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/Q.png"),this);
             imagenesFichasNegras[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/q.png"),this);
+            imagenesFichasBlancasMinisGrises[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/mQ.png"),this);
+            imagenesFichasNegrasMinisGrises[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/mQ.png"),this);
+            imagenesFichasBlancasMinisNormal[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/MQ.png"),this);
+            imagenesFichasNegrasMinisNormal[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/Mq.png"),this);
         }
 
         if(i==7) //Rey
         {
             imagenesFichasBlancas[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/K.png"),this);
             imagenesFichasNegras[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/k.png"),this);
+            imagenesFichasBlancasMinisGrises[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/mK.png"),this);
+            imagenesFichasNegrasMinisGrises[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/mK.png"),this);
+            imagenesFichasBlancasMinisNormal[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/MK.png"),this);
+            imagenesFichasNegrasMinisNormal[i]=new Ficha(QSizeF(520,640),QPixmap("Imagenes/Mk.png"),this);
         }
 
+        //Fichas de juego
         imagenesFichasBlancas[i]->setOffset(posBlancasX[i]*anchoCelda+deltaX,posBlancasY[i]*altoCelda+deltaY);
         this->addItem(imagenesFichasBlancas[i]);
-
         imagenesFichasNegras[i]->setOffset(posNegrasX[i]*anchoCelda+deltaX,posNegrasY[i]*altoCelda+deltaY);
         this->addItem(imagenesFichasNegras[i]);
+
+        //Miniaturas grises
+        imagenesFichasBlancasMinisNormal[i]->setOffset(deltaX+i*40,18);
+        imagenesFichasBlancasMinisGrises[i]->setOffset(deltaX+i*40,18);
+        this->addItem(imagenesFichasBlancasMinisGrises[i]);
+        imagenesFichasNegrasMinisNormal[i]->setOffset(deltaX+160+i*40,deltaY+480+20+5);
+        imagenesFichasNegrasMinisGrises[i]->setOffset(deltaX+160+i*40,deltaY+480+20+5);
+        this->addItem(imagenesFichasNegrasMinisGrises[i]);
 
         imagenesFichasBlancas[i]->setX(0);
         imagenesFichasBlancas[i]->setY(0);
@@ -160,7 +192,6 @@ void Tablero::pintarCuadricula()
         numeroInferior->setFont(fuente);
         numeroInferior->setPos(deltaX+480+dxnumeros-3,deltaY+40+(i*80));
     }
-
 }
 
 /*
@@ -322,10 +353,20 @@ void Tablero::eliminarFicha(int ficha, bool color) //Es temporal, toca arreglarl
     {
         this->removeItem(imagenesFichasBlancas[ficha]);
         imagenesFichasBlancas[ficha]->setEnabled(false);
+
+        //Cambio la mini ficha
+        this->removeItem(imagenesFichasBlancasMinisGrises[ficha]);
+        imagenesFichasBlancasMinisGrises[ficha]->setEnabled(false);
+        this->addItem(imagenesFichasBlancasMinisNormal[ficha]);
     }
     else
     {
         this->removeItem(imagenesFichasNegras[ficha]);
         imagenesFichasNegras[ficha]->setEnabled(false);
+
+        //Cambio la mini ficha
+        this->removeItem(imagenesFichasNegrasMinisGrises[ficha]);
+        imagenesFichasNegrasMinisGrises[ficha]->setEnabled(false);
+        this->addItem(imagenesFichasNegrasMinisNormal[ficha]);
     }
 }

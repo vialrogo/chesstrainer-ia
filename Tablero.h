@@ -45,6 +45,10 @@ private:
     QGraphicsRectItem *** matrizCuadrados;
     Ficha** imagenesFichasBlancas;
     Ficha** imagenesFichasNegras;
+    Ficha** imagenesFichasBlancasMinisGrises;
+    Ficha** imagenesFichasNegrasMinisGrises;
+    Ficha** imagenesFichasBlancasMinisNormal;
+    Ficha** imagenesFichasNegrasMinisNormal;
     QTimer *timer;
     void moverFicha(int ficha, bool color, int dx, int dy);
 
