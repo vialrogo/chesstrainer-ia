@@ -25,6 +25,7 @@ private:
     int calcularHeuristica(Nodo *elNodo);
     QList<Nodo*> expandir (Nodo *elNodo);
     void imprimir(Nodo *elNodo);
+    void imprimir(char **estadoIn);
 
 public:
     MiniMax(int nivelIn);
