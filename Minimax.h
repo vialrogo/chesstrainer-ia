@@ -31,6 +31,7 @@ private:
 
 public:
     MiniMax(int nivelIn);
+    ~MiniMax();
     string tomarDesicion(int *posBlancasX,int *posBlancasY,int *posNegrasX,int *posNegrasY,char **estado);
 //    void definirVariables(char **estadoIn, int *posBlancasXIn, int *posBlancasYIn, int *posNegrasXIn, int *posNegrasYIn, bool copia);
     bool verificarJaque(bool color, int xRey, int yRey, char **estado);

@@ -122,7 +122,7 @@ void Ventana::crearTablero()
         crearEstadoDeArreglos(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
 //        minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
 
-        if(minimax->verificarJaque(true,posBlancasX[7],posBlancasY[7],estado))
+        if(minimax->verificarJaque(true,posBlancasY[7],posBlancasX[7],estado))
             vect.append(ptmp);
         else
             break;
@@ -142,7 +142,7 @@ void Ventana::crearTablero()
         crearEstadoDeArreglos(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
 //        minimax->|(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
 
-        if(minimax->verificarJaque(false,posNegrasX[7],posNegrasY[7],estado))
+        if(minimax->verificarJaque(false,posNegrasY[7],posNegrasX[7],estado))
             vect.append(ptmp);
         else
             i++;
@@ -162,7 +162,7 @@ void Ventana::crearTablero()
         crearEstadoDeArreglos(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
 //        minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
 
-        if(minimax->verificarJaque(true,posBlancasX[7],posBlancasY[7],estado))
+        if(minimax->verificarJaque(true,posBlancasY[7],posBlancasX[7],estado))
             vect.append(ptmp);
         else
             i++;
@@ -271,6 +271,7 @@ void Ventana::newGame()
     ui->graphicsView->setHidden(true);
     ui->pushButtonEasy->setHidden(false);
     ui->pushButtonMedium->setHidden(false);
+    delete minimax;
 //    cout<<"260"<<endl;
 }
 
@@ -396,10 +397,7 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
 
                     if(minimax->verificarJaque(color_tmp,xReyTmp,yReyTmp,estado)) //El movimiento produce jaque, así que se anula
                     {
-                        if(color_tmp==true) //Si despues del movimiento el jugador sigue en jaque, perdió
-                        {
-                            finDelJuego=true;
-                        }
+                        if(color_tmp) finDelJuego=true; //Si despues del movimiento el jugador sigue en jaque, perdió
 
                         //Actualizar todos los estados
                         if(color_global) {
@@ -476,10 +474,7 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
 
                 if(minimax->verificarJaque(color_global,xReyGlobal,yReyGlobal,estado)) //El movimiento produce jaque, así que se anula
                 {
-                    if(color_global==true) //Si despues del movimiento el jugador sigue en jaque, perdió
-                    {
-                        finDelJuego=true;
-                    }
+                    if(color_global) finDelJuego=true; //Si despues del movimiento el jugador sigue en jaque, perdió
 
                     if(color_global) {
                         posBlancasX[ficha_global]=xSelected;
@@ -508,9 +503,9 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
 
     if(finDelJuego)
     {
+        finDelJuego=false;
         mensajeFinDeJuego->setText("Ganó parce!!!! :D");
         mensajeFinDeJuego->exec();
-        finDelJuego=false;
     }
 }
 
