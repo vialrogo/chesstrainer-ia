@@ -36,6 +36,7 @@ private:
     QTimer* timer;
     QMessageBox* mensajeFinDeJuego;
     bool sePuedeMoverFicha(int ficha, bool color, int xCelda, int yCelda);
+    bool empate();
 
 public:
     explicit Ventana(QWidget *parent = 0);

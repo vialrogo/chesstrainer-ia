@@ -167,13 +167,22 @@ void Ventana::crearTablero()
     }
 
     //Debugueo incompleto
-//    posNegrasX[0]=1; posNegrasX[1]=1; posNegrasX[2]=1; posNegrasX[3]=5; posNegrasX[4]=; posNegrasX[5]=2; posNegrasX[6]=3; posNegrasX[7]=5;
-//    posNegrasY[0]=1; posNegrasY[1]=2; posNegrasY[2]=3; posNegrasY[3]=4; posNegrasY[4]=; posNegrasY[5]=2; posNegrasY[6]=3; posNegrasY[7]=4;
+//    posBlancasX[0]=0; posBlancasX[1]=-1; posBlancasX[2]=-1; posBlancasX[3]=-1; posBlancasX[4]=-1; posBlancasX[5]=-1; posBlancasX[6]=-1; posBlancasX[7]=5;
+//    posBlancasY[0]=2; posBlancasY[1]=-1; posBlancasY[2]=-1; posBlancasY[3]=-1; posBlancasY[4]=-1; posBlancasY[5]=-1; posBlancasY[6]=-1; posBlancasY[7]=0;
 
-//    posBlancasX[0]=0; posBlancasX[1]=3; posBlancasX[2]=4; posBlancasX[3]=5; posBlancasX[4]=2; posBlancasX[5]=4; posBlancasX[6]=4; posBlancasX[7]=5;
-//    posBlancasY[0]=3; posBlancasY[1]=1; posBlancasY[2]=1; posBlancasY[3]=3; posBlancasY[4]=5; posBlancasY[5]=2; posBlancasY[6]=0; posBlancasY[7]=0;
+//    posNegrasX[0]=3; posNegrasX[1]=-1; posNegrasX[2]=-1; posNegrasX[3]=-1; posNegrasX[4]=2; posNegrasX[5]=-1; posNegrasX[6]=4; posNegrasX[7]=0;
+//    posNegrasY[0]=2; posNegrasY[1]-=1; posNegrasY[2]=-1; posNegrasY[3]=-1; posNegrasY[4]=2; posNegrasY[5]=-1; posNegrasY[6]=5; posNegrasY[7]=5;
 
-    imprimirEstado(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
+//    posBlancasX[0]=0; posBlancasX[1]=-1; posBlancasX[2]=-1; posBlancasX[3]=-1; posBlancasX[4]=-1; posBlancasX[5]=-1; posBlancasX[6]=-1; posBlancasX[7]=3;
+//    posBlancasY[0]=1; posBlancasY[1]=-1; posBlancasY[2]=-1; posBlancasY[3]=-1; posBlancasY[4]=-1; posBlancasY[5]=-1; posBlancasY[6]=-1; posBlancasY[7]=1;
+
+//    posNegrasX[0]=3; posNegrasX[1]=-1; posNegrasX[2]=-1; posNegrasX[3]=-1; posNegrasX[4]=-1; posNegrasX[5]=-1; posNegrasX[6]=-1; posNegrasX[7]=1;
+//    posNegrasY[0]=0; posNegrasY[1]=-1; posNegrasY[2]=-1; posNegrasY[3]=-1; posNegrasY[4]=-1; posNegrasY[5]=-1; posNegrasY[6]=-1; posNegrasY[7]=2;
+
+//    crearEstadoDeArreglos(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
+//    minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
+
+//    imprimirEstado(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
 
     //Crea el mapa (parte gráfica)
     ui->graphicsView->setHidden(false);
@@ -243,6 +252,7 @@ void Ventana::imprimirEstado(char **estado_in, int *posBlancasX_in, int *posBlan
 
 void Ventana::newGame()
 {
+//    cout<<"New Game"<<endl;
     tokenJugador=true;
     if(xSelected!=-1 && ySelected!=-1) tablerito->seleccionarFicha(xSelected,ySelected);
     xSelected=-1;
@@ -253,8 +263,8 @@ void Ventana::newGame()
     ui->graphicsView->setHidden(true);
     ui->pushButtonEasy->setHidden(false);
     ui->pushButtonMedium->setHidden(false);
+//    cout<<"260"<<endl;
 }
-
 
 void Ventana::gameEasy()
 {
@@ -485,8 +495,16 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
 
 void Ventana::cambiarJugador()
 {
-    tokenJugador=!tokenJugador;//Pasa el control a otro jugador
-    if(tokenJugador) game(); //Si el turno quedó en las blancas, que jueguen
+    if(empate())
+    {
+        mensajeFinDeJuego->setText("Juego empatado");
+        mensajeFinDeJuego->exec();
+    }
+    else
+    {
+        tokenJugador=!tokenJugador;//Pasa el control a otro jugador
+        if(tokenJugador) game(); //Si el turno quedó en las blancas, que jueguen
+    }
 }
 
 bool Ventana::sePuedeMoverFicha(int ficha, bool color, int xCelda, int yCelda)
@@ -580,3 +598,12 @@ bool Ventana::sePuedeMoverFicha(int ficha, bool color, int xCelda, int yCelda)
     return false;
 }
 
+bool Ventana::empate()
+{
+    for (int i = 0; i < 7; i++){
+        if(posBlancasX[i]!=-1 || posBlancasY[i]!=-1 || posNegrasX[i]!=-1 || posNegrasY[i]!=-1)
+            return false;
+    }
+
+    return true;
+}
