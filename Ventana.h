@@ -34,6 +34,7 @@ private:
     Tablero* tablerito;
     MiniMax* minimax;
     QTimer* timer;
+    QMessageBox* mensajeFinDeJuego;
     bool sePuedeMoverFicha(int ficha, bool color, int xCelda, int yCelda);
 
 public:
