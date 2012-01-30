@@ -181,6 +181,12 @@ void Ventana::crearTablero()
 //    posNegrasX[0]=3; posNegrasX[1]=-1; posNegrasX[2]=-1; posNegrasX[3]=-1; posNegrasX[4]=-1; posNegrasX[5]=-1; posNegrasX[6]=-1; posNegrasX[7]=1;
 //    posNegrasY[0]=0; posNegrasY[1]=-1; posNegrasY[2]=-1; posNegrasY[3]=-1; posNegrasY[4]=-1; posNegrasY[5]=-1; posNegrasY[6]=-1; posNegrasY[7]=2;
 
+//    posBlancasX[0]=-1; posBlancasX[1]=-1; posBlancasX[2]=-1; posBlancasX[3]=-1; posBlancasX[4]=2; posBlancasX[5]=1; posBlancasX[6]=4; posBlancasX[7]=0;
+//    posBlancasY[0]=-1; posBlancasY[1]=-1; posBlancasY[2]=-1; posBlancasY[3]=-1; posBlancasY[4]=2; posBlancasY[5]=5; posBlancasY[6]=5; posBlancasY[7]=5;
+
+//    posNegrasX[0]=0; posNegrasX[1]=-1; posNegrasX[2]=-1; posNegrasX[3]=-1; posNegrasX[4]=-1; posNegrasX[5]=-1; posNegrasX[6]=-1; posNegrasX[7]=5;
+//    posNegrasY[0]=2; posNegrasY[1]=-1; posNegrasY[2]=-1; posNegrasY[3]=-1; posNegrasY[4]=-1; posNegrasY[5]=-1; posNegrasY[6]=-1; posNegrasY[7]=0;
+
     crearEstadoDeArreglos(estado,posBlancasX,posBlancasY,posNegrasX,posNegrasY);
     minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
 
@@ -511,6 +517,13 @@ void Ventana::cambiarJugador()
     {
         tokenJugador=!tokenJugador;//Pasa el control a otro jugador
         if(tokenJugador) game(); //Si el turno quedó en las blancas, que jueguen
+        else{
+            minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
+            if(minimax->mateHumano()){
+                mensajeFinDeJuego->setText("Perdiste");
+                mensajeFinDeJuego->exec();
+            }
+        }
     }
 }
 

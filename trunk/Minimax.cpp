@@ -808,6 +808,25 @@ bool MiniMax::verificarJaque(bool color)
     return respuesta;
 }
 
+bool MiniMax::mateHumano()
+{
+    bool perdio=true;
+    Nodo *inicial=new Nodo(0,1,posBlancasX,posBlancasY,posNegrasX,posNegrasY,estado,"original");
+    QList<Nodo*> hijos=expandir(inicial);
+    Nodo *actual;
+    while (!hijos.isEmpty()) {
+        actual=hijos.front();
+        hijos.pop_front();
+        definirVariables(actual->getEstado(),actual->getPosBlancasX(),actual->getPosBlancasY(),actual->getPosNegrasX(),actual->getPosNegrasY(),false);
+
+        if(!verificarJaque(false))
+            perdio=false;
+
+        delete actual;
+    }
+    return perdio;
+}
+
 /*
 int main()
 {
