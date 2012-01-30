@@ -5,6 +5,11 @@ MiniMax::MiniMax(int nivelIn)
     nivel=nivelIn;//2=principiante, 4=amateur
 }
 
+MiniMax::~MiniMax()
+{
+
+}
+
 //Calcula el valor para un nodo
 int MiniMax::calcularHeuristica(Nodo *elNodo)
 {
@@ -894,7 +899,7 @@ bool MiniMax::mateHumano(int *posBlancasX,int *posBlancasY,int *posNegrasX,int *
         hijos.pop_front();
 //        definirVariables(actual->getEstado(),actual->getPosBlancasX(),actual->getPosBlancasY(),actual->getPosNegrasX(),actual->getPosNegrasY(),false);
 
-        if(!verificarJaque(false, actual->getPosNegrasX()[7], actual->getPosNegrasY()[7], actual->getEstado()))//Esto va a cambiar y hay que entregarle los parametros
+        if(!verificarJaque(false, actual->getPosNegrasX()[7], actual->getPosNegrasY()[7], actual->getEstado()))
             perdio=false;
 
         delete actual;
