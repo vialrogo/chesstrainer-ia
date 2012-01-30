@@ -560,37 +560,23 @@ string MiniMax::tomarDesicion()
         }
         aBorrar.push_front(actual);
     }
+    hijos.clear();
 
-    while (!aBorrar.isEmpty()) {
-        actual=aBorrar.front();
+    for (int i = 0; i < aBorrar.size(); i++) {
+        actual=aBorrar.at(i);
         if(actual->getPadre()!=0)
             actual->getPadre()->actualizarDesicion(actual->getValor(),actual->getQuiensoy());
-//        delete aBorrar.front();
-        aBorrar.pop_front();
     }
 
-
-//    for (int i = 0; i < aBorrar.size(); i++) {
-//        actual=aBorrar.at(i);
-//        if(actual->getPadre()!=0)
-//            actual->getPadre()->actualizarDesicion(actual->getValor(),actual->getQuiensoy());
-//    }
-
-//    while (!aBorrar.isEmpty()) {
-//        for (int i = 0; i < aBorrar.back()->getNivel(); i++) {
-//            cout<<"\t";
-//        }
-
-//        cout<<aBorrar.back()->getQuiensoy()<<" : "<<aBorrar.back()->getDecision();
-//        cout<<" : "<<aBorrar.back()->getValor()<<" : "<<aBorrar.back()->getNivel()<<endl;
-////        delete aBorrar.front();
-//        aBorrar.pop_back();
-//    }
-
     decision=inicial->getDecision();
-    definirVariables(inicial->getEstado(),inicial->getPosBlancasX(),inicial->getPosBlancasY(),inicial->getPosNegrasX(),inicial->getPosNegrasY(),false);
+//    definirVariables(inicial->getEstado(),inicial->getPosBlancasX(),inicial->getPosBlancasY(),inicial->getPosNegrasX(),inicial->getPosNegrasY(),false);
 
-    cout<<decision<<endl;
+    while(!aBorrar.isEmpty()){
+        actual=aBorrar.front();
+        aBorrar.pop_front();
+        delete actual;
+    }
+
     return decision;
 }
 
