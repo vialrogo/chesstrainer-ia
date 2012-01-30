@@ -17,22 +17,22 @@ Nodo::Nodo(Nodo* padreIn, int nivelIn, int *posBlancasXIn, int *posBlancasYIn, i
 
 Nodo::~Nodo()
 {
-    for(int i = 0; i < 7; i++)
+    for(int i = 0; i < 6; i++)
     {
-        delete estado[i];
+        delete[] estado[i];
         estado[i]=0;
     }
-    delete estado;
+    delete[] estado;
     estado=0;
 
-    delete posBlancasX;
-    delete posBlancasY;
-    delete posNegrasX;
-    delete posNegrasY;
-    posBlancasX=0;
-    posBlancasY=0;
-    posNegrasX=0;
-    posNegrasY=0;
+//    delete[] posBlancasX;
+//    delete[] posBlancasY;
+//    delete[] posNegrasX;
+//    delete[] posNegrasY;
+//    posBlancasX=0;
+//    posBlancasY=0;
+//    posNegrasX=0;
+//    posNegrasY=0;
 
 //    padre=0;
 }
