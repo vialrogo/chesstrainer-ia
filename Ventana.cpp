@@ -508,7 +508,7 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
     if(finDelJuego)
     {
         finDelJuego=false;
-        mensajeFinDeJuego->setText("Ganó parce!!!! :D");
+        mensajeFinDeJuego->setText("Usted ha ganado");
         mensajeFinDeJuego->exec();
     }
 }
@@ -532,7 +532,7 @@ void Ventana::cambiarJugador()
         else{
 //            minimax->definirVariables(estado,posBlancasY,posBlancasX,posNegrasY,posNegrasX,false);
             if(minimax->mateHumano(posBlancasY,posBlancasX,posNegrasY,posNegrasX,estado)){
-                mensajeFinDeJuego->setText("Perdiste");
+                mensajeFinDeJuego->setText("Usted ha perdido");
                 mensajeFinDeJuego->exec();
             }
         }
