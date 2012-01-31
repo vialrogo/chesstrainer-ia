@@ -39,6 +39,12 @@ private:
     bool sePuedeMoverFicha(int ficha, bool color, int xCelda, int yCelda);
     bool empate();
 
+    //Variables para animar despues de eliminar
+    int ficha_global_eliminar;
+    bool color_global_eliminar;
+    int xCelda_eliminar;
+    int yCelda_eliminar;
+
 public:
     explicit Ventana(QWidget *parent = 0);
     ~Ventana();
@@ -57,6 +63,7 @@ public slots:
     void gameMedium();
     void cliquearonEnCelda(int xCelda, int yCelda);
     void cambiarJugador();
+    void eliminarFicha();
 
 private slots:
     void game();

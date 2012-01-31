@@ -8,7 +8,12 @@ Tablero::Tablero()
     anchoCelda = 80; //Quemados en el código!! se definen en Ventana::pintarCuadricula()
     altoCelda = 80; //Quemados en el código!! se definen en Ventana::pintarCuadricula()
 
+    //Color cuando se selecciona una ficha
     colorFichaSeleccionada=QColor(0,180,180,255);
+
+    //tiempo de la animación
+    tiempoAnimacion=200;
+    tiempo=0;
 
     //Inicializo la matriz de cuadros
     matrizCuadrados = new QGraphicsRectItem**[6];
@@ -17,8 +22,10 @@ Tablero::Tablero()
 
     //Timer para las animaciones
     timer = new QTimer(this);
+    timerEliminar = new QTimer(this);
+
     connect(timer, SIGNAL(timeout()), this, SLOT(animar()));
-    tiempo=0;
+    connect(timerEliminar, SIGNAL(timeout()), this, SLOT(eliminarImagenFicha()));
 }
 
 void Tablero::crearFichas(int *posBlancasX, int *posBlancasY, int *posNegrasX, int *posNegrasY)
@@ -88,18 +95,31 @@ void Tablero::crearFichas(int *posBlancasX, int *posBlancasY, int *posNegrasX, i
         imagenesFichasNegras[i]->setOffset(posNegrasX[i]*anchoCelda+deltaX,posNegrasY[i]*altoCelda+deltaY);
         this->addItem(imagenesFichasNegras[i]);
 
+        int xArriba = deltaX+i*40;
+        int yArriba = 18;
+        int xAbajo = deltaX+160+i*40;
+        int yAbajo = deltaY+480+20+5;
+
         //Miniaturas grises
-        imagenesFichasBlancasMinisNormal[i]->setOffset(deltaX+i*40,18);
-        imagenesFichasBlancasMinisGrises[i]->setOffset(deltaX+i*40,18);
+        imagenesFichasBlancasMinisNormal[i]->setOffset(xArriba,yArriba);
+        imagenesFichasBlancasMinisGrises[i]->setOffset(xArriba,yArriba);
         this->addItem(imagenesFichasBlancasMinisGrises[i]);
-        imagenesFichasNegrasMinisNormal[i]->setOffset(deltaX+160+i*40,deltaY+480+20+5);
-        imagenesFichasNegrasMinisGrises[i]->setOffset(deltaX+160+i*40,deltaY+480+20+5);
+        imagenesFichasNegrasMinisNormal[i]->setOffset(xAbajo,yAbajo);
+        imagenesFichasNegrasMinisGrises[i]->setOffset(xAbajo,yAbajo);
         this->addItem(imagenesFichasNegrasMinisGrises[i]);
 
+        //Fichas
         imagenesFichasBlancas[i]->setX(0);
         imagenesFichasBlancas[i]->setY(0);
         imagenesFichasNegras[i]->setX(0);
         imagenesFichasNegras[i]->setY(0);
+
+        //Miniatura Gris
+        imagenesFichasBlancasMinisGrises[i]->setX(xArriba-20);
+        imagenesFichasBlancasMinisGrises[i]->setY(yArriba-20);
+        imagenesFichasNegrasMinisGrises[i]->setX(xAbajo-20);
+        imagenesFichasNegrasMinisGrises[i]->setY(yAbajo-20);
+
     }
 }
 
@@ -197,8 +217,9 @@ void Tablero::pintarCuadricula()
 /*
     Este método es llamado siempore con un movimiento válido
 */
-void Tablero::iniciarAnimacion(int ficha_in, bool color_in, int xIni, int yIni, int xFin, int yFin)
+void Tablero::iniciarAnimacion(int ficha_in, bool color_in, int xIni, int yIni, int xFin, int yFin, bool tocaElimiarLuego)
 {
+    tocaEliminarLuego_global=tocaElimiarLuego;
     int dx = xFin-xIni;
     int dy = yFin-yIni;
     ficha_global=ficha_in;
@@ -248,7 +269,7 @@ void Tablero::iniciarAnimacion(int ficha_in, bool color_in, int xIni, int yIni, 
         if(dx==-1 && dy==-2)signo = 8;
     }
 
-    timer->start(200);
+    timer->start(tiempoAnimacion);
 }
 
 /*
@@ -265,7 +286,9 @@ void Tablero::animar()
     if(tiempo==0)
     {
         timer->stop();
-        emit terminoAnimacion();
+
+        if(tocaEliminarLuego_global) emit empezarEliminar();
+        else emit terminoAnimacion();
     }
     else
     {
@@ -333,7 +356,7 @@ void Tablero::moverFicha(int ficha, bool color, int dx, int dy)
     {
         posX = imagenesFichasBlancas[ficha]->getX() + dx*anchoCelda;
         posY = imagenesFichasBlancas[ficha]->getY() + dy*altoCelda;
-        imagenesFichasBlancas[ficha]->animatePosition(QPointF(posX,posY));
+        imagenesFichasBlancas[ficha]->animatePosition(QPointF(posX,posY),tiempoAnimacion);
         imagenesFichasBlancas[ficha]->setX(posX);
         imagenesFichasBlancas[ficha]->setY(posY);
     }
@@ -341,32 +364,71 @@ void Tablero::moverFicha(int ficha, bool color, int dx, int dy)
     {
         posX = imagenesFichasNegras[ficha]->getX() + dx*anchoCelda;
         posY = imagenesFichasNegras[ficha]->getY() + dy*altoCelda;
-        imagenesFichasNegras[ficha]->animatePosition(QPointF(posX,posY));
+        imagenesFichasNegras[ficha]->animatePosition(QPointF(posX,posY),tiempoAnimacion);
         imagenesFichasNegras[ficha]->setX(posX);
         imagenesFichasNegras[ficha]->setY(posY);
     }
 }
 
-void Tablero::eliminarFicha(int ficha, bool color) //Es temporal, toca arreglarlo
+void Tablero::eliminarFicha(int ficha, bool color, int X, int Y) //Es temporal, toca arreglarlo
 {
+    int dx;
+    int dy;
+    int posX;
+    int posY;
+    int tiempoAnimacionEliminar=300;
+
+    ficha_global_eliminar=ficha;
+    color_global_eliminar=color;
+
     if (color)
     {
-        this->removeItem(imagenesFichasBlancas[ficha]);
-        imagenesFichasBlancas[ficha]->setEnabled(false);
-
-        //Cambio la mini ficha
-        this->removeItem(imagenesFichasBlancasMinisGrises[ficha]);
-        imagenesFichasBlancasMinisGrises[ficha]->setEnabled(false);
-        this->addItem(imagenesFichasBlancasMinisNormal[ficha]);
+        //Animo la ficha que se va
+        dx= (X*anchoCelda + deltaX)-imagenesFichasBlancasMinisGrises[ficha]->getX();
+        dy= (Y*altoCelda + deltaY)-imagenesFichasBlancasMinisGrises[ficha]->getY();
+        posX = imagenesFichasBlancas[ficha]->getX() - dx;
+        posY = imagenesFichasBlancas[ficha]->getY() - dy;
+        imagenesFichasBlancas[ficha]->animatePosition(QPointF(posX,posY),tiempoAnimacionEliminar);
     }
     else
     {
-        this->removeItem(imagenesFichasNegras[ficha]);
-        imagenesFichasNegras[ficha]->setEnabled(false);
+        //Animo la ficha que se va
+        dx= (X*anchoCelda + deltaX)-imagenesFichasNegrasMinisGrises[ficha]->getX();
+        dy= (Y*altoCelda + deltaY)-imagenesFichasNegrasMinisGrises[ficha]->getY();
+        posX = imagenesFichasNegras[ficha]->getX() - dx;
+        posY = imagenesFichasNegras[ficha]->getY() - dy;
+        imagenesFichasNegras[ficha]->animatePosition(QPointF(posX,posY),tiempoAnimacionEliminar);
+    }
+
+    timerEliminar->start(tiempoAnimacionEliminar);
+}
+
+void Tablero::eliminarImagenFicha()
+{
+    timerEliminar->stop();
+
+    if(color_global_eliminar)
+    {
+        //Quito la ficha
+        this->removeItem(imagenesFichasBlancas[ficha_global_eliminar]);
+        imagenesFichasBlancas[ficha_global_eliminar]->setEnabled(false);
 
         //Cambio la mini ficha
-        this->removeItem(imagenesFichasNegrasMinisGrises[ficha]);
-        imagenesFichasNegrasMinisGrises[ficha]->setEnabled(false);
-        this->addItem(imagenesFichasNegrasMinisNormal[ficha]);
+        this->removeItem(imagenesFichasBlancasMinisGrises[ficha_global_eliminar]);
+        imagenesFichasBlancasMinisGrises[ficha_global_eliminar]->setEnabled(false);
+        this->addItem(imagenesFichasBlancasMinisNormal[ficha_global_eliminar]);
     }
+    else
+    {
+        //Quito la ficha
+        this->removeItem(imagenesFichasNegras[ficha_global_eliminar]);
+        imagenesFichasNegras[ficha_global_eliminar]->setEnabled(false);
+
+        //Cambio la mini ficha
+        this->removeItem(imagenesFichasNegrasMinisGrises[ficha_global_eliminar]);
+        imagenesFichasNegrasMinisGrises[ficha_global_eliminar]->setEnabled(false);
+        this->addItem(imagenesFichasNegrasMinisNormal[ficha_global_eliminar]);
+    }
+
+    emit terminoAnimacion();
 }

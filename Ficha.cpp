@@ -30,13 +30,13 @@ QRectF Ficha::boundingRect() const
 return QRectF(0, 0, m_size.width(), m_size.height());
 }
 
-void Ficha::animatePosition(const QPointF& end)
+void Ficha::animatePosition(const QPointF& end, int mtime)
 {
     // Start animate this class
     QPropertyAnimation* anim = new QPropertyAnimation(this, "pos");
 
     // 2 second duration animation
-    anim->setDuration(200);
+    anim->setDuration(mtime);
     // position to start animation
 //    anim->setStartValue(start);
     // end position of animation

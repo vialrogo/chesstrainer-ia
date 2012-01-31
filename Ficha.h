@@ -28,7 +28,7 @@ class Ficha : public QObject, public QGraphicsPixmapItem
         ~Ficha();
 
         // Animate position of this class
-        void animatePosition(const QPointF& end);
+        void animatePosition(const QPointF& end, int mtime);
         QRectF boundingRect() const;
 
         int getX();

@@ -55,6 +55,7 @@ Ventana::Ventana(QWidget *parent) :
     connect(ui->pushButtonMedium,SIGNAL(clicked()),this,SLOT(gameMedium()));
     connect(tablerito,SIGNAL(celdaCliqueada(int,int)),this,SLOT(cliquearonEnCelda(int,int)));
     connect(tablerito,SIGNAL(terminoAnimacion()),this,SLOT(cambiarJugador()));
+    connect(tablerito,SIGNAL(empezarEliminar()),this,SLOT(eliminarFicha()));
     connect(mensajeFinDeJuego,SIGNAL(buttonClicked(QAbstractButton*)),this, SLOT(newGame()));
 }
 
@@ -421,8 +422,11 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
                     else //el movimiento no produce jaque así que se dibuja
                     {
                         //Animar el movimiento de comerse la ficha
-                        tablerito->eliminarFicha(ficha_global,color_global);
-                        tablerito->iniciarAnimacion(ficha_tmp, color_tmp, xSelected, ySelected, xCelda, yCelda);
+                        ficha_global_eliminar=ficha_global;
+                        color_global_eliminar=color_global;
+                        xCelda_eliminar=xCelda;
+                        yCelda_eliminar=yCelda;
+                        tablerito->iniciarAnimacion(ficha_tmp, color_tmp, xSelected, ySelected, xCelda, yCelda,true);
                     }
 
                     //Qutar la selección a la ficha
@@ -490,7 +494,7 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
                 else //el movimiento no produce jaque así que se dibuja
                 {
                     //Animación
-                    tablerito->iniciarAnimacion(ficha_global, color_global, xSelected, ySelected, xCelda, yCelda);
+                    tablerito->iniciarAnimacion(ficha_global, color_global, xSelected, ySelected, xCelda, yCelda,false);
                 }
             }
 
@@ -507,6 +511,11 @@ void Ventana::cliquearonEnCelda(int xCelda, int yCelda)
         mensajeFinDeJuego->setText("Ganó parce!!!! :D");
         mensajeFinDeJuego->exec();
     }
+}
+
+void Ventana::eliminarFicha()
+{
+    tablerito->eliminarFicha(ficha_global,color_global, xCelda_eliminar, yCelda_eliminar);
 }
 
 void Ventana::cambiarJugador()
