@@ -376,7 +376,8 @@ void Tablero::eliminarFicha(int ficha, bool color, int X, int Y) //Es temporal, 
     int dy;
     int posX;
     int posY;
-    int tiempoAnimacionEliminar=300;
+    int saltoTiempoAnimacion=100;
+    int tiempoAnimacionEliminar;
 
     ficha_global_eliminar=ficha;
     color_global_eliminar=color;
@@ -388,6 +389,7 @@ void Tablero::eliminarFicha(int ficha, bool color, int X, int Y) //Es temporal, 
         dy= (Y*altoCelda + deltaY)-imagenesFichasBlancasMinisGrises[ficha]->getY();
         posX = imagenesFichasBlancas[ficha]->getX() - dx;
         posY = imagenesFichasBlancas[ficha]->getY() - dy;
+        tiempoAnimacionEliminar= (sqrt(pow(dx,2)+pow(dy,2))/80)*saltoTiempoAnimacion;
         imagenesFichasBlancas[ficha]->animatePosition(QPointF(posX,posY),tiempoAnimacionEliminar);
     }
     else
@@ -397,6 +399,7 @@ void Tablero::eliminarFicha(int ficha, bool color, int X, int Y) //Es temporal, 
         dy= (Y*altoCelda + deltaY)-imagenesFichasNegrasMinisGrises[ficha]->getY();
         posX = imagenesFichasNegras[ficha]->getX() - dx;
         posY = imagenesFichasNegras[ficha]->getY() - dy;
+        tiempoAnimacionEliminar= (sqrt(pow(dx,2)+pow(dy,2))/80)*saltoTiempoAnimacion;
         imagenesFichasNegras[ficha]->animatePosition(QPointF(posX,posY),tiempoAnimacionEliminar);
     }
 
