@@ -23,6 +23,9 @@ Ventana::Ventana(QWidget *parent) :
     W=520; //80x6 de ancho por celda + 20x2 de los bordes
     H=640; //80x6 de largo por celda + 20x2 de los bordes +2x60 de fichas muertas
 
+    //Aún no se sabe que nivel del juego
+    minimax=0;
+
     //Arreglos con las posiciones de las fichas
     posBlancasX = new int[8];
     posBlancasY = new int[8];
@@ -272,7 +275,11 @@ void Ventana::newGame()
     ui->graphicsView->setHidden(true);
     ui->pushButtonEasy->setHidden(false);
     ui->pushButtonMedium->setHidden(false);
-    delete minimax;
+    if(minimax!=0)
+    {
+        delete minimax;
+        minimax=0;
+    }
 //    cout<<"260"<<endl;
 }
 

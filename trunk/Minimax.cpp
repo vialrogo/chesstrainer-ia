@@ -657,6 +657,7 @@ string MiniMax::tomarDesicion(int *posBlancasX,int *posBlancasY,int *posNegrasX,
 
     pila.push_front(inicial);
 
+    //Se expande el árbol
     while (!pila.isEmpty()) {
         actual=pila.front();
         pila.pop_front();
@@ -678,6 +679,7 @@ string MiniMax::tomarDesicion(int *posBlancasX,int *posBlancasY,int *posNegrasX,
     }
     hijos.clear();
 
+    //Se actualizan todos valores del árbol
     for (int i = 0; i < aBorrar.size(); i++) {
         actual=aBorrar.at(i);
         if(actual->getPadre()!=0)
@@ -686,6 +688,7 @@ string MiniMax::tomarDesicion(int *posBlancasX,int *posBlancasY,int *posNegrasX,
 
     decision=inicial->getDecision();
 
+    //se borran todos los nodos expandidos
     while(!aBorrar.isEmpty()){
         actual=aBorrar.front();
         aBorrar.pop_front();
